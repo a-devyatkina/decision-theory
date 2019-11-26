@@ -1,0 +1,215 @@
+[{
+    "state": "none",
+    "name": "step1",
+    "title": "Первый шаг",
+    "subtitle": "Цветовые пространства",
+    "content": [{
+        "layout": "col-3",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-1",
+        "name": "answer",
+        "element": "input",
+        "type": "number",
+        "value": 0,
+        "style": "width: 30px",
+        "class": "shadow-2 round-borders"
+    }, {
+        "layout": "col-6"
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "step2",
+    "title": "Второй шаг",
+    "subtitle": "Цветовые пространства",
+    "content": [{
+        "layout": "col-3",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-1",
+        "name": "answer",
+        "element": "input",
+        "type": "number",
+        "value": "",
+        "style": "width: 30px",
+        "class": "shadow-2 round-borders"
+    }, {
+        "layout": "col-6"
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "step3",
+    "title": "Третий шаг",
+    "subtitle": "Цветовые пространства",
+    "content": [{
+        "layout": "col-12",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-10",
+        "name": "answer",
+        "element": "group",
+        "type": "checkbox",
+        "value": [],
+        "options": []
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "step4",
+    "title": "Четвертый шаг",
+    "subtitle": "Цветовые пространства",
+    "content": [{
+        "layout": "col-12",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-10",
+        "name": "answer",
+        "element": "group",
+        "type": "radio",
+        "value": "",
+        "options": []
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "step5",
+    "title": "Пятый шаг",
+    "subtitle": "Матрицы",
+    "content": [{
+        "layout": "col-12",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-3",
+        "name": "answer",
+        "element": "table",
+        "caption": "Единичная матрица",
+        "value": [
+            []
+        ],
+        "type": "number",
+        "style": "width: 75%",
+        "cellclass": "shadow-2 round-borders"
+    }, {
+        "layout": "col-7"
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "step6",
+    "title": "Шестой шаг",
+    "subtitle": "Матрицы",
+    "content": [{
+        "layout": "col-12",
+        "name": "question",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-3",
+        "name": "matrix",
+        "element": "table",
+        "caption": "Матрица",
+        "value": [
+            []
+        ],
+        "type": "label",
+        "style": "width: 75%",
+        "cellclass": "shadow-2 round-borders bg-grey-1",
+        "cellstyle": "height: 25px"
+    }, {
+        "layout": "col-1",
+        "name": "vector",
+        "element": "table",
+        "caption": "Вершина",
+        "value": [
+            []
+        ],
+        "type": "label",
+        "style": "width: 50px",
+        "cellclass": "shadow-2 round-borders bg-grey-1",
+        "cellstyle": "height: 25px"
+    }, {
+        "layout": "col-1",
+        "name": "answer",
+        "element": "table",
+        "caption": "Результат",
+        "value": [
+            []
+        ],
+        "type": "number",
+        "style": "width: 50px",
+        "cellclass": "shadow-2 round-borders"
+    }, {
+        "layout": "col-5"
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }],
+    "button": {
+        "label": "Применить"
+    }
+}, {
+    "state": "none",
+    "name": "status",
+    "title": "Результат",
+    "subtitle": "",
+    "content": [{
+        "layout": "col-10",
+        "name": "message",
+        "element": "label",
+        "value": ""
+    }, {
+        "layout": "col-2",
+        "name": "picture",
+        "element": "image",
+        "value": ""
+    }]
+}]

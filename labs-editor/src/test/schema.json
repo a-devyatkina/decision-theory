@@ -1,0 +1,68 @@
+{
+    "req": {
+        "put": {
+            "step6": {
+                "state": "",
+                "content": [
+                    {
+                        "name": "question",
+                        "element": "label",
+                        "value": "Примените матрицу перемещения (2D) к вершине"
+                    },
+                    {
+                        "name": "matrix",
+                        "element": "table",
+                        "type": "label",
+                        "value": [[]]
+                    },
+                    {
+                        "name": "vector",
+                        "element": "table",
+                        "type": "label",
+                        "value": []
+                    },
+                    {
+                        "name": "answer",
+                        "element": "table",
+                        "type": "number",
+                        "value": [5, 11, 1]
+                    },
+                    {
+                        "name": "picture",
+                        "element": "image",
+                        "value": ""
+                    }
+                ]
+            }
+        },
+        "get": {
+            "step4": {
+                "state": "",
+                "content": [
+                    {
+                        "layout": "col-12",
+                        "name": "question",
+                        "element": "label",
+                        "value": ""
+                    },
+                    {
+                        "layout": "col-10",
+                        "name": "answer",
+                        "element": "group",
+                        "type": "radio",
+                        "value": "",
+                        "options": []
+                    },
+                    {
+                        "layout": "col-2",
+                        "name": "picture",
+                        "element": "image",
+                        "value": ""
+                    }
+                ]
+            },
+            "state": "",
+            "score": 0
+        }
+    }
+}

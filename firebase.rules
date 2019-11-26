@@ -1,0 +1,56 @@
+{
+  "rules": {
+    ".read" : "auth != null",
+    ".write": "auth != null",
+    "admin": {
+      ".read" : false,
+      ".write": false
+    },
+    "teachers": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('admin').child(auth.uid).exists()",
+      ".indexOn": "email"
+    },
+    "groups": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('teachers').child(auth.uid).exists()"
+    },
+    "students": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('teachers').child(auth.uid).exists()",
+      ".indexOn": "email"
+    },
+    "labs": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('teachers').child(auth.uid).exists()"
+    },
+    "courses": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('teachers').child(auth.uid).exists()"
+    },
+    "attendance": {
+      ".read" : "auth != null",
+      ".write": "auth != null && root.child('teachers').child(auth.uid).exists()",
+      ".indexOn": "student",
+      ".indexOn": "teacher"
+    },
+    "works": {
+      ".read" : "auth != null",
+      ".write": "auth != null && (root.child('teachers').child(auth.uid).exists() || root.child('students').child(auth.uid).exists())"
+      "$uid": {
+        ".validate": "auth != null && newData.hasChildren(['student', 'teacher']) && (newData.child('student') === auth.uid || newData.child('teacher') === auth.uid)"
+        ".write": "auth != null && data.hasChildren(['student', 'teacher']) && (data.child('student').val() === auth.uid || data.child('teacher').val() === auth.uid)"
+      }
+    },
+    "histories": {
+      ".read" : "auth != null",
+      ".write": "auth != null && (root.child('teachers').child(auth.uid).exists() || root.child('students').child(auth.uid).exists())"
+      "$uid": {
+        "$index": {
+          ".validate": "auth != null && newData.hasChildren(['author']) && newData.child('author') === auth.uid)"
+          ".write": "auth != null && data.hasChildren(['author']) && data.child('author').val() === auth.uid"
+        }
+      }
+    }
+  }
+}
