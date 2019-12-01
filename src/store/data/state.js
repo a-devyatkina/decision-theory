@@ -11,5 +11,6 @@ export default {
   works: {},
   histories: {},
   links: {},
-  steplabs: {}
+  steplabs: {},
+  registrations: {}
 }

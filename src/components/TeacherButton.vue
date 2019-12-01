@@ -8,6 +8,7 @@
         <q-input :stack-label="$t('Name')" v-model="name" :error="$v.name.$error" />
         <q-input :stack-label="$t('Phone')" v-model="phone" />
         <q-input :stack-label="$t('E-mail')" v-model="email" :error="$v.email.$error" />
+        <q-input :stack-label="$t('Address')" v-model="address" />
         <div class="row q-mt-lg">
           <q-btn slot="footer" color="secondary" @click="apply()" :label="title" class="col q-ma-sm" :loading="loading"
             :disabled="error || loading" />
@@ -33,6 +34,7 @@ export default {
       name: this.teacher ? this.teacher.name : '',
       phone: this.teacher ? this.teacher.phone : '',
       email: this.teacher ? this.teacher.email : '',
+      address: this.address ? this.teacher.address : '',
       outdated: this.teacher ? this.teacher.outdated : false
     }
   },
@@ -65,6 +67,7 @@ export default {
         name: this.name,
         phone: this.phone,
         email: this.email,
+        address: this.address,
         outdated: this.outdated
       }
       if (this.tid) {
@@ -83,6 +86,7 @@ export default {
       this.name = this.teacher ? this.teacher.name : ''
       this.phone = this.teacher ? this.teacher.phone : ''
       this.email = this.teacher ? this.teacher.email : ''
+      this.address = this.teacher ? this.teacher.address : ''
       this.outdated = this.teacher ? this.teacher.outdated : false
     }
   }

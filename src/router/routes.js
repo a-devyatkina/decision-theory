@@ -74,6 +74,10 @@ const routes = [
     component: () => import('pages/LoginPage.vue')
   },
   {
+    path: '/registration',
+    component: () => import('pages/RegistrationPage.vue')
+  },
+  {
     path: '/labs',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/LabsPage.vue') }],

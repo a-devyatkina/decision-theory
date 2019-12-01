@@ -5,9 +5,12 @@ var cookieParser = require('cookie-parser')
 var YandexStrategy = require('passport-yandex').Strategy
 var MailruStrategy = require('passport-mail').Strategy
 var GoogleStrategy = require('passport-google-oauth20').Strategy
+var CustomStrategy = require('passport-custom').Strategy
 var firebase = require("../firebase/index.js")
+var registration = require("../registration/index.js")
+const url = require('url')
 
-async function validateProfile(profile, done) {
+async function validateProfile(req, profile, done) {
   if (profile && profile.emails[0] && profile.emails[0].value) {
     try {
       let user = null;
@@ -31,28 +34,75 @@ async function validateProfile(profile, done) {
         }
       }
       if (user) {
-        done(null, user);
+        if (req.session.regrequest) {
+          done('this email already used', null);
+        } else {
+          done(null, user);
+        }
       } else {
-        done("unknown user", false);
+        if (req.session.regrequest) {
+          let snapshot = await firebase
+            .database()
+            .ref("registrations")
+            .orderByChild("email")
+            .equalTo(profile.emails[0].value)
+            .once("value");
+          if (snapshot.exists()) {
+            done('request for registration already done', null);
+          } else {
+            req.session.regrequest.email = profile.emails[0].value
+            done(null, { uid: '', role: 'guest' });
+          }
+        } else {
+          done("unknown user", null);
+        }
       }
     } catch (error) {
-      done("unknown user", false);
+      done("unknown user", null);
     }
   } else {
-    done("empty email", false);
+    done("empty email", null);
   }
 }
 
+passport.use(new CustomStrategy(function(req, done) {
+  firebase.auth().verifyIdToken(req.body.idToken, true)
+    .then(decodedToken => {
+      if ('email' in decodedToken) {
+        return firebase.database().ref("admin")
+          .orderByChild("email")
+          .equalTo(decodedToken.email)
+          .once("value")
+      }
+      done("no such admin", null)
+    })
+    .then(snapshot => {
+      if (snapshot && snapshot.exists()) {
+        let info = snapshot.val()
+        return done(null, {uid: Object.keys(snapshot.val())[0], role: 'root'})
+      }
+      done("unknown user", null)
+    })
+    .catch(error => {
+      if (error.code == 'auth/id-token-revoked') {
+        done('Access token has been revoked. It is need to relogin.', null)
+      } else {
+        done('wrong access token', null)
+      }
+    })
+  }
+));
+
 passport.use(new YandexStrategy(config.authorization.yandex, function (req, accessToken, refreshToken, profile, done) {
-  validateProfile(profile, done)
+  validateProfile(req, profile, done)
 }))
 
 passport.use(new MailruStrategy(config.authorization.mailru, function (req, accessToken, refreshToken, profile, done) {
-  validateProfile(profile, done)
+  validateProfile(req, profile, done)
 }))
 
 passport.use(new GoogleStrategy(config.authorization.google, function(req, accessToken, refreshToken, profile, done) {
-  validateProfile(profile, done);
+  validateProfile(req, profile, done);
 }));
 
 passport.serializeUser(function (user, cb) {
@@ -63,12 +113,26 @@ passport.deserializeUser(function (user, cb) {
   cb(null, user)
 })
 
+function checkForRootAccess(req, res, next) {
+  if (req.isAuthenticated() && req.session.passport.user.role === 'root') {
+      return next();
+  }
+  res.status(500).send('access denyed');
+}
+
 module.exports.init = function (app) {
 
   app.use(session(config.authorization.session))
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(cookieParser())
+
+  app.post('/auth/token', passport.authenticate('custom'), (req, res) => {
+    if (req.isAuthenticated()) {
+      return res.status(200).send()
+    }
+    return res.status(401).send()
+  })
 
   app.get('/auth/yandex/custom-token', passport.authenticate('yandex'))
 
@@ -92,13 +156,48 @@ module.exports.init = function (app) {
   }))
 
   app.get('/custom-token', (req, res) => {
+    if ('regrequest' in req.session) {
+      let regrequest = req.session.regrequest
+      delete req.session.regrequest
+      return registration.createRegRequest(regrequest, (rid, error) => {
+        if (error) {
+          return res.status(500).send(error)
+        }
+        return res.redirect('/registration?rid=' + rid)
+      })
+    }
     firebase.auth().createCustomToken(req.session.passport.user.uid)
       .then(function (token) {
-        res.cookie('custom_token', token).redirect('/')
+        return res.cookie('custom_token', token).redirect('/')
       })
       .catch(function (error) {
-        res.status(500).send(error)
+        return res.status(500).send(error)
       });
+  })
+
+  app.get('/regrequest/:provider', (req, res) => {
+    req.session.regrequest = url.parse(req.url, true).query
+    return res.redirect(`/auth/${req.params.provider}/custom-token`)
+  })
+
+  app.post('/regrequest/accept', checkForRootAccess, (req, res) => {
+    let rid = url.parse(req.url, true).query.rid
+    registration.acceptRegRequest(rid, error => {
+      if (error) {
+        return res.status(500).send(error)
+      }
+      return res.status(200).send()
+    })
+  })
+
+  app.post('/regrequest/reject', checkForRootAccess, (req, res) => {
+    let rid = url.parse(req.url, true).query.rid
+    registration.rejectRegRequest(rid, error => {
+      if (error) {
+        return res.status(500).send(error)
+      }
+      return res.status(200).send()
+    })
   })
 
   app.get('/auth-error', (req, res) => {

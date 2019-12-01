@@ -1,0 +1,6 @@
+{
+    "MEPhI-lab registration request" : "Запрос регистрации на МИФИ-лаба",
+    "Received request for registration from user with name %s and email %s": "Получен запрос на регистрацию от пользователя с именем %s и %s адресом",
+    "Your request for registration was accepted. Welcome to MEPhI-lab!": "Ваш запрос на регистрацию одобрен. Добро пожаловать в МИФИ-лаба!",
+    "Your request for registration was rejected. Check registration info and try again.": "Ваш запрос на регистрацию отклонен. Проверьте регистрационные данные и попробуйте снова."
+}

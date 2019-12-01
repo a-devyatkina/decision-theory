@@ -121,13 +121,41 @@ export async function removeGroup ({ state }, { gid }) {
   await model.groups.remove(gid)
 }
 
+export async function listGroups ({ commit }) {
+  let groups = await model.groups.list()
+  commit('fillGroups', groups)
+  return groups
+}
+
+export async function listenRegistrations ({ commit }) {
+  model.registrations.listen(data => {
+    commit('updateRegistration', data)
+  }, data => {
+    commit('updateRegistration', data)
+  }, rid => {
+    commit('removeRegistration', rid)
+  })
+}
+
+export async function unlistenRegistrations ({ commit }) {
+  model.registrations.unlisten()
+}
+
+export async function acceptRegistration ({ state }, { rid }) {
+  await model.registrations.acceptRegRequest(rid)
+}
+
+export async function rejectRegistration ({ state }, { rid }) {
+  await model.registrations.rejectRegRequest(rid)
+}
+
 export async function listenTeachers ({ commit }) {
   model.teachers.listen(data => {
     commit('updateTeacher', data)
   }, data => {
     commit('updateTeacher', data)
-  }, sid => {
-    commit('removeTeacher', sid)
+  }, tid => {
+    commit('removeTeacher', tid)
   })
 }
 
@@ -140,10 +168,10 @@ export async function updateTeacher ({ commit }, { tid, teacher }) {
   if (found && found.tid !== tid) {
     throw Error('teacher with such email already exists')
   }
-  await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.outdated)
+  await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
   commit('updateTeacher', {
     tid: tid,
-    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, outdated: teacher.outdated }
+    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, address: teacher.address, outdated: teacher.outdated }
   })
 }
 
@@ -153,22 +181,21 @@ export async function createTeacher ({ commit }, { teacher }) {
   if (found) {
     tid = found.tid
     if (found.teacher.outdated === true) {
-      await model.students.update(tid, teacher.name, teacher.email, teacher.phone, teacher.outdated)
+      await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
     } else {
       throw Error('teacher with such email already exists')
     }
   } else {
-    tid = await model.teachers.create(teacher.name, teacher.email, teacher.phone, teacher.outdated)
+    tid = await model.teachers.create(teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
   }
   commit('updateTeacher', {
     tid: tid,
-    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, outdated: teacher.outdated }
+    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, address: teacher.address, outdated: teacher.outdated }
   })
 }
 
 export async function removeTeacher ({ commit }, { tid }) {
   await model.teachers.remove(tid)
-  commit('removeTeacher', tid)
 }
 
 export async function listenStudents ({ commit }) {
@@ -384,12 +411,16 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
     dispatch('listenAttendance')
     commit('updateGroup', await model.groups.get(state.user.group))
   } else if (state.user.role === 'root') {
-    commit('fillTeachers', await model.teachers.list())
+    dispatch('listenGroups')
+    dispatch('listenTeachers')
+    dispatch('listenRegistrations')
   }
 }
 
 export async function unsubscribeDatabase ({ dispatch }) {
+  dispatch('unlistenGroups')
   dispatch('unlistenTeachers')
+  dispatch('unlistenRegistrations')
   dispatch('unlistenLabs')
   dispatch('unlistenStudents')
   dispatch('unlistenWorks')

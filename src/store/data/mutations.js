@@ -39,6 +39,12 @@ export function removeAttendance (state, aid) {
   Vue.delete(state.attendance, aid)
 }
 
+export function fillGroups (state, data) {
+  for (let gid in data) {
+    Vue.set(state.groups, gid, data[gid])
+  }
+}
+
 export function updateGroup (state, data) {
   Vue.set(state.groups, data.gid, data.group)
 }
@@ -156,4 +162,12 @@ export const updateSteplabHandle = (state, data) => {
       Vue.set(state.steplabs[data.lid][key], 'score', value.score)
     }
   }
+}
+
+export function updateRegistration (state, data) {
+  Vue.set(state.registrations, data.rid, data.request)
+}
+
+export function removeRegistration (state, rid) {
+  Vue.delete(state.registrations, rid)
 }

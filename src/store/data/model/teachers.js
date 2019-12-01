@@ -80,6 +80,7 @@ export default (function () {
             name: val.name,
             email: val.email,
             phone: val.phone,
+            address: val.address ? val.address : '',
             outdated: val.outdated
           }
         }
@@ -87,21 +88,23 @@ export default (function () {
       return ret
     }
 
-    async create (name, email, phone, outdated) {
+    async create (name, email, phone, address, outdated) {
       let snapshot = await ref().push({
         name: name,
         email: email,
         phone: phone,
+        address: address,
         outdated: outdated
       })
       return snapshot.key
     }
 
-    async update (tid, name, email, phone, outdated) {
+    async update (tid, name, email, phone, address, outdated) {
       await ref().child(tid).set({
         name: name,
         email: email,
         phone: phone,
+        address: address,
         outdated: outdated
       })
     }

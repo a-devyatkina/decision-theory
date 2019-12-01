@@ -10,6 +10,8 @@ import ChangePlanButton from '../components/ChangePlanButton.vue'
 import LabsTable from '../components/LabsTable.vue'
 import SteplabsTable from '../components/SteplabsTable.vue'
 import SteplabButton from '../components/SteplabButton.vue'
+import TeachersTable from '../components/TeachersTable.vue'
+import RegistrationsTable from '../components/RegistrationsTable.vue'
 
 import routes from './routes'
 
@@ -24,6 +26,8 @@ Vue.component('change-plan-button', ChangePlanButton)
 Vue.component('labs-table', LabsTable)
 Vue.component('steplabs-table', SteplabsTable)
 Vue.component('steplab-button', SteplabButton)
+Vue.component('teachers-table', TeachersTable)
+Vue.component('registrations-table', RegistrationsTable)
 
 /*
  * If not building with SSR mode, you can
