@@ -68,6 +68,21 @@ export default {
           })
         }
       }
+      for (let lid in this.plan.steplabs) {
+        let steplab = this.$store.getters['data/getSteplabHandle'](lid)
+        if (steplab) {
+          cols.push({
+            name: lid,
+            required: true,
+            label: steplab.name,
+            align: 'center',
+            field: lid,
+            sortable: true,
+            classes: '',
+            style: ''
+          })
+        }
+      }
       if (this.plan.attendance !== undefined) {
         cols.push({
           name: 'attendance',

@@ -535,7 +535,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, attendance }) {
+export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, attendance, steplabs }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -551,6 +551,17 @@ export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, atte
         }
       }
       Vue.set(plan, 'labs', labs)
+      for (let lid in steplabs) {
+        for (let sid in state.students) {
+          if (state.students[sid].group === gid) {
+            let steplab = getters['getSteplabHandle'](lid)
+            if (!steplab) {
+              await model.steplabs.createSteplab(lid, sid)
+            }
+          }
+        }
+      }
+      Vue.set(plan, 'steplabs', steplabs)
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
