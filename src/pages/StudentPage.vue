@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link :to="`workflow?wid=${props.row.wid}`">
+            <router-link to="" @click.native="view(props.row.wid)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -112,7 +112,7 @@ export default {
         }
         if (courses[cid] !== undefined) {
           courses[cid].score += work.score
-          let lab = this.$store.getters['data/getLab'](work.lab)
+          let lab = this.$store.getters['data/getLab'](work.lab) || this.$store.getters['data/getSteplabHandle'](work.lab)
           courses[cid].works.push({
             wid: wid,
             name: lab ? lab.name : '',
@@ -129,6 +129,18 @@ export default {
     },
     works () {
       return this.$store.getters['data/getStudentWorks'](this.user.id)
+    }
+  },
+  methods: {
+    view (wid) {
+      let work = this.works[wid]
+      let lab = this.$store.getters['data/getLab'](work.lab)
+      let steplab = this.$store.getters['data/getSteplabHandle'](work.lab)
+      if (typeof lab !== 'undefined') {
+        this.$router.push(`/workflow?wid=${wid}`)
+      } else if (typeof steplab !== 'undefined') {
+        this.$router.push(`/steplab?lab=${work.lab}&user=${this.user.id}`)
+      }
     }
   }
 }

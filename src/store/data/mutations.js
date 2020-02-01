@@ -141,7 +141,7 @@ export const updateSteplab = (state, data) => {
 }
 
 export const removeSteplab = (state, data) => {
-  if (state.steplabs[data.lid] === undefined) {
+  if (state.steplabs[data.lid] !== undefined) {
     Vue.delete(state.steplabs[data.lid], data.uid)
   }
 }

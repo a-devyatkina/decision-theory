@@ -407,6 +407,8 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
   } else if (state.user.role === 'student') {
     dispatch('listenTeachers')
     dispatch('listenLabs')
+    // need to listen steplabs
+    dispatch('fillSteplabHandles')
     dispatch('listenWorks')
     dispatch('listenAttendance')
     commit('updateGroup', await model.groups.get(state.user.group))
@@ -535,7 +537,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, attendance, steplabs }) {
+export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -546,22 +548,29 @@ export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, atte
             let work = getters['getStudentWork'](sid, lid)
             if (!work) {
               await model.works.create(sid, cid, course.teacher, lid, 'unassign', '', '', 0)
+            } else {
+              await model.works.update(work.wid, sid, cid, course.teacher, lid, 'unassign', '', '', 0)
             }
           }
         }
       }
       Vue.set(plan, 'labs', labs)
+      Vue.set(plan, 'steplabs', steplabs)
       for (let lid in steplabs) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
-            let steplab = getters['getSteplabHandle'](lid)
-            if (!steplab) {
-              await model.steplabs.createSteplab(lid, sid)
+            let work = getters['getStudentWork'](sid, lid)
+            console.log(work)
+            if (!work) {
+              await model.works.create(sid, cid, course.teacher, lid, 'unassign', '', '', 0)
+            } else {
+              await model.works.update(work.wid, sid, cid, course.teacher, lid, 'unassign', '', '', 0)
             }
+            await dispatch('removeSteplab', { lid, uid: sid })
+            await dispatch('createSteplab', { lid, uid: sid })
           }
         }
       }
-      Vue.set(plan, 'steplabs', steplabs)
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
