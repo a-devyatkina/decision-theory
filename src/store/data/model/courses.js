@@ -12,8 +12,8 @@ export default (function () {
   }
 
   class CoursesRef {
-    listen (cid, onAdded, onChanged, onRemoved) {
-      ref().orderByKey().startAt(cid).endAt(cid).on('child_changed', snapshot => {
+    listen (onAdded, onChanged, onRemoved) {
+      ref().on('child_changed', snapshot => {
         let val = snapshot.val()
         onChanged({
           cid: snapshot.key,
@@ -28,7 +28,7 @@ export default (function () {
         console.log('courses child_changed failed: ' + error.code)
       })
 
-      ref().orderByKey().startAt(cid).endAt(cid).on('child_added', snapshot => {
+      ref().on('child_added', snapshot => {
         let val = snapshot.val()
         onAdded({
           cid: snapshot.key,
@@ -43,18 +43,18 @@ export default (function () {
         console.log('courses child_added failed: ' + error.code)
       })
 
-      ref().orderByKey().startAt(cid).endAt(cid).on('child_removed', snapshot => {
+      ref().on('child_removed', snapshot => {
         onRemoved(snapshot.key)
       }, error => {
         console.log('courses child_removed failed: ' + error.code)
       })
     }
 
-    unlisten (cid) {
-      ref().orderByKey().startAt(cid).endAt(cid).off()
+    unlisten () {
+      ref().off()
     }
 
-    async list (teacher) {
+    async list () {
       let snapshot = await ref().once('value')
       let courses = {}
       snapshot.forEach(function (child) {

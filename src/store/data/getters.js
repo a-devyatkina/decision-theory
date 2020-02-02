@@ -5,7 +5,7 @@ export const getLink = (state) => (owner, file) => {
   return null
 }
 
-export const getCurrentCourses = (state) => (tid) => {
+export const getCurrentCourses = (state) => () => {
   let courses = {}
   for (let cid in state.courses) {
     if (state.courses[cid].archived === false) {
@@ -15,11 +15,23 @@ export const getCurrentCourses = (state) => (tid) => {
   return courses
 }
 
-export const getArchivedCourses = (state) => (tid) => {
+export const getArchivedCourses = (state) => () => {
   let courses = {}
   for (let cid in state.courses) {
-    if (state.courses[cid].archived === true && (!tid || tid === state.courses[cid].teacher)) {
+    if (state.courses[cid].archived === true) {
       courses[cid] = state.courses[cid]
+    }
+  }
+  return courses
+}
+
+export const getGroupCourses = (state) => (gid) => {
+  let courses = {}
+  for (let cid in state.courses) {
+    for (let id in state.courses[cid].groups) {
+      if (id === gid) {
+        courses[cid] = state.courses[cid]
+      }
     }
   }
   return courses

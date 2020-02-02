@@ -13,7 +13,8 @@ export default (function () {
 
   class WorksRef {
     listen (user, onAdded, onChanged, onRemoved) {
-      ref().on('child_changed', snapshot => {
+      let fetch = user.role === 'student' ? ref().orderByChild('student').equalTo(user.id) : ref()
+      fetch.on('child_changed', snapshot => {
         let val = snapshot.val()
         onChanged({
           wid: snapshot.key,
@@ -32,7 +33,7 @@ export default (function () {
         console.log('works child_changed failed: ' + error.code)
       })
 
-      ref().on('child_added', snapshot => {
+      fetch.on('child_added', snapshot => {
         let val = snapshot.val()
         onAdded({
           wid: snapshot.key,
@@ -51,7 +52,7 @@ export default (function () {
         console.log('works child_added failed: ' + error.code)
       })
 
-      ref().on('child_removed', snapshot => {
+      fetch.on('child_removed', snapshot => {
         onRemoved(snapshot.key)
       }, error => {
         console.log('works child_removed failed: ' + error.code)

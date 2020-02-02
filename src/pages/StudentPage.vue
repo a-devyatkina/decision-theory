@@ -3,12 +3,12 @@
     <q-item class="q-my-sm">
       <q-item-main :label="$t('Curriculum')"/>
     </q-item>
-    <q-collapsible inset-separator v-for="(item, cid) in courses" :key="cid" collapse-icon="expand_more">
+    <q-collapsible inset-separator v-for="(item, cid) in sessions" :key="cid" collapse-icon="expand_more">
       <template slot="header">
         <q-item-side><q-icon name="layers" color="secondary" size="24px" /></q-item-side>
         <q-item-main :label="item.course.name" :sublabel="item.teacher.name" />
       </template>
-      <q-table separator="cell" :data="item.works" :columns="columns" row-key="wid" rows-per-page-options="0" hide-bottom :pagination.sync="pagination" class="bg-grey-2 q-ma-md">
+      <q-table separator="cell" :data="item.tasks" :columns="columns" row-key="id" rows-per-page-options="0" hide-bottom :pagination.sync="pagination" class="bg-grey-2 q-ma-md">
         <template slot="top-right" slot-scope="props">
           <q-list no-border dense>
             <q-item>
@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" @click.native="view(props.row.wid)">
+            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -93,53 +93,62 @@ export default {
     }
   },
   computed: {
-    courses () {
-      let courses = {}
-      for (let wid in this.works) {
-        let work = this.works[wid]
-        let cid = work.course
-        if (courses[cid] === undefined) {
-          let course = this.$store.getters['data/getCourse'](cid)
-          if (course !== undefined) {
-            courses[cid] = {
-              course: course,
-              attendance: this.$store.getters['data/getAttendance'](this.user.id, cid),
-              teacher: this.$store.getters['data/getTeacher'](course.teacher),
-              works: [],
-              score: 0
+    sessions () {
+      let sessions = {}
+      let courses = this.$store.getters['data/getGroupCourses'](this.user.group)
+      for (let cid in courses) {
+        let course = courses[cid].groups[this.user.group]
+        if (course) {
+          sessions[cid] = {
+            course: courses[cid],
+            teacher: this.$store.getters['data/getTeacher'](courses[cid].teacher),
+            attendance: this.$store.getters['data/getAttendance'](this.user.id, cid),
+            tasks: [],
+            score: 0
+          }
+          sessions[cid].score = sessions[cid].attendance
+          for (let lid in course.labs) {
+            let data = this.$store.getters['data/getStudentWork'](this.user.id, lid)
+            if (data) {
+              sessions[cid].score += data.work.score
+              let lab = this.$store.getters['data/getLab'](lid)
+              sessions[cid].tasks.push({
+                id: data.wid,
+                name: lab ? lab.name : '',
+                description: lab ? lab.description : '',
+                stage: data.work.stage,
+                score: data.work.score
+              })
+            }
+          }
+          for (let lid in course.steplabs) {
+            let steplab = this.$store.getters['data/getSteplabHandle'](lid)
+            if (steplab && steplab[this.user.id]) {
+              sessions[cid].score += steplab[this.user.id].score
+              sessions[cid].tasks.push({
+                id: lid,
+                name: steplab.name,
+                description: steplab.description,
+                stage: steplab[this.user.id].state,
+                score: steplab[this.user.id].score,
+                isSteplab: true
+              })
             }
           }
         }
-        if (courses[cid] !== undefined) {
-          courses[cid].score += work.score
-          let lab = this.$store.getters['data/getLab'](work.lab) || this.$store.getters['data/getSteplabHandle'](work.lab)
-          courses[cid].works.push({
-            wid: wid,
-            name: lab ? lab.name : '',
-            description: lab ? lab.description : '',
-            stage: work.stage,
-            score: work.score
-          })
-        }
       }
-      return courses
+      return sessions
     },
     user () {
       return this.$store.getters['data/getUser']()
-    },
-    works () {
-      return this.$store.getters['data/getStudentWorks'](this.user.id)
     }
   },
   methods: {
-    view (wid) {
-      let work = this.works[wid]
-      let lab = this.$store.getters['data/getLab'](work.lab)
-      let steplab = this.$store.getters['data/getSteplabHandle'](work.lab)
-      if (typeof lab !== 'undefined') {
-        this.$router.push(`/workflow?wid=${wid}`)
-      } else if (typeof steplab !== 'undefined') {
-        this.$router.push(`/steplab?lab=${work.lab}&user=${this.user.id}`)
+    view (task, isSteplab) {
+      if (isSteplab) {
+        this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
+      } else {
+        this.$router.push(`/workflow?wid=${task}`)
       }
     }
   }

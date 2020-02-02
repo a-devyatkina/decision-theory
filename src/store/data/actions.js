@@ -276,9 +276,6 @@ export async function removeStudent ({ state }, { sid }) {
 export async function listenWorks ({ state, commit, dispatch }) {
   model.works.listen(state.user, async data => {
     commit('updateWork', data)
-    if (state.user && state.user.role === 'student') {
-      dispatch('listenCourse', { cid: data.work.course })
-    }
     // if (data.work.solution && data.work.solution.length > 0) {
     //   let url = await model.storage.url(data.work.student, data.work.solution)
     //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
@@ -290,12 +287,6 @@ export async function listenWorks ({ state, commit, dispatch }) {
     //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
     // }
   }, wid => {
-    if (state.user && state.user.role === 'student') {
-      let work = state.works[wid]
-      if (work) {
-        dispatch('unlistenCourse', { cid: work.course })
-      }
-    }
     commit('removeWork', wid)
   })
 }
@@ -398,19 +389,20 @@ export async function unlistenHistory ({ commit }, { wid }) {
 export async function subscribeDatabase ({ state, commit, dispatch }) {
   if (state.user.role === 'teacher') {
     dispatch('listenGroups')
+    dispatch('listenTeachers')
     dispatch('listenStudents')
     dispatch('listenWorks')
-    dispatch('fillLabs')
-    dispatch('fillSteplabHandles')
-    commit('fillAttendance', await model.attendance.list(state.user.id))
-    commit('fillCourses', await model.courses.list(state.user.id))
+    dispatch('listenLabs')
+    dispatch('listenSteplabHandles')
+    dispatch('listenAttendance')
+    dispatch('listenCourses')
   } else if (state.user.role === 'student') {
     dispatch('listenTeachers')
     dispatch('listenLabs')
-    // need to listen steplabs
-    dispatch('fillSteplabHandles')
+    dispatch('listenSteplabHandles')
     dispatch('listenWorks')
     dispatch('listenAttendance')
+    dispatch('listenCourses')
     commit('updateGroup', await model.groups.get(state.user.group))
   } else if (state.user.role === 'root') {
     dispatch('listenGroups')
@@ -427,6 +419,7 @@ export async function unsubscribeDatabase ({ dispatch }) {
   dispatch('unlistenStudents')
   dispatch('unlistenWorks')
   dispatch('unlistenAttendance')
+  dispatch('unlistenCourses')
 }
 
 export async function loginUser ({ dispatch, commit }, { email, password }) {
@@ -475,8 +468,8 @@ export async function signOut ({ dispatch, commit }) {
   dispatch('unsubscribeDatabase')
 }
 
-export async function listenCourse ({ commit }, { cid }) {
-  model.courses.listen(cid, data => {
+export async function listenCourses ({ commit }) {
+  model.courses.listen(data => {
     commit('updateCourse', data)
   }, data => {
     commit('updateCourse', data)
@@ -485,8 +478,8 @@ export async function listenCourse ({ commit }, { cid }) {
   })
 }
 
-export async function unlistenCourse ({ commit }, { cid }) {
-  model.courses.unlisten(cid)
+export async function unlistenCourses ({ commit }) {
+  model.courses.unlisten()
 }
 
 export async function addGroupToCourse ({ state, commit }, { cid, gid }) {
@@ -548,8 +541,6 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
             let work = getters['getStudentWork'](sid, lid)
             if (!work) {
               await model.works.create(sid, cid, course.teacher, lid, 'unassign', '', '', 0)
-            } else {
-              await model.works.update(work.wid, sid, cid, course.teacher, lid, 'unassign', '', '', 0)
             }
           }
         }
@@ -559,15 +550,10 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
       for (let lid in steplabs) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
-            let work = getters['getStudentWork'](sid, lid)
-            console.log(work)
-            if (!work) {
-              await model.works.create(sid, cid, course.teacher, lid, 'unassign', '', '', 0)
-            } else {
-              await model.works.update(work.wid, sid, cid, course.teacher, lid, 'unassign', '', '', 0)
+            let steplab = getters['getSteplab'](lid, sid)
+            if (!steplab) {
+              await dispatch('createSteplab', { lid, uid: sid })
             }
-            await dispatch('removeSteplab', { lid, uid: sid })
-            await dispatch('createSteplab', { lid, uid: sid })
           }
         }
       }
@@ -672,4 +658,14 @@ export async function fillSteplabHandles ({ state, commit }) {
     let handle = handles[lid]
     commit('updateSteplabHandle', { lid, handle })
   }
+}
+
+export async function listenSteplabHandles ({ state, commit }) {
+  model.steplabs.listen(data => {
+    commit('updateSteplabHandle', data)
+  }, data => {
+    commit('updateSteplabHandle', data)
+  }, lid => {
+    commit('removeSteplabHandle', lid)
+  })
 }

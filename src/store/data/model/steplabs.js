@@ -86,6 +86,32 @@ export default (function () {
       return steplab
     }
 
+    listen (onAdded, onChanged, onRemoved) {
+      ref().on('child_changed', snapshot => {
+        onChanged({
+          lid: snapshot.key,
+          handle: snapshot.val()
+        })
+      }, error => {
+        console.log('steplabs child_changed failed: ' + error.code)
+      })
+
+      ref().on('child_added', snapshot => {
+        onAdded({
+          lid: snapshot.key,
+          handle: snapshot.val()
+        })
+      }, error => {
+        console.log('steplabs child_added failed: ' + error.code)
+      })
+
+      ref().on('child_removed', snapshot => {
+        onRemoved(snapshot.key)
+      }, error => {
+        console.log('steplabs child_removed failed: ' + error.code)
+      })
+    }
+
     async createSteplabHandle (handle) {
       let snapshot = await ref().push(handle)
       return snapshot.key

@@ -6,7 +6,7 @@
       </q-item>
       <q-stepper ref="stepper" vertical no-header-navigation color="secondary" class="q-mx-md">
         <q-step v-for="(step, index) in steps" :order="index" :key="index" :done-icon="step.state=='edit' ? 'edit' : step.state=='fail' ? 'priority_high' : 'playlist_add_check'" :active-icon="step.state=='edit' ? 'edit' : step.state=='fail' ? 'priority_high' : 'playlist_add_check'"
-          :default="step.state=='edit'" :icon="step.state=='done' ? 'playlist_add_check' : 'edit'" :title="step.title" :subtitle="step.subtitle" :name="step.name" @click.native="view(step.name)">
+          :default="step.state=='edit'" :icon="step.state=='done' ? 'playlist_add_check' : step.state=='fail' ? 'priority_high' : 'edit'" :title="step.title" :subtitle="step.subtitle" :name="step.name" @click.native="view(step.name)">
           <div class="shadow-2 round-borders row bg-grey-2" @click.native.stop="">
             <div v-for="(elem, index) in step.content" :key="index" :class="elem.layout">
               <div class="q-ma-md">
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     readonly (state) {
-      return state !== 'edit'
+      return this.uid !== this.user.id || state !== 'edit'
     },
     async done () {
       try {
