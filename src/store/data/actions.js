@@ -546,17 +546,14 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'labs', labs)
-      Vue.set(plan, 'steplabs', steplabs)
       for (let lid in steplabs) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
-            let steplab = getters['getSteplab'](lid, sid)
-            if (!steplab) {
-              await dispatch('createSteplab', { lid, uid: sid })
-            }
+            await dispatch('createSteplab', { lid, uid: sid })
           }
         }
       }
+      Vue.set(plan, 'steplabs', steplabs)
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
@@ -642,7 +639,22 @@ export async function createSteplabHandle ({ commit }, { handle }) {
   return lid
 }
 
-export async function updateSteplabHandle ({ commit }, { lid, handle }) {
+export async function updateSteplabHandle ({ state, commit, dispatch }, { lid, handle }) {
+  if (handle.outdated) {
+    for (let cid in state.courses) {
+      let course = state.courses[cid]
+      let dirty = false
+      for (let gid in course.groups) {
+        if (course.groups[gid].steplabs && course.groups[gid].steplabs[lid]) {
+          Vue.delete(course.groups[gid].steplabs, lid)
+          dirty = true
+        }
+      }
+      if (dirty) {
+        await dispatch('updateCourse', { cid, ...course })
+      }
+    }
+  }
   await model.steplabs.updateSteplabHandle(lid, handle)
   commit('updateSteplabHandle', { lid, handle })
 }

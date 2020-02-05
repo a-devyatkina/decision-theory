@@ -38,7 +38,7 @@ export default {
   methods: {
     getGroupName (id) {
       let group = this.$store.getters['data/getGroup'](id)
-      return group.name
+      return group ? group.name : this.$t('none')
     },
     getTeacherName (tid) {
       let teacher = this.$store.getters['data/getTeacher'](tid)

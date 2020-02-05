@@ -132,25 +132,15 @@ export default (function () {
     }
 
     async updateSteplabHandle (lab, handle) {
-      if (handle.outdated) {
-        let remove = true
-        let old = await this.getSteplabHandle(lab)
-        for (let key in old) {
-          if (key !== 'outdated' && key !== 'name' && key !== 'description') {
-            remove = false
-            break
-          }
-        }
-        if (remove) {
-          await ref().child(lab).remove()
-          return
-        }
-      }
-      await ref().child(lab).set({
-        name: handle.name,
-        description: handle.description,
-        outdated: handle.outdated
-      })
+      let updates = {}
+      updates['/' + lab + '/name'] = handle.name
+      updates['/' + lab + '/description'] = handle.description
+      updates['/' + lab + '/outdated'] = handle.outdated
+      await ref().update(updates)
+    }
+
+    async removeSteplabHandle (lab) {
+      await ref().child(lab).remove()
     }
 
     async getSteplabPatternSchema (lab) {

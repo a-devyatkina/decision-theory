@@ -171,7 +171,13 @@ export const getSteplabHandle = (state) => (lid) => {
 }
 
 export const getSteplabsHandles = (state) => () => {
-  return state.steplabs
+  let steplabs = {}
+  for (let lid in state.steplabs) {
+    if (state.steplabs[lid].outdated === false) {
+      steplabs[lid] = state.steplabs[lid]
+    }
+  }
+  return steplabs
 }
 
 export const getRegistrations = (state) => () => {

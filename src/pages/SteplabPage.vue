@@ -5,8 +5,8 @@
         <q-item-main :label="name" :sublabel="description" />
       </q-item>
       <q-stepper ref="stepper" vertical no-header-navigation color="secondary" class="q-mx-md">
-        <q-step v-for="(step, index) in steps" :order="index" :key="index" :done-icon="step.state=='edit' ? 'edit' : step.state=='fail' ? 'priority_high' : 'playlist_add_check'" :active-icon="step.state=='edit' ? 'edit' : step.state=='fail' ? 'priority_high' : 'playlist_add_check'"
-          :default="step.state=='edit'" :icon="step.state=='done' ? 'playlist_add_check' : step.state=='fail' ? 'priority_high' : 'edit'" :title="step.title" :subtitle="step.subtitle" :name="step.name" @click.native="view(step.name)">
+        <q-step v-for="(step, index) in steps" :order="index" :key="index" :done-icon="icon(step.state)" :active-icon="icon(step.state)"
+          :default="icon(step.state)" :icon="icon(step.state)" :title="step.title" :subtitle="step.subtitle" :name="step.name" @click.native="view(step.name)">
           <div class="shadow-2 round-borders row bg-grey-2" @click.native.stop="">
             <div v-for="(elem, index) in step.content" :key="index" :class="elem.layout">
               <div class="q-ma-md">
@@ -56,7 +56,7 @@ export default {
       return this.$store.getters['data/getSteplab'](this.lid, this.uid)
     },
     steps () {
-      return this.steplab === null ? [] : this.steplab.steps.filter(step => step.state !== 'none')
+      return this.steplab === null ? [] : this.reviewing ? this.steplab.steps : this.steplab.steps.filter(step => step.state !== 'none')
     },
     handle () {
       return this.$store.getters['data/getSteplabHandle'](this.lid)
@@ -66,11 +66,14 @@ export default {
     },
     description () {
       return this.handle ? this.handle.description : ''
+    },
+    reviewing () {
+      return this.uid !== this.user.id
     }
   },
   methods: {
     readonly (state) {
-      return this.uid !== this.user.id || state !== 'edit'
+      return this.reviewing || state !== 'edit'
     },
     async done () {
       try {
@@ -91,6 +94,9 @@ export default {
     },
     image (step, image) {
       return '/restapi/steplab/instance/image?lab=' + this.lid + '&user=' + this.uid + '&step=' + step + '&image=' + image
+    },
+    icon (state) {
+      return state === 'edit' ? 'edit' : state === 'fail' ? 'priority_high' : state === 'done' ? 'playlist_add_check' : 'hourglass_empty'
     }
   },
   async created () {

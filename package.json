@@ -12,6 +12,7 @@
     "start": "node ./dist/server/app.js"
   },
   "dependencies": {
+    "@firebase/app": "^0.5.3",
     "axios": "^0.19.0",
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.4",
