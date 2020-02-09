@@ -29,6 +29,14 @@ import LogicsCondition from 'components/LogicsLab/LogicsCondition.vue'
 import LogicsImplementation from 'pages/LogicsLab/Implementation.vue'
 import Question from 'components/LogicsLab/Question.vue'
 
+import FirstStep from '../pages/PreferenceLab/components/FirstStep.vue'
+import SecondStep from '../pages/PreferenceLab/components/SecondStep.vue'
+import ThirdStep from '../pages/PreferenceLab/components/ThirdStep.vue'
+import FourthStep from '../pages/PreferenceLab/components/FourthStep.vue'
+import LastStep from '../pages/PreferenceLab/components/LastStep.vue'
+import FillTable from '../pages/PreferenceLab/components/FillTable.vue'
+import InputTable from '../pages/PreferenceLab/components/InputTable.vue'
+
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -60,6 +68,14 @@ Vue.component('thirdquest', ThirdQuest)
 Vue.component('logics-condition', LogicsCondition)
 Vue.component('logics-implementation', LogicsImplementation)
 Vue.component('question', Question)
+
+Vue.component('FirstStep', FirstStep)
+Vue.component('SecondStep', SecondStep)
+Vue.component('ThirdStep', ThirdStep)
+Vue.component('FourthStep', FourthStep)
+Vue.component('LastStep', LastStep)
+Vue.component('FillTable', FillTable)
+Vue.component('InputTable', InputTable)
 
 /*
  * If not building with SSR mode, you can
