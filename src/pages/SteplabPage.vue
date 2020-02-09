@@ -56,7 +56,7 @@ export default {
       return this.$store.getters['data/getSteplab'](this.lid, this.uid)
     },
     steps () {
-      return this.steplab === null ? [] : this.reviewing ? this.steplab.steps : this.steplab.steps.filter(step => step.state !== 'none')
+      return this.steplab === null ? [] : this.user.role === 'teacher' && this.uid === this.user.id ? this.steplab.steps : this.steplab.steps.filter(step => step.state !== 'none')
     },
     handle () {
       return this.$store.getters['data/getSteplabHandle'](this.lid)
@@ -66,14 +66,11 @@ export default {
     },
     description () {
       return this.handle ? this.handle.description : ''
-    },
-    reviewing () {
-      return this.uid !== this.user.id
     }
   },
   methods: {
     readonly (state) {
-      return this.reviewing || state !== 'edit'
+      return this.uid !== this.user.id || state !== 'edit'
     },
     async done () {
       try {
