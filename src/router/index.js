@@ -11,6 +11,24 @@ import LabsTable from '../components/LabsTable.vue'
 import SteplabsTable from '../components/SteplabsTable.vue'
 import SteplabButton from '../components/SteplabButton.vue'
 
+import QuantitativeFunc from 'components/AdditiveLab/QuantitativeFunc.vue'
+import CategoricalFunc from 'components/AdditiveLab/CategoricalFunc.vue'
+import Condition from 'components/AdditiveLab/Condition.vue'
+import TheoreticaChoice from 'components/AdditiveLab/TheoreticaChoice.vue'
+import TheoreticalInput from 'components/AdditiveLab/TheoreticalInput.vue'
+import AlternativesEvaluation from 'components/AdditiveLab/AlternativesEvaluation.vue'
+import RFunctions from 'components/AdditiveLab/RFunctions.vue'
+import Squares from 'components/AdditiveLab/Squares.vue'
+import CoordsAndAnswer from 'components/AdditiveLab/CoordsAndAnswer.vue'
+import importanceTable from 'components/AdditiveLab/importanceTable'
+import linguisticTable from 'components/AdditiveLab/linguisticTable'
+
+import Alternative from 'components/LogicsLab/Alternative.vue'
+import ThirdQuest from 'components/LogicsLab/ThirdQuest.vue'
+import LogicsCondition from 'components/LogicsLab/LogicsCondition.vue'
+import LogicsImplementation from 'pages/LogicsLab/Implementation.vue'
+import Question from 'components/LogicsLab/Question.vue'
+
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -24,6 +42,24 @@ Vue.component('change-plan-button', ChangePlanButton)
 Vue.component('labs-table', LabsTable)
 Vue.component('steplabs-table', SteplabsTable)
 Vue.component('steplab-button', SteplabButton)
+
+Vue.component('importance-table', importanceTable)
+Vue.component('linguistic-table', linguisticTable)
+Vue.component('condition', Condition)
+Vue.component('quantitativefunc', QuantitativeFunc)
+Vue.component('categoricalfunc', CategoricalFunc)
+Vue.component('theoretical-choice', TheoreticaChoice)
+Vue.component('theoretical-input', TheoreticalInput)
+Vue.component('alternatives-evaluation', AlternativesEvaluation)
+Vue.component('r-functions', RFunctions)
+Vue.component('squares', Squares)
+Vue.component('coords-and-answer', CoordsAndAnswer)
+
+Vue.component('alternative', Alternative)
+Vue.component('thirdquest', ThirdQuest)
+Vue.component('logics-condition', LogicsCondition)
+Vue.component('logics-implementation', LogicsImplementation)
+Vue.component('question', Question)
 
 /*
  * If not building with SSR mode, you can

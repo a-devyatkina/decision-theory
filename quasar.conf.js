@@ -22,12 +22,12 @@ module.exports = function (ctx) {
     supportIE: true,
     build: {
       env: ctx.dev
-      ? { // so on dev we'll have
-        API: JSON.stringify('http://localhost:' + config.port)
-      }
-      : { // and on build (production):
-        API: JSON.stringify('http://localhost:' + config.port)
-      },
+        ? { // so on dev we'll have
+          API: JSON.stringify('http://localhost:' + config.port)
+        }
+        : { // and on build (production):
+          API: JSON.stringify('http://localhost:' + config.port)
+        },
       scopeHoisting: true,
       vueRouterMode: 'history',
       // vueCompiler: true,
@@ -96,7 +96,15 @@ module.exports = function (ctx) {
         'QStep',
         'QStepperNavigation',
         'QOptionGroup',
-        'QAjaxBar'
+        'QAjaxBar',
+
+        // 'QMarkupTable',
+        // 'QHeader',
+        // 'QDrawer',
+        // 'QItemSection',
+        // 'QItemLabel',
+        'QTh',
+        'QTableColumns'
       ],
       directives: [
         'Ripple',

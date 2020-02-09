@@ -127,6 +127,27 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/SteplabPage.vue') }
     ]
+  },
+  {
+    path: '/additiveLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AdditiveLab/Implementation.vue') }
+    ]
+  },
+  {
+    path: '/logicsLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LogicsLab/Implementation.vue') }
+    ]
+  },
+  {
+    path: '/preferenceLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/PreferenceLab/Index.vue') }
+    ]
   }
 ]
 
