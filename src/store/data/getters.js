@@ -161,3 +161,7 @@ export const getSteplabHandle = (state) => (lid) => {
 export const getSteplabsHandles = (state) => () => {
   return state.steplabs
 }
+
+export const getLabs3 = (state) => () => {
+  return state.lab3
+}

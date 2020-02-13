@@ -13,7 +13,7 @@
       :columns = 'columns'
       :title = '"Значения альтернатив"'
       />
-      <div v-if = 'data.koef.length && part === 2'>
+      <div v-if = 'data.koef && part === 2'>
         <FillTable
         :data = 'koefValue'
         :columns = 'columns'
@@ -24,7 +24,7 @@
     <div class="content">
       <img v-bind:src="data.function"/>
     </div>
-    <div v-if = 'data.koef.length && part === 1'>
+    <div v-if = 'data.koef && part === 1'>
       <div v-for="(item, index) in koefArr" v-bind:key='index'>
         {{String.fromCodePoint(65 + index)}} = <input v-model="koefArr[index]" placeholder="0.00"/>
       </div>
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     part: function () {
-      if (this.data.koef.length && !this.next && !this.done) {
+      if (this.data.koef && !this.next && !this.done) {
         return 1
       } else {
         return 2

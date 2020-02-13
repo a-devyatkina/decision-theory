@@ -29,7 +29,7 @@
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @back='back'></theoretical-choice>
       </q-step>
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-      <q-step
+      <!-- <q-step
          :name='2'
          title='Критерий'
          icon='assignment'
@@ -75,6 +75,25 @@
       >
         <categoricalfunc @right='test()' @back='back()' @err='count += 1' :number='3' :condition='condition'/>
         <q-stepper-navigation><q-btn @click='test()' color='secondary' label='Продолжить без ответа' /></q-stepper-navigation>
+      </q-step> -->
+      <q-step v-for="(item, index) in condition.criterion" v-bind:key='index'
+        :name='Number(index + 2)'
+        :title='`Вычисление значений критерия С${index + 1}`'
+        icon='assignment'
+        :done='correctStep > index + 1'
+      >
+        <FirstStep
+        :data = 'item'
+        :alternative = 'condition.alternative'
+        :index = 'index'
+        :answers = 'funcAnswers[index]'
+        :done='correctStep > 1 + index'
+        @success = 'Answer()'
+        />
+        <q-stepper-navigation>
+          <q-btn @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
+          <q-btn flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
+        </q-stepper-navigation>
       </q-step>
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
       <q-step
@@ -195,6 +214,25 @@ export default {
       uid: ''
     }
   },
+  computed: {
+    funcAnswers: function () {
+      const answerArr = []
+      for (let i = 1; i < 5; i++) {
+        const arr = []
+        for (let j = 0; j < this.condition.alternative.length; j++) {
+          if (i === 3 || i === 4) {
+            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i][1])).toFixed(2)))
+          } else {
+            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i])).toFixed(2)))
+          }
+        }
+        answerArr.push(arr)
+      }
+      console.log('answerArr')
+      console.log(answerArr)
+      return answerArr
+    }
+  },
   methods: {
     back () {
       this.step--
@@ -202,6 +240,9 @@ export default {
     test () {
       this.step++
       // this.correctStep++
+    },
+    Answer () {
+      this.correctStep++
     },
     correctChoice () {
       if (this.step > this.correctStep) {
@@ -273,7 +314,7 @@ export default {
       this.mark -= penalty
     }
   },
-  created () {
+  mounted () {
     this.uid = this.$store.getters['data/getUser']().id
     checkLab.call(this)
   },

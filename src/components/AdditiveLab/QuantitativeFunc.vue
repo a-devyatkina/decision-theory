@@ -130,7 +130,7 @@ export default {
         this.validation = false
         this.$emit('error')
       } else {
-        this.$emit('right')
+        this.$emit('right', {s1, s2, s3})
       }
     },
     comparesecond (a, b) {

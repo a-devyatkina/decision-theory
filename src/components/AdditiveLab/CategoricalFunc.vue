@@ -58,7 +58,7 @@ export default {
         this.$emit('error')
         this.validation = false
       } else {
-        this.$emit('right')
+        this.$emit('right', {s1, s2, s3})
       }
     },
     compare (a, b) {

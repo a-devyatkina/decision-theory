@@ -11,5 +11,19 @@ export default {
   works: {},
   histories: {},
   links: {},
-  steplabs: {}
+  steplabs: {},
+  lab3: {
+    additiveLab: {
+      description: '',
+      name: 'Метод аддитивной свертки',
+      teacher: '-LYhUEirsWu0_jAkKAwf',
+      link: '/additiveLab'
+    },
+    logicsLab: {
+      description: '',
+      name: 'Метод нечеткой логики',
+      teacher: '-LYhUEirsWu0_jAkKAwf',
+      link: '/logicsLab'
+    }
+  }
 }

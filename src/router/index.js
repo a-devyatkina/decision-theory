@@ -37,6 +37,7 @@ import LastStep from '../pages/PreferenceLab/components/LastStep.vue'
 import FillTable from '../pages/PreferenceLab/components/FillTable.vue'
 import InputTable from '../pages/PreferenceLab/components/InputTable.vue'
 
+import Lab3Table from '../components/Lab3Table.vue'
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -77,6 +78,7 @@ Vue.component('LastStep', LastStep)
 Vue.component('FillTable', FillTable)
 Vue.component('InputTable', InputTable)
 
+Vue.component('lab3-table', Lab3Table)
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation
