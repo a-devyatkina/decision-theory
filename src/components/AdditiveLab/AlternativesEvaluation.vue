@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  props: ['condition', 'cr', 'step', 'correctStep'],
+  props: ['condition', 'cr', 'step', 'correctStep', 'funcAnswers'],
   data () {
     return {
       columns: [
@@ -85,10 +85,14 @@ export default {
       // ],
       tables: {
         condition: [
-          [0.86, 0.57, 0.14, 0.078],
-          [0.46, 0.92, 0.29, 0.558],
-          [0.29, 0.71, 0.43, 0.136],
-          [0.2, 0.07, 0.3, 0.228]
+          // [0.86, 0.57, 0.14, 0.078],
+          // [0.46, 0.92, 0.29, 0.558],
+          // [0.29, 0.71, 0.43, 0.136],
+          // [0.2, 0.07, 0.3, 0.228]
+          [0.34, 0.82, 0.24, 0.24],
+          [0.86, 0.72, 0.67, 0.16],
+          [0.34, 0.82, 0.24, 0.45],
+          [0.5, 0.25, 0.5, 0.15]
         ],
         importance: [0.1, 0.4, 0.7, 1],
         linguistic: [0.1, 0.3, 0.5, 0.75, 1],
@@ -121,7 +125,7 @@ export default {
         // correct[this.cr]['a' + (alt + 1)] = this.tables.linguisticValues[0]
         correct[0]['a' + (alt + 1)] = this.tables.linguisticValues[0]
         for (let i = 1; i < linguistic.length - 1; i++) {
-          value = this.membership(this.tables.condition[this.cr][alt], linguistic[i - 1], linguistic[i], linguistic[i + 1]).toFixed(2)
+          value = this.membership(this.funcAnswers[this.cr][alt], linguistic[i - 1], linguistic[i], linguistic[i + 1]).toFixed(2)
           console.log(`cr = ${this.cr + 1}`, `alt = ${alt + 1}`, `step = ${i}`, value, max, value > max)
           if (value > max) {
             max = value
@@ -135,8 +139,8 @@ export default {
       let value = 0
       correct[0]['importance'] = this.tables.importanceValues[0]
       for (let i = 1; i < importance.length - 1; i++) {
-        value = this.membership(this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
-        console.log(value > max, `value = ${value}`, `max = ${max}`, this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
+        value = this.membership(this.funcAnswers[this.cr][this.funcAnswers.length - 1], importance[i - 1], importance[i], importance[i + 1])
+        console.log(value > max, `value = ${value}`, `max = ${max}`, this.funcAnswers[this.cr][this.funcAnswers.length - 1], importance[i - 1], importance[i], importance[i + 1])
         if (value > max) {
           max = value
           correct[0]['importance'] = this.tables.importanceValues[i - 1]
