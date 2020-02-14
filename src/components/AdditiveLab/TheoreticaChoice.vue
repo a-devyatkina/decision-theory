@@ -2,6 +2,7 @@
   <div>
     <div class="goal">
       <p><b>{{ question.question }}</b></p>
+      <img v-if="question.path" :src="question.path"/>
       <div class="q-pa-md">
         <div class="q-gutter-sm">
           <q-radio v-model="answer" val="val0" :disable="checked" :label="question.answer[0]" color="secondary"/><br><br>

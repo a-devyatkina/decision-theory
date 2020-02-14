@@ -1,8 +1,9 @@
 <template>
     <div class="goal">
         <div class="finalquest">
-            <p><b>Какое из утверждений является условием нормальности функции?</b></p>
+            <p><b>{{ question.question }}</b></p>
         </div>
+        <img v-if="question.path" :src="question.path"/>
         <div class="q-pa-md">
             <div class="q-gutter-md">
                 <q-input type="textarea" autogrow outlined v-model="finalAnswer" label="Ответ" color="secondary"/>
@@ -14,6 +15,7 @@
 
 <script>
 export default {
+  props: ['question'],
   data () {
     return {
       finalAnswer: ''
