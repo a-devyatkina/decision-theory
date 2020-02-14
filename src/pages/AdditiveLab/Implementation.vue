@@ -102,7 +102,7 @@
         icon='assignment'
         :done='correctStep > 3'
       >
-        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
       </q-step>
       <q-step
         :name='7'
@@ -110,7 +110,7 @@
         icon='assignment'
         :done='correctStep > 4'
       >
-        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
       </q-step>
       <q-step
         :name='8'
@@ -118,7 +118,7 @@
         icon='assignment'
         :done='correctStep > 5'
       >
-        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -127,7 +127,7 @@
         icon='assignment'
         :done='correctStep > 6'
       >
-        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -153,7 +153,7 @@
         :done='correctStep > 9'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @back='back()'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back()'></theoretical-choice>
       </q-step>
 
       <q-step
@@ -171,7 +171,7 @@
         :done='correctStep > 11'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back()'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back()'></theoretical-choice>
       </q-step>
 
       <q-step
@@ -189,7 +189,7 @@
         icon='assignment'
         :done='correctStep > 13'
       >
-        <theoretical-input @back='back()'></theoretical-input>
+        <theoretical-input :question='question[4]' @back='back()'></theoretical-input>
       </q-step>
     </q-stepper>
     {{ error }}
@@ -264,16 +264,33 @@ export default {
       console.log(this.altsEvals)
     },
     getFunctions (functions) {
-      if (this.step > this.correctStep && this.r_functions.length < 3) {
+      /* if (this.step > this.correctStep && this.r_functions.length < 3) {
         this.r_functions = functions
+        console.log('getFunctions:')
+        console.log(this.r_functions)
         this.correctStep++
+      }
+      this.step++ */
+      if (this.step > this.correctStep) {
+        this.correctStep++
+      }
+      if (this.r_functions.length < 3) {
+        this.r_functions = functions
       }
       this.step++
     },
     getSquares (squares) {
-      if (this.step > this.correctStep && this.squares.length < 1) {
+      /* if (this.step > this.correctStep && this.squares.length < 1) {
         this.squares = squares
         this.correctStep++
+        console.log('in getSquares')
+      }
+      this.step++ */
+      if (this.step > this.correctStep) {
+        this.correctStep++
+      }
+      if (this.squares.length < 1) {
+        this.squares = squares
       }
       this.step++
     },
