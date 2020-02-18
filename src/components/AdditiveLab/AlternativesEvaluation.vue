@@ -139,8 +139,8 @@ export default {
       let value = 0
       correct[0]['importance'] = this.tables.importanceValues[0]
       for (let i = 1; i < importance.length - 1; i++) {
-        value = this.membership(this.funcAnswers[this.cr][this.funcAnswers.length - 1], importance[i - 1], importance[i], importance[i + 1])
-        console.log(value > max, `value = ${value}`, `max = ${max}`, this.funcAnswers[this.cr][this.funcAnswers.length - 1], importance[i - 1], importance[i], importance[i + 1])
+        value = this.membership(this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
+        console.log(value > max, `value = ${value}`, `max = ${max}`, this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
         if (value > max) {
           max = value
           correct[0]['importance'] = this.tables.importanceValues[i - 1]
@@ -175,7 +175,7 @@ export default {
         this.$emit('answer', this.answer)
         this.evals = this.answer
       } else {
-        this.$emit('error')
+        this.$emit('error', 2)
       }
       // console.log('in check')
       // console.log(this.answer)

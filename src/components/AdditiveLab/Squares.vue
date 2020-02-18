@@ -114,7 +114,7 @@ export default {
         if (Math.abs(triangle.square - this.answer[row].square) > 0.05) {
           this.$refs.table.$children[2 + row].$children[1].$el.style = 'background-color: #FF0000'
           this.mistake = true
-          this.$emit('error')
+          this.$emit('error', 2)
         } else {
           this.$refs.table.$children[2 + row].$children[1].$el.style = 'background-color: #FFFFFF'
         }

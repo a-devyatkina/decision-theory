@@ -151,6 +151,8 @@ export default {
       return correct
     },
     answerAltNum () {
+      console.log('answerAltNum:')
+      console.log(this.answerRating)
       return (this.answerRating.findIndex(function (e) { return e.rating === 1 }) + 1)
     }
   },
@@ -161,7 +163,7 @@ export default {
         if (Math.abs(point.coord - this.answerCoords[row].coord) > 0.05) {
           this.$refs.coords.$children[2 + row].$children[1].$el.style = 'background-color: #FF0000'
           this.mistake = true
-          this.$emit('error')
+          this.$emit('error', 3)
         } else {
           this.$refs.coords.$children[2 + row].$children[1].$el.style = 'background-color: #FFFFFF'
         }
@@ -171,7 +173,7 @@ export default {
         if (Math.abs(alt.rating - this.answerRating[row].rating) > 0.05) {
           this.$refs.rating.$children[2 + row].$children[1].$el.style = 'background-color: #FF0000'
           this.mistake = true
-          this.$emit('error')
+          this.$emit('error', 3)
         } else {
           this.$refs.rating.$children[2 + row].$children[1].$el.style = 'background-color: #FFFFFF'
         }
@@ -206,10 +208,10 @@ export default {
       // this.$emit('answer')
       this.coords = this.answerCoords
       this.rating = this.answerRating
-      this.altNum = this.altNum
+      this.altNum = this.answerAltNum
     }
-  },
-  watch: {
+  }
+  /* watch: {
     coords: {
       handler: function (oldCoords, newCoords) {
         localStorage.coords = JSON.stringify(newCoords)
@@ -227,6 +229,6 @@ export default {
         localStorage.altNum = newNum
       }
     }
-  }
+  } */
 }
 </script>

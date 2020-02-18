@@ -39,7 +39,7 @@ export default {
         this.$emit('answer')
       } else {
         this.mistake = true
-        this.$emit('error')
+        this.$emit('error', 8)
       }
     }
   },

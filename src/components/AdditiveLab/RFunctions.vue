@@ -153,35 +153,33 @@ export default {
   },
   methods: {
     check () {
-      // this.mistake = false
-      // let cols = ['begin', 'top', 'end']
-      // this.r_functions.forEach((rfunc, row) => {
-      //   cols.forEach((point, col) => {
-      //     if (Math.abs(rfunc[point] - this.answer[row][point]) > 0.05) {
-      //       this.$refs.table.$children[4 + row].$children[1 + col].$el.style = 'background-color: #FF0000'
-      //       this.mistake = true
-      //     } else {
-      //       this.$refs.table.$children[4 + row].$children[1 + col].$el.style = 'background-color: #FFFFFF'
-      //     }
-      //   })
-      // })
-      // if (!this.mistake) {
-      //   this.checked = true
-      //   this.$emit('answer', this.answer)
-      //   this.r_functions = this.answer
-      // }
-      this.checked = true
+      this.mistake = false
+      let cols = ['begin', 'top', 'end']
+      this.r_functions.forEach((rfunc, row) => {
+        cols.forEach((point, col) => {
+          if (Math.abs(rfunc[point] - this.answer[row][point]) > 0.05) {
+            this.$refs.table.$children[4 + row].$children[1 + col].$el.style = 'background-color: #FF0000'
+            this.mistake = true
+          } else {
+            this.$refs.table.$children[4 + row].$children[1 + col].$el.style = 'background-color: #FFFFFF'
+          }
+        })
+      })
+      if (!this.mistake) {
+        this.checked = true
+        this.$emit('answer', this.answer)
+        this.r_functions = this.answer
+      } else {
+        this.$emit('error', 2)
+      }
+      /* this.checked = true
       this.$emit('answer', this.answer)
-      this.r_functions = this.answer
+      this.r_functions = this.answer */
     }
   },
   mounted () {
-    // if (localStorage.r_functions) {
-    //   this.r_functions = localStorage.r_functions
-    // }
     if (this.correctStep >= this.step) {
       this.checked = true
-      // this.$emit('answer', this.answer)
       this.r_functions = this.answer
     }
     console.log('rfunctions:')
