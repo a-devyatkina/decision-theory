@@ -25,5 +25,6 @@ export default {
       teacher: '-LYhUEirsWu0_jAkKAwf',
       link: '/logicsLab'
     }
-  }
+  },
+  registrations: {}
 }

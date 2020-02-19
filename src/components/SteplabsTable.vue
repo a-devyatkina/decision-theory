@@ -1,32 +1,27 @@
 <template>
-  <div>
-    <q-table :data="content" :columns="columns" row-key="id" rows-per-page-options="0" hide-bottom :pagination.sync="pagination" :filter="filter" :filter-method="doFilter" class="q-ma-md">
-      <template slot="top-left" slot-scope="props">
-        <q-search hide-underline v-model="filter" />
-      </template>
-      <template slot="top-right" slot-scope="props">
-        <steplab-button icon="add" :title="$t('Add lab')" color="secondary" />
-      </template>
-      <q-tr slot="body" slot-scope="props" :props="props">
-        <q-td key="name" :props="props">
-          {{ props.row.name }}
-        </q-td>
-        <q-td key="desc" :props="props">
-          <div style="white-space:pre-wrap">{{ props.row.description }}</div>
-        </q-td>
-        <q-td key="preview">
-          <q-btn icon-right="find_in_page" color="secondary" no-caps no-wrap :label="$t('View')" rounded @click="previewSteplab(props.row.id)" />
-        </q-td>
-        <q-td key="actions" :props="props">
-          <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.id" />
-          <q-btn icon="delete" round flat @click="removeSteplab(props.row.id, props.row.name)" />
-        </q-td>
-      </q-tr>
-    </q-table>
-    <router-link class="q-btn" to="/preferenceLab">Метод отношений предпочтений</router-link>
-    <router-link class="q-btn" to="/logicsLab">Метод нечёткого логического вывода</router-link>
-    <router-link class="q-btn" to="/additiveLab">Метод аддитивной свёртки</router-link>
-  </div>
+  <q-table :data="content" :columns="columns" row-key="lid" rows-per-page-options="0" hide-bottom :pagination.sync="pagination" :filter="filter" :filter-method="doFilter" class="q-ma-md">
+    <template slot="top-left" slot-scope="props">
+      <q-search hide-underline v-model="filter" />
+    </template>
+    <template slot="top-right" slot-scope="props">
+      <steplab-button icon="add" :title="$t('Add lab')" color="secondary" />
+    </template>
+    <q-tr slot="body" slot-scope="props" :props="props">
+      <q-td key="name" :props="props">
+        {{ props.row.steplab.name }}
+      </q-td>
+      <q-td key="desc" :props="props">
+        <div style="white-space:pre-wrap">{{ props.row.steplab.description }}</div>
+      </q-td>
+      <q-td key="preview">
+        <q-btn icon-right="find_in_page" color="secondary" no-caps no-wrap :label="$t('View')" rounded @click="previewSteplab(props.row.lid)" />
+      </q-td>
+      <q-td key="actions" :props="props">
+        <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.lid" />
+        <q-btn icon="delete" round flat @click="removeSteplab(props.row.lid, props.row.steplab.name)" />
+      </q-td>
+    </q-tr>
+  </q-table>
 </template>
 
 <script>
@@ -84,12 +79,13 @@ export default {
       let handles = this.$store.getters['data/getSteplabsHandles']()
       let content = []
       for (let lid in handles) {
-        let handle = handles[lid]
-        if (handle !== undefined && handle.outdated === false) {
+        if (handles[lid]) {
           content.push({
-            id: lid,
-            name: handle.name,
-            description: handle.description
+            lid: lid,
+            steplab: {
+              name: handles[lid].name,
+              description: handles[lid].description
+            }
           })
         }
       }
@@ -123,9 +119,9 @@ export default {
           ok: this.$t('Yes'),
           cancel: this.$t('Cancel')
         })
-        let handle = this.content.find(item => item.id === lid)
-        handle.outdated = true
-        await this.$store.dispatch('data/updateSteplabHandle', { lid, handle })
+        let elem = this.content.find(item => item.lid === lid)
+        elem.steplab.outdated = true
+        await this.$store.dispatch('data/updateSteplabHandle', { lid, handle: elem.steplab })
         await this.$store.dispatch('data/removeSteplabPattern', { lid })
       } catch (error) {
         this.$q.notify(error.message)

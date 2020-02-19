@@ -1,5 +1,5 @@
-const url = require('url');
-const office = require("../office/index.js");
+const url = require('url')
+const office = require("../office/index.js")
 const fs = require('fs-extra')
 
 module.exports.init = function (app) {
@@ -24,7 +24,7 @@ module.exports.init = function (app) {
     res.status(500).send('access denyed');
   }
 
-  function checkForAdminAccess(req, res, next) {
+  function checkForMasterAccess(req, res, next) {
     if (req.isAuthenticated()) {
       if (req.session.passport.user.role === "teacher")
         return next();
@@ -32,7 +32,7 @@ module.exports.init = function (app) {
     res.status(500).send('access denyed');
   }
 
-  app.get('/restapi/steplab/pattern/file', checkForAdminAccess, (req, res) => {
+  app.get('/restapi/steplab/pattern/file', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.getPattern(query.lab, (err, file) => {
       if(err) {
@@ -52,7 +52,7 @@ module.exports.init = function (app) {
     });
   });
 
-  app.post('/restapi/steplab/pattern/file', checkForAdminAccess, (req, res) => {
+  app.post('/restapi/steplab/pattern/file', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.setPattern(query.lab, req.files.pattern, (err) => {
       if(err) {
@@ -68,7 +68,7 @@ module.exports.init = function (app) {
     });
   });
 
-  app.get('/restapi/steplab/pattern/schema', checkForAdminAccess, (req, res) => {
+  app.get('/restapi/steplab/pattern/schema', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.getPatternSchema(query.lab, (err, schema) => {
       if(err) {
@@ -79,7 +79,7 @@ module.exports.init = function (app) {
     });
   });
 
-  app.put('/restapi/steplab/pattern/schema', checkForAdminAccess, (req, res) => {
+  app.put('/restapi/steplab/pattern/schema', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.setPatternSchema(query.lab, req.body, (err) => {
       if(err) {
@@ -90,7 +90,7 @@ module.exports.init = function (app) {
     });
   });
 
-  app.delete('/restapi/steplab/pattern/file', checkForAdminAccess, (req, res) => {
+  app.delete('/restapi/steplab/pattern/file', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.removePattern(query.lab, (err) => {
       if(err) {
@@ -150,18 +150,20 @@ module.exports.init = function (app) {
     });
   });
 
-  app.post('/restapi/steplab/instance/create', checkForAdminAccess, (req, res) => {
+  app.post('/restapi/steplab/instance/create', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.createLab(query.lab, query.user, (err) => {
       if(err) {
         console.log(JSON.stringify(err));
-        return res.status(500).send(err);
+        if (err != 'lab already created') {
+          return res.status(500).send(err);
+        }
       }
       return res.status(200).send();
     });
   });
 
-  app.delete('/restapi/steplab/instance/remove', checkForAdminAccess, (req, res) => {
+  app.delete('/restapi/steplab/instance/remove', checkForMasterAccess, (req, res) => {
     const query = url.parse(req.url, true).query;
     office.removeLab(query.lab, query.user, (err) => {
       if(err) {

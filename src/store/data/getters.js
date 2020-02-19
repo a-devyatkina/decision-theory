@@ -5,7 +5,7 @@ export const getLink = (state) => (owner, file) => {
   return null
 }
 
-export const getCurrentCourses = (state) => (tid) => {
+export const getCurrentCourses = (state) => () => {
   let courses = {}
   for (let cid in state.courses) {
     if (state.courses[cid].archived === false) {
@@ -15,11 +15,23 @@ export const getCurrentCourses = (state) => (tid) => {
   return courses
 }
 
-export const getArchivedCourses = (state) => (tid) => {
+export const getArchivedCourses = (state) => () => {
   let courses = {}
   for (let cid in state.courses) {
-    if (state.courses[cid].archived === true && (!tid || tid === state.courses[cid].teacher)) {
+    if (state.courses[cid].archived === true) {
       courses[cid] = state.courses[cid]
+    }
+  }
+  return courses
+}
+
+export const getGroupCourses = (state) => (gid) => {
+  let courses = {}
+  for (let cid in state.courses) {
+    for (let id in state.courses[cid].groups) {
+      if (id === gid) {
+        courses[cid] = state.courses[cid]
+      }
     }
   }
   return courses
@@ -159,7 +171,21 @@ export const getSteplabHandle = (state) => (lid) => {
 }
 
 export const getSteplabsHandles = (state) => () => {
-  return state.steplabs
+  let steplabs = {}
+  for (let lid in state.steplabs) {
+    if (state.steplabs[lid].outdated === false) {
+      steplabs[lid] = state.steplabs[lid]
+    }
+  }
+  return steplabs
+}
+
+export const getRegistrations = (state) => () => {
+  return state.registrations
+}
+
+export const getRegistration = (state) => (rid) => {
+  return state.registrations[rid]
 }
 
 export const getLabs3 = (state) => () => {

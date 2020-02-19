@@ -1,41 +1,45 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-page class="q-mt-xl">
-      <div class="column login-form">
-        <q-card class="q-ma-sm">
-          <q-card-title class="column items-center">
-            {{ $t('MEPhI') }}
-          </q-card-title>
-          <q-card-main>
-            <q-input :error="$v.email.$error" color="secondary" v-model="email" type="text" :stack-label="$t('E-mail')" />
-            <q-input :error="$v.password.$error" color="secondary" v-model="password" type="password" :stack-label="$t('Password')" />
-          </q-card-main>
-          <q-card-actions class="column items-center">
-            <q-btn no-caps glossy color="secondary" @click="onSubmit" :loading="loading" :disabled="loading"
-              type="submit" class="submit-btn" text-color="white" :label="$t('Login')">
-              <q-icon class="q-pr-md absolute-right" name="arrow_right" />
-            </q-btn>
-            <div class="row self-center justify-between">
-              <q-btn class="social-auth" @click="onGoogleSignIn" :loading="loading" :disabled="loading" >
-                <img src="../assets/google-logo.svg" />
+    <q-page-container>
+      <q-page class="q-mt-xl">
+        <div class="column login-form">
+          <q-card class="q-ma-sm">
+            <q-card-title class="column items-center">
+              {{ $t('MEPhI-lab') }}
+            </q-card-title>
+            <q-card-main>
+              <q-input :error="$v.email.$error" color="secondary" v-model="email" type="text" :stack-label="$t('E-mail')" />
+              <q-input :error="$v.password.$error" color="secondary" v-model="password" type="password" :stack-label="$t('Password')" />
+            </q-card-main>
+            <q-card-actions class="column items-center">
+              <q-btn no-caps glossy color="secondary" @click="onSubmit" :loading="loading" :disabled="loading"
+                type="submit" class="submit-btn" text-color="white" :label="$t('Login')">
+                <q-icon class="q-pr-md absolute-right" name="arrow_right" />
               </q-btn>
-              <q-btn class="social-auth" @click="onYandexSignIn" :loading="loading" :disabled="loading">
-                <img src="../assets/yandex-logo.svg" />
-              </q-btn>
-              <q-btn class="social-auth" @click="onMailruSignIn" :loading="loading" :disabled="loading">
-                <img src="../assets/mailru-logo.svg" />
-              </q-btn>
-            </div>
-          </q-card-actions>
-        </q-card>
-      </div>
-    </q-page>
+              <div class="row self-center justify-between">
+                <q-btn class="social-auth" @click="onGoogleSignIn" :loading="loading" :disabled="loading" >
+                  <img src="../assets/google-logo.svg" />
+                </q-btn>
+                <q-btn class="social-auth" @click="onYandexSignIn" :loading="loading" :disabled="loading">
+                  <img src="../assets/yandex-logo.svg" />
+                </q-btn>
+                <q-btn class="social-auth" @click="onMailruSignIn" :loading="loading" :disabled="loading">
+                  <img src="../assets/mailru-logo.svg" />
+                </q-btn>
+              </div>
+              <router-link class="row justify-center text-secondary q-caption q-my-sm cursor-pointer" to="/registration" tag="span">{{ $t('registration') }}</router-link>
+            </q-card-actions>
+          </q-card>
+        </div>
+      </q-page>
+    </q-page-container>
   </q-layout>
 </template>
 
 <script>
 import {
-  required
+  required,
+  email
 } from 'vuelidate/lib/validators'
 export default {
   data () {
@@ -46,7 +50,8 @@ export default {
   },
   validations: {
     email: {
-      required
+      required,
+      email
     },
     password: {
       required
@@ -62,7 +67,6 @@ export default {
   },
   methods: {
     onSubmit () {
-      console.log(this)
       this.$v.email.$touch()
       this.$v.password.$touch()
       if (this.error) {

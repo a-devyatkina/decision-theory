@@ -38,6 +38,20 @@ export default (function () {
       ref().off()
     }
 
+    async list () {
+      let snapshot = await ref().once('value')
+      let groups = {}
+      snapshot.forEach(function (child) {
+        const val = child.val()
+        groups[child.key] = {
+          name: val.name,
+          description: val.description,
+          outdated: val.outdated
+        }
+      })
+      return groups
+    }
+
     async create (name, description, outdated) {
       let snapshot = await ref().push({
         name: name,

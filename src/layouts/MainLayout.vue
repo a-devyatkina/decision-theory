@@ -6,7 +6,7 @@
         <q-btn v-if="isStudent" flat dense round to="/works" icon="menu"/>
 
         <q-toolbar-title>
-          {{ $t('MEPhI') }}
+          {{ $t('MEPhI-lab') }}
           <div slot="subtitle">{{ $t('Managment And Watching For Labs Execution') }}</div>
         </q-toolbar-title>
         <q-btn-dropdown flat no-caps >

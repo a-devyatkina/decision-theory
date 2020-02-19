@@ -169,7 +169,7 @@ function getStatus(lab, callback) {
       if (err) {
         return callback(err, null);
       }
-      return callback(null, res);
+      return callback(null, JSON.parse(res));
     });
   });
 }

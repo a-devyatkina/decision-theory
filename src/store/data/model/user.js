@@ -1,4 +1,5 @@
 import * as firebase from 'firebase'
+import axios from 'axios'
 
 export default (function () {
   let instance = null
@@ -18,9 +19,17 @@ export default (function () {
         id: userId
       })
     }
+
     async loginByPassword (email, password) {
-      const auth = await firebase.auth().signInWithEmailAndPassword(email, password)
-      return { role: 'root', id: auth.user.uid, email: auth.user.email }
+      const cred = await firebase.auth().signInWithEmailAndPassword(email, password)
+      let req = {
+        idToken: await cred.user.getIdToken()
+      }
+      const response = await axios.post('auth/token', req)
+      if (response.status !== 200) {
+        throw new Error('error: ' + response.status)
+      }
+      return { role: 'root', id: cred.user.uid, email: cred.user.email }
     }
 
     async loginWithCustomToken (token) {
@@ -31,7 +40,6 @@ export default (function () {
         let student = {...snapshot.val()}
         student.id = uid
         student.role = 'student'
-        console.log(student)
         return student
       } else {
         let snapshot = await firebase.database().ref('/teachers/' + uid).once('value')

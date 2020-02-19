@@ -9,6 +9,7 @@ import attendance from './attendance'
 import histories from './histories'
 import storage from './storage'
 import steplabs from './steplabs'
+import registrations from './registrations'
 
 export default {
   user: user,
@@ -21,5 +22,6 @@ export default {
   histories: histories,
   teachers: teachers,
   storage: storage,
-  steplabs: steplabs
+  steplabs: steplabs,
+  registrations: registrations
 }

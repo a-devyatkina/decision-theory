@@ -121,13 +121,41 @@ export async function removeGroup ({ state }, { gid }) {
   await model.groups.remove(gid)
 }
 
+export async function listGroups ({ commit }) {
+  let groups = await model.groups.list()
+  commit('fillGroups', groups)
+  return groups
+}
+
+export async function listenRegistrations ({ commit }) {
+  model.registrations.listen(data => {
+    commit('updateRegistration', data)
+  }, data => {
+    commit('updateRegistration', data)
+  }, rid => {
+    commit('removeRegistration', rid)
+  })
+}
+
+export async function unlistenRegistrations ({ commit }) {
+  model.registrations.unlisten()
+}
+
+export async function acceptRegistration ({ state }, { rid }) {
+  await model.registrations.acceptRegRequest(rid)
+}
+
+export async function rejectRegistration ({ state }, { rid }) {
+  await model.registrations.rejectRegRequest(rid)
+}
+
 export async function listenTeachers ({ commit }) {
   model.teachers.listen(data => {
     commit('updateTeacher', data)
   }, data => {
     commit('updateTeacher', data)
-  }, sid => {
-    commit('removeTeacher', sid)
+  }, tid => {
+    commit('removeTeacher', tid)
   })
 }
 
@@ -140,10 +168,10 @@ export async function updateTeacher ({ commit }, { tid, teacher }) {
   if (found && found.tid !== tid) {
     throw Error('teacher with such email already exists')
   }
-  await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.outdated)
+  await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
   commit('updateTeacher', {
     tid: tid,
-    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, outdated: teacher.outdated }
+    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, address: teacher.address, outdated: teacher.outdated }
   })
 }
 
@@ -153,22 +181,21 @@ export async function createTeacher ({ commit }, { teacher }) {
   if (found) {
     tid = found.tid
     if (found.teacher.outdated === true) {
-      await model.students.update(tid, teacher.name, teacher.email, teacher.phone, teacher.outdated)
+      await model.teachers.update(tid, teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
     } else {
       throw Error('teacher with such email already exists')
     }
   } else {
-    tid = await model.teachers.create(teacher.name, teacher.email, teacher.phone, teacher.outdated)
+    tid = await model.teachers.create(teacher.name, teacher.email, teacher.phone, teacher.address, teacher.outdated)
   }
   commit('updateTeacher', {
     tid: tid,
-    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, outdated: teacher.outdated }
+    teacher: { name: teacher.name, email: teacher.email, phone: teacher.phone, address: teacher.address, outdated: teacher.outdated }
   })
 }
 
 export async function removeTeacher ({ commit }, { tid }) {
   await model.teachers.remove(tid)
-  commit('removeTeacher', tid)
 }
 
 export async function listenStudents ({ commit }) {
@@ -249,9 +276,6 @@ export async function removeStudent ({ state }, { sid }) {
 export async function listenWorks ({ state, commit, dispatch }) {
   model.works.listen(state.user, async data => {
     commit('updateWork', data)
-    if (state.user && state.user.role === 'student') {
-      dispatch('listenCourse', { cid: data.work.course })
-    }
     // if (data.work.solution && data.work.solution.length > 0) {
     //   let url = await model.storage.url(data.work.student, data.work.solution)
     //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
@@ -263,12 +287,6 @@ export async function listenWorks ({ state, commit, dispatch }) {
     //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
     // }
   }, wid => {
-    if (state.user && state.user.role === 'student') {
-      let work = state.works[wid]
-      if (work) {
-        dispatch('unlistenCourse', { cid: work.course })
-      }
-    }
     commit('removeWork', wid)
   })
 }
@@ -371,29 +389,37 @@ export async function unlistenHistory ({ commit }, { wid }) {
 export async function subscribeDatabase ({ state, commit, dispatch }) {
   if (state.user.role === 'teacher') {
     dispatch('listenGroups')
+    dispatch('listenTeachers')
     dispatch('listenStudents')
     dispatch('listenWorks')
-    dispatch('fillLabs')
-    dispatch('fillSteplabHandles')
-    commit('fillAttendance', await model.attendance.list(state.user.id))
-    commit('fillCourses', await model.courses.list(state.user.id))
+    dispatch('listenLabs')
+    dispatch('listenSteplabHandles')
+    dispatch('listenAttendance')
+    dispatch('listenCourses')
   } else if (state.user.role === 'student') {
     dispatch('listenTeachers')
     dispatch('listenLabs')
+    dispatch('listenSteplabHandles')
     dispatch('listenWorks')
     dispatch('listenAttendance')
+    dispatch('listenCourses')
     commit('updateGroup', await model.groups.get(state.user.group))
   } else if (state.user.role === 'root') {
-    commit('fillTeachers', await model.teachers.list())
+    dispatch('listenGroups')
+    dispatch('listenTeachers')
+    dispatch('listenRegistrations')
   }
 }
 
 export async function unsubscribeDatabase ({ dispatch }) {
+  dispatch('unlistenGroups')
   dispatch('unlistenTeachers')
+  dispatch('unlistenRegistrations')
   dispatch('unlistenLabs')
   dispatch('unlistenStudents')
   dispatch('unlistenWorks')
   dispatch('unlistenAttendance')
+  dispatch('unlistenCourses')
 }
 
 export async function loginUser ({ dispatch, commit }, { email, password }) {
@@ -442,8 +468,8 @@ export async function signOut ({ dispatch, commit }) {
   dispatch('unsubscribeDatabase')
 }
 
-export async function listenCourse ({ commit }, { cid }) {
-  model.courses.listen(cid, data => {
+export async function listenCourses ({ commit }) {
+  model.courses.listen(data => {
     commit('updateCourse', data)
   }, data => {
     commit('updateCourse', data)
@@ -452,8 +478,8 @@ export async function listenCourse ({ commit }, { cid }) {
   })
 }
 
-export async function unlistenCourse ({ commit }, { cid }) {
-  model.courses.unlisten(cid)
+export async function unlistenCourses ({ commit }) {
+  model.courses.unlisten()
 }
 
 export async function addGroupToCourse ({ state, commit }, { cid, gid }) {
@@ -504,7 +530,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, attendance }) {
+export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -520,6 +546,14 @@ export async function updatePlanLabs ({ state, getters }, { cid, gid, labs, atte
         }
       }
       Vue.set(plan, 'labs', labs)
+      for (let lid in steplabs) {
+        for (let sid in state.students) {
+          if (state.students[sid].group === gid) {
+            await dispatch('createSteplab', { lid, uid: sid })
+          }
+        }
+      }
+      Vue.set(plan, 'steplabs', steplabs)
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
@@ -605,7 +639,22 @@ export async function createSteplabHandle ({ commit }, { handle }) {
   return lid
 }
 
-export async function updateSteplabHandle ({ commit }, { lid, handle }) {
+export async function updateSteplabHandle ({ state, commit, dispatch }, { lid, handle }) {
+  if (handle.outdated) {
+    for (let cid in state.courses) {
+      let course = state.courses[cid]
+      let dirty = false
+      for (let gid in course.groups) {
+        if (course.groups[gid].steplabs && course.groups[gid].steplabs[lid]) {
+          Vue.delete(course.groups[gid].steplabs, lid)
+          dirty = true
+        }
+      }
+      if (dirty) {
+        await dispatch('updateCourse', { cid, ...course })
+      }
+    }
+  }
   await model.steplabs.updateSteplabHandle(lid, handle)
   commit('updateSteplabHandle', { lid, handle })
 }
@@ -621,4 +670,14 @@ export async function fillSteplabHandles ({ state, commit }) {
     let handle = handles[lid]
     commit('updateSteplabHandle', { lid, handle })
   }
+}
+
+export async function listenSteplabHandles ({ state, commit }) {
+  model.steplabs.listen(data => {
+    commit('updateSteplabHandle', data)
+  }, data => {
+    commit('updateSteplabHandle', data)
+  }, lid => {
+    commit('removeSteplabHandle', lid)
+  })
 }
