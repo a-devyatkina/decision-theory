@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab)">
+            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab, props.row.isLab3)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -135,6 +135,21 @@ export default {
               })
             }
           }
+          for (let lid in course.lab3) {
+            let data = this.$store.getters['data/getStudentWork3'](this.user.id, lid)
+            if (data) {
+              sessions[cid].score += data.work.score
+              let lab = this.$store.getters['data/getLab3'](lid)
+              sessions[cid].tasks.push({
+                id: data.wid,
+                name: lab ? lab.name : '',
+                description: lab ? lab.description : '',
+                stage: data.work.step,
+                score: data.work.score,
+                isLab3: true
+              })
+            }
+          }
         }
       }
       return sessions
@@ -144,9 +159,11 @@ export default {
     }
   },
   methods: {
-    view (task, isSteplab) {
+    view (task, isSteplab, isLab3) {
       if (isSteplab) {
         this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
+      } else if (isLab3) {
+        this.$router.push(`/workflow3?wid=${task}`)
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }

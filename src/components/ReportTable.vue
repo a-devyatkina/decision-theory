@@ -18,9 +18,9 @@
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(lab.state)}}</q-chip>
         </router-link>
       </q-td>
-      <q-td v-for="lab in props.row.work3" :key="lab.lid" :props="props">
-        <router-link :to="`work3?lab=${lab.lid}&user=${lab.uid}`">
-          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(lab.stage)}}</q-chip>
+      <q-td v-for="work in props.row.work3" :key="work.lid" :props="props">
+        <router-link :to="`workflow3?wid=${work.wid}`">
+          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
       <q-td key="attendance" :props="props">

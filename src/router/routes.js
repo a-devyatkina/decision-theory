@@ -118,6 +118,14 @@ const routes = [
     beforeEnter: checkStudentOrTeacher
   },
   {
+    path: '/workflow3',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LabFlowPage.vue') }
+    ],
+    beforeEnter: checkStudentOrTeacher
+  },
+  {
     path: '/works',
     component: () => import('layouts/MainLayout.vue'),
     children: [

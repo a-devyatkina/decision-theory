@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     content () {
-      let labs = this.$store.getters['data/getLab3']()
+      let labs = this.$store.getters['data/getLabs3']()
       console.log('labs')
       console.log(labs)
       let content = []
