@@ -227,6 +227,9 @@ export async function createStudent ({ state }, { name, group, email, phone, add
         for (let lid in state.courses[cid].groups[group].labs) {
           await model.works.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', '', '', 0)
         }
+        for (let lid in state.courses[cid].groups[group].lab3) {
+          await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 'unassign', 0, 0, [])
+        }
       }
     }
   }
@@ -245,6 +248,7 @@ export async function updateStudent ({ commit }, { sid, name, group, email, phon
   await model.students.update(sid, name, group, email, phone, address, outdated)
 }
 
+// TODO: change for work3
 export async function removeStudent ({ state }, { sid }) {
   let remove = true
   for (let wid in state.works) {
@@ -396,6 +400,8 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
     dispatch('listenSteplabHandles')
     dispatch('listenAttendance')
     dispatch('listenCourses')
+    dispatch('listenLab3')
+    dispatch('listenWorks3')
   } else if (state.user.role === 'student') {
     dispatch('listenTeachers')
     dispatch('listenLabs')
@@ -403,6 +409,8 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
     dispatch('listenWorks')
     dispatch('listenAttendance')
     dispatch('listenCourses')
+    dispatch('listenLab3')
+    dispatch('listenWorks3')
     commit('updateGroup', await model.groups.get(state.user.group))
   } else if (state.user.role === 'root') {
     dispatch('listenGroups')
@@ -420,6 +428,7 @@ export async function unsubscribeDatabase ({ dispatch }) {
   dispatch('unlistenWorks')
   dispatch('unlistenAttendance')
   dispatch('unlistenCourses')
+  dispatch('unlistenLab3')
 }
 
 export async function loginUser ({ dispatch, commit }, { email, password }) {
@@ -530,7 +539,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs }) {
+export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs, lab3 }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -546,6 +555,7 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'labs', labs)
+
       for (let lid in steplabs) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
@@ -554,6 +564,21 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'steplabs', steplabs)
+
+      console.log('STEP2')
+      for (let lid in lab3) {
+        for (let sid in state.students) {
+          if (state.students[sid].group === gid) {
+            let work = getters['getStudentWork3'](sid, lid)
+            if (!work) {
+              await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 'unassign', 0, 0, [])
+            }
+          }
+        }
+      }
+      Vue.set(plan, 'lab3', lab3)
+      console.log('STEP3')
+
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
@@ -680,4 +705,93 @@ export async function listenSteplabHandles ({ state, commit }) {
   }, lid => {
     commit('removeSteplabHandle', lid)
   })
+}
+
+export function listenLab3 ({commit}) {
+  console.log(model)
+  console.log(model.lab3)
+  model.lab3.listen(async data => {
+    commit('updateLab3', data)
+    // if (data.lab.files !== undefined) {
+    //   for (let file of data.lab.files) {
+    //     if (file.length > 0) {
+    //       let url = await model.storage.url(data.lab.teacher, file)
+    //       commit('updateLink', { owner: data.lab.teacher, file: file, url: url })
+    //     }
+    //   }
+    // }
+  }, async data => {
+    commit('updateLab3', data)
+    // if (data.lab.files !== undefined) {
+    //   for (let file of data.lab.files) {
+    //     if (file.length > 0) {
+    //       let url = await model.storage.url(data.lab.teacher, file)
+    //       commit('updateLink', { owner: data.lab.teacher, file: file, url: url })
+    //     }
+    //   }
+    // }
+  }, lid => {
+    commit('removeLab3', lid)
+  })
+}
+
+export function unlistenLab3 ({ commit }) {
+  model.lab3.unlisten()
+}
+
+export async function createLab3 ({ commit }, { name, description, teacher }) {
+  let lid = await model.lab3.create(name, description, teacher)
+  commit('updateLab3', { lid: lid, lab: { name, description, teacher } })
+}
+
+export async function updateLab3 ({ commit }, { lid, name, description, teacher }) {
+  await model.lab3.update(lid, name, description, teacher)
+  commit('updateLab3', { lid: lid, lab: { name, description, teacher } })
+}
+
+export async function removeLab3 ({ state, commit }, { lid }) {
+  let archive = false
+  for (let wid in state.work3) {
+    if (state.work3[wid].lab === lid) {
+      archive = true
+      break
+    }
+  }
+  if (archive) {
+    let lab = state.lab3[lid]
+    if (lab) {
+      await model.lab3.update(lid, lab.name, lab.description, lab.teacher)
+      commit('updateLab3', { lid: lid, lab: { name: lab.name, description: lab.description, teacher: lab.teacher } })
+    }
+    return
+  }
+  await model.lab3.remove(lid)
+  commit('removeLab3', lid)
+}
+
+export async function listenWorks3 ({ state, commit, dispatch }) {
+  model.work3.listen(state.user, async data => {
+    commit('updateWork3', data)
+    // if (data.work.solution && data.work.solution.length > 0) {
+    //   let url = await model.storage.url(data.work.student, data.work.solution)
+    //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
+    // }
+  }, async data => {
+    commit('updateWork3', data)
+    // if (data.work.solution && data.work.solution.length > 0) {
+    //   let url = await model.storage.url(data.work.student, data.work.solution)
+    //   commit('updateLink', { owner: data.work.student, file: data.work.solution, url: url })
+    // }
+  }, wid => {
+    commit('removeWork3', wid)
+  })
+}
+
+export async function unlistenWorks3 ({ commit }) {
+  model.work3.unlisten()
+}
+
+export async function updateWork3 ({ commit }, { wid, work, history }) {
+  await model.work3.update(wid, work.student, work.course, work.teacher, work.lab, work.step, work.condition, work.score, work.attempt, work.error)
+  await model.histories.update(wid, history)
 }

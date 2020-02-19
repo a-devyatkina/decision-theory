@@ -11,7 +11,7 @@ export default (function () {
     return reference
   }
 
-  class LabsRef {
+  class Lab3Ref {
     listen (onAdded, onChanged, onRemoved) {
       ref().on('child_changed', snapshot => {
         let val = snapshot.val()
@@ -34,9 +34,7 @@ export default (function () {
           lab: {
             name: val.name,
             description: val.description,
-            teacher: val.teacher,
-            files: val.files,
-            outdated: val.outdated
+            teacher: val.teacher
           }
         })
       }, error => {
@@ -91,7 +89,7 @@ export default (function () {
   }
 
   if (!instance) {
-    instance = new LabsRef()
+    instance = new Lab3Ref()
   }
 
   return instance
