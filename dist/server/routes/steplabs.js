@@ -155,7 +155,9 @@ module.exports.init = function (app) {
     office.createLab(query.lab, query.user, (err) => {
       if(err) {
         console.log(JSON.stringify(err));
-        return res.status(500).send(err);
+        if (err != 'lab already created') {
+          return res.status(500).send(err);
+        }
       }
       return res.status(200).send();
     });

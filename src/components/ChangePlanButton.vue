@@ -79,6 +79,18 @@ export default {
           selected: selected
         })
       }
+      let steplabs = this.$store.getters['data/getSteplabsHandles']()
+      for (let lid in steplabs) {
+        let selected = this.group.steplabs !== undefined && this.group.steplabs[lid] !== undefined
+        let maxScore = selected ? this.group.steplabs[lid].maxScore : 0
+        content.push({
+          lid: lid,
+          name: steplabs[lid].name,
+          maxScore: maxScore,
+          selected: selected,
+          isStepLab: true
+        })
+      }
       let selected = this.group.attendance !== undefined
       let maxScore = selected ? this.group.attendance.maxScore : 0
       content.push({
@@ -92,11 +104,14 @@ export default {
     apply () {
       this.opened = false
       let labs = {}
+      let steplabs = {}
       let attendance = null
       for (let item of this.content) {
         if (item.selected) {
           if (item.lid === 'attendance') {
             attendance = item.maxScore
+          } else if (item.isStepLab) {
+            steplabs[item.lid] = { maxScore: item.maxScore }
           } else {
             labs[item.lid] = { maxScore: item.maxScore }
           }
@@ -106,6 +121,7 @@ export default {
         cid: this.cid,
         gid: this.gid,
         labs: labs,
+        steplabs: steplabs,
         attendance: attendance !== null ? { maxScore: attendance } : undefined
       })
     },

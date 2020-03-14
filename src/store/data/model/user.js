@@ -40,7 +40,6 @@ export default (function () {
         let student = {...snapshot.val()}
         student.id = uid
         student.role = 'student'
-        console.log(student)
         return student
       } else {
         let snapshot = await firebase.database().ref('/teachers/' + uid).once('value')

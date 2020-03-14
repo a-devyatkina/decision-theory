@@ -13,6 +13,11 @@
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
+      <q-td v-for="lab in props.row.steplabs" :key="lab.lid" :props="props">
+        <router-link :to="`steplab?lab=${lab.lid}&user=${lab.uid}`">
+          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(lab.state)}}</q-chip>
+        </router-link>
+      </q-td>
       <q-td key="attendance" :props="props">
         <q-chip color="secondary" style="width:50px" class="cursor-pointer">{{props.row.attendance}}
           <q-popover v-if="editable!=undefined">
@@ -68,6 +73,21 @@ export default {
           })
         }
       }
+      for (let lid in this.plan.steplabs) {
+        let steplab = this.$store.getters['data/getSteplabHandle'](lid)
+        if (steplab) {
+          cols.push({
+            name: lid,
+            required: true,
+            label: steplab.name,
+            align: 'center',
+            field: lid,
+            sortable: true,
+            classes: '',
+            style: ''
+          })
+        }
+      }
       if (this.plan.attendance !== undefined) {
         cols.push({
           name: 'attendance',
@@ -101,12 +121,26 @@ export default {
           sid: sid,
           name: student.name,
           score: 0,
-          works: []
+          works: [],
+          steplabs: []
         }
-        let works = this.$store.getters['data/getCourseStudentWorks'](sid, this.cid)
-        for (let wid in works) {
-          row.score += works[wid].score
-          row.works.push({ lid: works[wid].lab, stage: works[wid].stage, wid: wid })
+        for (let lid in this.plan.labs) {
+          let data = this.$store.getters['data/getStudentWork'](sid, lid)
+          if (data) {
+            row.score += data.work.score
+            row.works.push({ lid: lid, stage: data.work.stage, wid: data.wid })
+          } else {
+            row.works.push({ lid: lid, stage: '', wid: '' })
+          }
+        }
+        for (let lid in this.plan.steplabs) {
+          let steplab = this.$store.getters['data/getSteplabHandle'](lid)
+          if (steplab && steplab[sid]) {
+            row.score += steplab[sid].score
+            row.steplabs.push({ lid: lid, state: steplab[sid].state, uid: sid })
+          } else {
+            row.works.push({ lid: lid, state: '' })
+          }
         }
         if (this.plan.attendance !== undefined) {
           row.attendance = this.$store.getters['data/getAttendance'](sid, this.cid)

@@ -13,18 +13,15 @@ export default (function () {
 
   class LabsRef {
     listen (user, onAdded, onChanged, onRemoved) {
-      ref().orderByChild(user.role).equalTo(user.id).on('child_changed', snapshot => {
+      let fetch = user.role === 'student' ? ref().orderByChild(user.role).equalTo(user.id) : ref()
+      fetch.on('child_changed', snapshot => {
         let val = snapshot.val()
         onChanged({
-          wid: snapshot.key,
-          work: {
+          aid: snapshot.key,
+          attendance: {
             student: val.student,
             course: val.course,
             teacher: val.teacher,
-            lab: val.lab,
-            stage: val.stage,
-            task: val.task,
-            solution: val.solution,
             score: val.score
           }
         })
@@ -32,18 +29,14 @@ export default (function () {
         console.log('attendance child_changed failed: ' + error.code)
       })
 
-      ref().orderByChild(user.role).equalTo(user.id).on('child_added', snapshot => {
+      fetch.on('child_added', snapshot => {
         let val = snapshot.val()
         onAdded({
-          wid: snapshot.key,
-          work: {
+          aid: snapshot.key,
+          attendance: {
             student: val.student,
             course: val.course,
             teacher: val.teacher,
-            lab: val.lab,
-            stage: val.stage,
-            task: val.task,
-            solution: val.solution,
             score: val.score
           }
         })
@@ -51,7 +44,7 @@ export default (function () {
         console.log('attendance child_added failed: ' + error.code)
       })
 
-      ref().orderByChild(user.role).equalTo(user.id).on('child_removed', snapshot => {
+      fetch.on('child_removed', snapshot => {
         onRemoved(snapshot.key)
       }, error => {
         console.log('attendance child_removed failed: ' + error.code)

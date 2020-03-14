@@ -107,5 +107,8 @@
   "Reject": "Отклонить",
   "Do you want to reject registration of": "Хотите отклонить регистрацию для",
   "registration": "регистрация",
-  "Register with:": "Зарегистрироваться с помощью:"
+  "Register with:": "Зарегистрироваться с помощью:",
+  "none": "неизвестно",
+  "fail": "неудача",
+  "done": "успех"
 }

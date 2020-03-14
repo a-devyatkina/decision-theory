@@ -25,12 +25,6 @@ export function createCourse (state, data) {
   Vue.set(state.courses, data.cid, data.course)
 }
 
-export function fillAttendance (state, data) {
-  for (let aid in data) {
-    Vue.set(state.attendance, aid, data[aid])
-  }
-}
-
 export function updateAttendance (state, data) {
   Vue.set(state.attendance, data.aid, data.attendance)
 }
@@ -141,8 +135,14 @@ export const updateSteplab = (state, data) => {
 }
 
 export const removeSteplab = (state, data) => {
-  if (state.steplabs[data.lid] === undefined) {
+  if (state.steplabs[data.lid] !== undefined) {
     Vue.delete(state.steplabs[data.lid], data.uid)
+  }
+}
+
+export const removeSteplabHandle = (state, lid) => {
+  if (state.steplabs[lid] !== undefined) {
+    Vue.delete(state.steplabs, lid)
   }
 }
 
