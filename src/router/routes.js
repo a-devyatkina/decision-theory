@@ -131,6 +131,13 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/SteplabPage.vue') }
     ]
+  },
+  {
+    path: '/sibling_hierarchies_preview',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/SiblingHierarchiesPreview.vue') }
+    ]
   }
 ]
 

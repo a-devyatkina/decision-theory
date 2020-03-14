@@ -17,8 +17,10 @@
         <q-btn icon-right="find_in_page" color="secondary" no-caps no-wrap :label="$t('View')" rounded @click="previewSteplab(props.row.id)" />
       </q-td>
       <q-td key="actions" :props="props">
-        <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.id" />
-        <q-btn icon="delete" round flat @click="removeSteplab(props.row.id, props.row.name)" />
+        <div v-if="!checkIfSiblingHierarchies(props.row.id)">
+          <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.id" />
+          <q-btn icon="delete" round flat @click="removeSteplab(props.row.id, props.row.name)" />
+        </div>
       </q-td>
     </q-tr>
   </q-table>
@@ -103,9 +105,13 @@ export default {
     },
     async previewSteplab (lid) {
       try {
-        await this.$store.dispatch('data/removeSteplab', { lid, uid: this.user.id })
-        await this.$store.dispatch('data/createSteplab', { lid, uid: this.user.id })
-        this.$router.push('/steplab?lab=' + lid + '&user=' + this.user.id)
+        if (lid === '-M2Nblxlb2mvJGuklWDZ') {
+          this.$router.push('/sibling_hierarchies_preview?' + '&user=' + this.user.id)
+        } else {
+          await this.$store.dispatch('data/removeSteplab', { lid, uid: this.user.id })
+          await this.$store.dispatch('data/createSteplab', { lid, uid: this.user.id })
+          this.$router.push('/steplab?lab=' + lid + '&user=' + this.user.id)
+        }
       } catch (error) {
         this.$q.notify(error.message)
       }
@@ -120,11 +126,14 @@ export default {
         })
         let handle = this.content.find(item => item.id === lid)
         handle.outdated = true
-        await this.$store.dispatch('data/updateSteplabHandle', { lid, handle })
-        await this.$store.dispatch('data/removeSteplabPattern', { lid })
+        await this.$store.dispatch('data/updateSteplabHandle', {lid, handle})
+        await this.$store.dispatch('data/removeSteplabPattern', {lid})
       } catch (error) {
         this.$q.notify(error.message)
       }
+    },
+    checkIfSiblingHierarchies (id) {
+      return id === '-M2Nblxlb2mvJGuklWDZ'
     }
   }
 }

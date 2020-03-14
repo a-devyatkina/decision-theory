@@ -144,6 +144,17 @@ export const error = (state) => () => {
   return state.error
 }
 
+export const getStepLabs = (state) => () => {
+  let steplabs = {}
+  for (let lid in state.steplabs) {
+    if (state.steplabs[lid].outdated === false) {
+      steplabs[lid] = state.steplabs[lid]
+    }
+  }
+  console.log(steplabs)
+  return steplabs
+}
+
 export const getSteplab = (state) => (lid, uid) => {
   if (state.steplabs[lid] !== undefined && state.steplabs[lid][uid] !== undefined && state.steplabs[lid][uid].steps !== undefined) {
     return state.steplabs[lid][uid]
