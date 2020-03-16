@@ -8,139 +8,182 @@
       animated
     >
       <q-step
-        :name='1'
-        title='Create an ad'
-        icon='add_comment'
-        :header-nav='step > 1'
+        :name='-1'
+        title='Условие'
+        icon='assignment'
+        :header-nav='true'
+        :done='true'
       >
-        Try out different ad text to see what brings in the most customers, and learn how to
-        enhance your ads using features like ad extensions. If you run into any problems with
-        your ads, find out how to tell if they're running and how to resolve approval issues.
+      <ConditionPref
+        :condition="condition"
+      />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 2 }' color='secondary' label='Continue' />
+          <q-btn @click='() => { done2 = true; step = 0 }' color='secondary' label='Продолжить' />
         </q-stepper-navigation>
       </q-step>
-      <q-step  v-for="(item, index) in example.criterion" v-bind:key='index'
+      <q-step v-for="index in 2" v-bind:key='index'
+        :name='index - 1'
+        :title='`Вопрос ${index}`'
+        icon='assignment'
+        :header-nav='doneStep > index - 3'
+        :done='doneStep > index - 2'
+      >
+      <QuestionPref
+        :question="question[index - 1]"
+        :done='doneStep > index - 2'
+        @success = 'Answer()'
+        @error = 'errorMethod'
+      />
+        <q-stepper-navigation>
+          <q-btn v-if='doneStep > index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > index - 2 || teacherMode' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step  v-for="(item, index) in condition.criterion" v-bind:key='index'
         :name='Number(index + 2)'
-        :title='`Вычисление значений критерия С${index + 1}`'
-        icon='create_new_folder'
+        :title='`Значения С${index + 1}`'
+        icon='assignment'
         :done='doneStep > index + 1'
         :header-nav='doneStep > index'
       >
         <FirstStep
         :data = 'item'
-        :alternative = 'example.alternative'
+        :alternative = 'condition.alternative'
         :index = 'index'
         :answers = 'funcAnswers[index]'
         :done='doneStep > 1 + index'
         @success = 'Answer()'
+        @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > index + 1 || teacherMode' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > index + 1 || teacherMode' flat @click='step = 1 + index' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
-      <q-step  v-for="(item, index) in example.criterion" v-bind:key='index'
+      <q-step  v-for="(item, index) in condition.criterion" v-bind:key='index'
         :name='Number(index + 6)'
-        :title='`Нечеткое отношения критерия С${index + 1}`'
-        icon='create_new_folder'
+        :title='`Отношение С${index + 1}`'
+        icon='assignment'
         :done='doneStep > 5 + index'
         :header-nav='doneStep > 4 + index'
       >
         <SecondStep
         :rightMatrix = 'matrixStep2[index]'
-        :alternative = 'example.alternative'
+        :alternative = 'condition.alternative'
         :index = 'index'
         :answers = 'funcAnswers[index]'
         :done='doneStep > 5 + index'
         @success = 'Answer()'
+        @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 7 + index }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 5 + index || teacherMode' @click='() => { done2 = true; step = 7 + index }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 5 + index || teacherMode' flat @click='step = 5 + index' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
         :name='10'
         title='Нечеткое отношение'
-        icon='create_new_folder'
+        icon='assignment'
+        :done='doneStep > 9'
+        :header-nav='doneStep > 8'
+      >
+        <ThirdStep
+        :showMatrix = 'matrixStep2'
+        :rightMatrix   = 'matrixStep3'
+        :alternative = 'condition.alternative'
+        :done='doneStep > 9'
+        @success = 'Answer()'
+        @error = 'errorMethod'
+        />
+        <q-stepper-navigation>
+          <q-btn v-if='doneStep > 9 || teacherMode' @click='() => { done2 = true; step = 11 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 9 || teacherMode' flat @click='step = 9' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :name='11'
+        title='Подмножество альтернатив'
+        icon='assignment'
+        :done='doneStep > 10'
+        :header-nav='doneStep > 9'
+      >
+        <FourthStep
+        :showMatrix = 'matrixStep3'
+        :rightMatrix   = 'matrixStep4'
+        :alternative = 'condition.alternative'
+        :done='doneStep > 10'
+        @success = 'Answer()'
+        @error = 'errorMethod'
+        />
+        <q-stepper-navigation>
+          <q-btn v-if='doneStep > 10 || teacherMode' @click='() => { done2 = true; step = 12 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 10 || teacherMode' flat @click='step = 10' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :name='12'
+        title='Нечеткое отношение'
+        icon='assignment'
         :done='doneStep > 11'
         :header-nav='doneStep > 10'
       >
         <ThirdStep
         :showMatrix = 'matrixStep2'
-        :rightMatrix   = 'matrixStep3'
-        :alternative = 'example.alternative'
+        :rightMatrix = 'matrixStep5'
+        :weight = 'condition.weight'
+        :alternative = 'condition.alternative'
         :done='doneStep > 11'
         @success = 'Answer()'
+        @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 11 }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 9' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 11 || teacherMode' @click='() => { done2 = true; step = 13 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 11 || teacherMode' flat @click='step = 11' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
-      <q-step
-        :name='11'
-        title='Подмножество недоминируемых альтернатив'
-        icon='create_new_folder'
-        :done='doneStep > 12'
-        :header-nav='doneStep > 11'
+      <q-step v-for="index in 2" v-bind:key='index'
+        :name='13 + index - 1'
+        :title='`Вопрос ${index + 2}`'
+        icon='assignment'
+        :header-nav='doneStep > 13 + index - 3'
+        :done='doneStep > 13 + index - 2'
       >
-        <FourthStep
-        :showMatrix = 'matrixStep3'
-        :rightMatrix   = 'matrixStep4'
-        :alternative = 'example.alternative'
-        :done='doneStep > 12'
+      <QuestionPref
+        :question="question[index + 1]"
+        :done='doneStep > 13 + index - 2'
         @success = 'Answer()'
-        />
+        @error = 'errorMethod'
+      />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 12 }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 10' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 13 + index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 13 + index - 2 || teacherMode' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
-        :name='12'
-        title='Create an ad group'
-        icon='create_new_folder'
-        :done='doneStep > 13'
-        :header-nav='doneStep > 12'
-      >
-        <ThirdStep
-        :showMatrix = 'matrixStep2'
-        :rightMatrix = 'matrixStep5'
-        :weigth = 'example.weigth'
-        :alternative = 'example.alternative'
-        :done='doneStep > 13'
-        @success = 'Answer()'
-        />
-        <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 13 }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 11' color='secondary' label='Back' class='q-ml-sm' />
-        </q-stepper-navigation>
-      </q-step>
-      <q-step
-        :name='13'
-        title='Create an ad group'
-        icon='create_new_folder'
+        :name='15'
+        title='Подмножество альтернатив'
+        icon='assignment'
         :done='doneStep > 14'
         :header-nav='doneStep > 13'
       >
         <FourthStep
         :showMatrix = 'matrixStep5'
         :rightMatrix   = 'matrixStep6'
-        :alternative = 'example.alternative'
+        :alternative = 'condition.alternative'
         :done='doneStep > 14'
         @success = 'Answer()'
+        @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 14 }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 12' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 14 || teacherMode' @click='() => { done2 = true; step = 16 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 14 || teacherMode' flat @click='step = 14' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
-        :name='14'
-        title='Create an ad group'
-        icon='create_new_folder'
+        :name='16'
+        title='Лучшая альтернатива'
+        icon='assignment'
         :done='doneStep > 15'
         :header-nav='doneStep > 14'
       >
@@ -150,109 +193,65 @@
         :rightMatrix   = 'lastMatrix'
         :done='doneStep > 15'
         @success = 'Answer()'
+        @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 15 }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 13' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 15 || teacherMode' @click='() => { done2 = true; step = 17 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 15 || teacherMode' flat @click='step = 15' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :name='17'
+        title='Последний вопрос'
+        icon='assignment'
+        :done='doneStep > 16'
+        :header-nav='doneStep > 15'
+      >
+        <QuestionInput
+        :question   = 'question[4]'
+        :done='doneStep > 16'
+        @finish = 'Answer()'
+        @error = 'errorMethod'
+        />
+        <q-stepper-navigation>
+          <q-btn v-if='doneStep > 15 || teacherMode' @click='() => { done2 = true; step = 15 }' color='secondary' label='Назад' />
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
+    {{mark}}
+    {{error}}
   </div>
 </template>
 
 <script>
+import { checkLab } from '../../function/workWithFirebase'
 export default {
   data () {
     return {
-      step: 1,
-      doneStep: 1,
-      example: {
-        goal: 'Выбрать город, наиболее пригодный для жизни, по значениям заданных критериев и их функциям принадлежности',
-        criterion: [
-          {
-            title: 'С1 Население',
-            description: 'С1 Население – количество человек (в млн), проживающих в данном городе',
-            function: '../statics/1.11.png',
-            path: '../statics/1.1.png',
-            count: 3,
-            graphic: '',
-            koef: [-0.02, 0.286, 0],
-            functioncompute: '-0.02*x**2+0.286*x'
-          },
-          {
-            title: 'С2 Средняя з/п',
-            description: 'С2 Средняя з/п – показатель средней заработной платы (в тысячах рублей) по профессии нашего клиента',
-            function: '../statics/1.12.png',
-            path: '../statics/1.2.png',
-            count: 3,
-            graphic: '',
-            koef: [0.125, 2, 1],
-            functioncompute: 'Math.log(x+1)/(8*Math.log(2))'
-          },
-          {
-            title: 'С3 Количество свободных вакансий',
-            description: 'С3 Количество свободных вакансий – показатель относительного количества свободных вакансий по профессии нашего клиента',
-            function: '../statics/1.13.png',
-            path: '../statics/1.3.png',
-            count: 0,
-            graphic: '',
-            koef: [],
-            functioncompute: 'x**2/16'
-          },
-          {
-            title: 'С4 Уровень загрязнения',
-            description: 'С4 Уровень загрязнения – показатель содержания вредных примесей в атмосфере, почве и воде',
-            function: '../statics/1.14.png',
-            path: '../statics/1.4.png',
-            count: 0,
-            graphic: '',
-            koef: [],
-            functioncompute: '1-x/4'
-          }
-        ],
-        alternative: [
-          {
-            description: 'А1 Москва',
-            1: 13,
-            2: 120,
-            3: ['низкое', 1],
-            4: ['средний', 2]
-          },
-          {
-            description: 'А2 Питер',
-            1: 4,
-            2: 52,
-            3: ['среднее', 2],
-            4: ['высокий', 3]
-          },
-          {
-            description: 'А3 Краснодар',
-            1: 0.9,
-            2: 40,
-            3: ['среднее', 2],
-            4: ['средний', 2]
-          }
-        ],
-        weigth: [0.17, 0.25, 0.5, 0.08],
-        rules: {
-          d1str: 'Если и С3 = подходящее, и (или С1 = неподходящее, или С2 = неподходящее), то Y = удовлетворительный',
-          d2str: 'Если и С2 = неподходящее, и С3 = неподходящее, то Y = неудовлетворительный',
-          d3str: 'Если и С1 = подходящее, и С3 = подходящее, и С4 = подходящее, то Y = безупречный',
-          d: ['Math.min(m[2],Math.max(1-m[0],1-m[1]))', 'Math.min(1-m[1],1-m[2])', 'Math.min(m[0],m[2],m[3])']
-        }
-      }
+      teacherMode: true,
+      step: -1,
+      doneStep: -1,
+      error: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      condition: {},
+      question: []
     }
   },
   computed: {
+    mark: function () {
+      return this.error.reduce(function (acc, val) {
+        acc += val
+        return acc
+      }, 0)
+    },
     funcAnswers: function () {
       const answerArr = []
       for (let i = 1; i < 5; i++) {
         const arr = []
-        for (let j = 0; j < this.example.alternative.length; j++) {
+        for (let j = 0; j < this.condition.alternative.length; j++) {
           if (i === 3 || i === 4) {
-            arr.push(Number(eval(this.example.criterion[i - 1].functioncompute.replace(/x/g, this.example.alternative[j][i][1])).toFixed(2)))
+            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i][1])).toFixed(2)))
           } else {
-            arr.push(Number(eval(this.example.criterion[i - 1].functioncompute.replace(/x/g, this.example.alternative[j][i])).toFixed(2)))
+            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i])).toFixed(2)))
           }
         }
         answerArr.push(arr)
@@ -317,7 +316,7 @@ export default {
       let arr = [0, 0, 0, 0, 0, 0, 0, 0, 0]
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 4; j++) {
-          arr[i] += this.matrixStep2[j][i] * this.example.weigth[j]
+          arr[i] += this.matrixStep2[j][i] * this.condition.weight[j]
         }
         arr[i] = Number(arr[i].toFixed(2))
       }
@@ -349,7 +348,15 @@ export default {
   methods: {
     Answer: function () {
       this.doneStep++
+    },
+    errorMethod () {
+      this.error.splice(this.step, 1, this.error[this.step] + 1)
     }
+  },
+  created () {
+    let user = this.$store.getters['data/getUser']()
+    this.work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
+    checkLab.call(this, 'additiveLab')
   }
 }
 </script>

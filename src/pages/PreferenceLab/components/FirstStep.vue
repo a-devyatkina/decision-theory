@@ -7,7 +7,7 @@
       {{data.description}}
     </h5>
     <div class="content">
-      <img :src="data.path" width="400px" height="auto"/>
+      <img :src="data.path" width="500px" height="auto"/>
       <FillTable
       :data = 'funcValue'
       :columns = 'columns'
@@ -21,20 +21,24 @@
         />
       </div>
     </div>
-    <div class="content">
-      <img v-bind:src="data.function"/>
-    </div>
+    <img v-bind:src="data.function"/>
     <div v-if = 'data.koef && part === 1'>
       <div v-for="(item, index) in koefArr" v-bind:key='index'>
         {{String.fromCodePoint(65 + index)}} = <input v-model="koefArr[index]" placeholder="0.00"/>
       </div>
-      <q-btn type="submit" class="knopka" name="check" @click = 'onAnswer(koefArr, data.koef)'>Проверить</q-btn>
+      <div v-if="error" style="font-size: 16px; color: red">
+        Ошибка
+      </div>
+      <q-btn color="secondary" type="submit" class="knopka" name="check" @click = 'onAnswer(koefArr, data.koef)'>Проверить</q-btn>
     </div>
     <div v-else-if = 'part === 2 && !done'>
       <div v-for="(item, index) in alternative" v-bind:key='index'>
         {{item.description}} <input v-model="funcAnswer[index]" placeholder="0.00"/>
       </div>
-      <q-btn type="submit" class="knopka" name="check" @click = 'onAnswer(funcAnswer, answers)'>Проверить</q-btn>
+      <div v-if="error" style="font-size: 16px; color: red">
+        Ошибка
+      </div>
+      <q-btn color="secondary" type="submit" class="knopka" name="check" @click = 'onAnswer(funcAnswer, answers)'>Проверить</q-btn>
     </div>
     <div v-else>
       <FillTable
@@ -66,7 +70,10 @@ export default {
   },
   computed: {
     part: function () {
-      if (this.data.koef && !this.next && !this.done) {
+      console.log('hi')
+      console.log(this.done)
+      console.log('hi')
+      if ('koef' in this.data && !this.next && !this.done) {
         return 1
       } else {
         return 2
@@ -118,9 +125,11 @@ export default {
   methods: {
     onAnswer: function (answer, rightAnswer) {
       console.log(this.answers)
+      this.error = false
       for (let i = 0; i < answer.length; i++) {
         if (Number(answer[i]) !== rightAnswer[i]) {
           this.error = true
+          this.$emit('error')
         }
       }
       if (this.error) {
@@ -132,7 +141,6 @@ export default {
           this.next = true
         }
       }
-      this.error = false
     }
   }
 }

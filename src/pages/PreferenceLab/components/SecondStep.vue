@@ -6,20 +6,27 @@
     <FillTable
     :data = 'answerValue'
     :columns = 'columns'
-    :title = '"Значения альтернатив"'
+    :title = '`Значения альтернативы C${index + 1}`'
     />
-    <InputTable
+    <InputTable v-if = '!done'
     :data = 'inputMatrix'
     :columns = 'inputColumns'
-    :title = '"Значения альтернатив"'
+    :title = '"Постройте нечеткое отношение"'
     />
-    <q-btn type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <FillTable v-else
+    :data = 'rightMatrixTable'
+    :columns = 'inputColumns'
+    :title = '"Значения нечеткого отношения"'
+    />
+    <q-btn color="secondary" v-if='!done' type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <p v-if='error' style="font-size: 16px; color: red">Вы допустили ошибку</p>
   </div>
 </template>
 
 <script>
+import { rightMatrixFill } from '../functions/workWithQuasarTable.js'
 export default {
-  props: ['alternative', 'answers', 'rightMatrix', 'index'],
+  props: ['alternative', 'answers', 'rightMatrix', 'index', 'done'],
   data () {
     return {
       error: false,
@@ -75,20 +82,25 @@ export default {
         })
       }
       return arr
-    }
+    },
+    rightMatrixTable: rightMatrixFill
   },
   methods: {
     onAnswer: function () {
-      console.log(this.inputMatrix)
+      console.log(this.rightMatrix)
+      this.error = false
       for (let i = 0; i < 3; i++) {
         if (Number(this.inputMatrix[i].a1) !== this.rightMatrix[i * 3 + 0]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a2) !== this.rightMatrix[i * 3 + 1]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a3) !== this.rightMatrix[i * 3 + 2]) {
           this.error = true
+          this.$emit('error')
         }
       }
       if (!this.error) {
@@ -96,7 +108,6 @@ export default {
       } else {
         console.log('mistake')
       }
-      this.error = false
     }
   }
 }

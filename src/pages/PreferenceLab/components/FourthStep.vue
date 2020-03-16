@@ -8,18 +8,25 @@
     :columns = 'columns'
     :title = '"Значения альтернатив"'
     />
-    <InputTable
+    <InputTable v-if="!done"
     :data = 'inputMatrix'
     :columns = 'columns'
     :title = '"Значения альтернатив"'
     />
-    <q-btn type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <FillTable v-else
+    :data = 'rightMatrixTable'
+    :columns = 'columns'
+    :title = '"Значения альтернатив"'
+    />
+    <q-btn color="secondary" v-if='!done' type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <p v-if='error' style="font-size: 16px; color: red">Вы допустили ошибку</p>
   </div>
 </template>
 
 <script>
+import { rightMatrixFill } from '../functions/workWithQuasarTable.js'
 export default {
-  props: ['alternative', 'answers', 'rightMatrix', 'showMatrix'],
+  props: ['alternative', 'answers', 'rightMatrix', 'showMatrix', 'done'],
   data () {
     return {
       error: false,
@@ -68,20 +75,25 @@ export default {
         })
       }
       return arr
-    }
+    },
+    rightMatrixTable: rightMatrixFill
   },
   methods: {
     onAnswer: function () {
       console.log(this.rightMatrix)
+      this.error = false
       for (let i = 0; i < 3; i++) {
         if (Number(this.inputMatrix[i].a1) !== this.rightMatrix[i * 3 + 0]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a2) !== this.rightMatrix[i * 3 + 1]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a3) !== this.rightMatrix[i * 3 + 2]) {
           this.error = true
+          this.$emit('error')
         }
       }
       if (!this.error) {
@@ -89,7 +101,6 @@ export default {
       } else {
         console.log('mistake')
       }
-      this.error = false
     }
   }
 }

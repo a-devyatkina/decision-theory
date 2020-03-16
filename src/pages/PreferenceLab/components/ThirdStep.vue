@@ -10,23 +10,32 @@
       :title = '`Значения критерия С${index + 1}`'
       />
     </div>
-    <FillTable v-if = 'weigth'
-    :data = 'weigthValue'
-    :columns = 'weigthColumns'
-    :title = '"Значения весов"'
-    />
-    <InputTable
-    :data = 'inputMatrix'
-    :columns = 'columns'
-    :title = '"Значения альтернатив"'
-    />
-    <q-btn type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <div class="content">
+      <FillTable v-if = 'weight'
+      :data = 'weightValue'
+      :columns = 'weightColumns'
+      :title = '"Значения весов"'
+      />
+      <InputTable v-if='!done'
+      :data = 'inputMatrix'
+      :columns = 'columns'
+      :title = '"Постройте нечеткое отношение"'
+      />
+      <FillTable v-else
+      :data = 'rightMatrixTable'
+      :columns = 'columns'
+      :title = '"Значения нечеткого отношения"'
+      />
+    </div>
+    <q-btn color="secondary" v-if='!done' type="submit" class="knopka" name="check" @click = 'onAnswer()'>Проверить</q-btn>
+    <p v-if='error' style="font-size: 16px; color: red">Вы допустили ошибку</p>
   </div>
 </template>
 
 <script>
+import { rightMatrixFill } from '../functions/workWithQuasarTable.js'
 export default {
-  props: ['alternative', 'answers', 'showMatrix', 'rightMatrix', 'weigth'],
+  props: ['alternative', 'answers', 'showMatrix', 'rightMatrix', 'weight', 'done'],
   data () {
     return {
       error: false,
@@ -41,7 +50,7 @@ export default {
         { name: 'a2', label: 'a2', field: 'a2' },
         { name: 'a3', label: 'a3', field: 'a3' }
       ],
-      weigthColumns: [
+      weightColumns: [
         {
           name: 'desc',
           required: true,
@@ -74,8 +83,8 @@ export default {
   },
   computed: {
     matrixData: function () {
-      const matrixArr = []
       console.log(this.weight)
+      const matrixArr = []
       for (let i = 0; i < this.showMatrix.length; i++) {
         const arr = []
         for (let j = 0; j < 3; j++) {
@@ -90,32 +99,37 @@ export default {
       }
       return matrixArr
     },
-    weigthValue: function () {
+    weightValue: function () {
       const arr = []
-      console.log(this.weigth)
-      if (this.weigth) {
-        for (let i = 0; i < this.weigth.length; i++) {
+      console.log(this.weight)
+      if (this.weight) {
+        for (let i = 0; i < this.weight.length; i++) {
           arr.push({
             name: `C${i + 1}`,
-            value: this.weigth[i]
+            value: this.weight[i]
           })
         }
       }
       return arr
-    }
+    },
+    rightMatrixTable: rightMatrixFill
   },
   methods: {
     onAnswer: function () {
       console.log(this.rightMatrix)
+      this.error = false
       for (let i = 0; i < 3; i++) {
         if (Number(this.inputMatrix[i].a1) !== this.rightMatrix[i * 3 + 0]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a2) !== this.rightMatrix[i * 3 + 1]) {
           this.error = true
+          this.$emit('error')
         }
         if (Number(this.inputMatrix[i].a3) !== this.rightMatrix[i * 3 + 2]) {
           this.error = true
+          this.$emit('error')
         }
       }
       if (!this.error) {
@@ -123,7 +137,6 @@ export default {
       } else {
         console.log('mistake')
       }
-      this.error = false
     }
   }
 }
