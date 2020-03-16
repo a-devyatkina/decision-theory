@@ -24,10 +24,14 @@ export default (function () {
             teacher: val.teacher,
             lab: val.lab,
             step: val.step,
+            stage: val.stage,
             condition: val.condition,
             score: val.score,
             attempt: val.attempt,
-            error: val.error
+            error: val.error,
+            question: val.question,
+            penalty: val.penalty,
+            finalquestion: val.finalquestion
           }
         })
       }, error => {
@@ -44,10 +48,14 @@ export default (function () {
             teacher: val.teacher,
             lab: val.lab,
             step: val.step,
+            stage: val.stage,
             condition: val.condition,
             score: val.score,
             attempt: val.attempt,
-            error: val.error
+            error: val.error,
+            question: val.question,
+            penalty: val.penalty,
+            finalquestion: val.finalquestion
           }
         })
       }, error => {
@@ -65,32 +73,40 @@ export default (function () {
       ref().off()
     }
 
-    async create (student, course, teacher, lab, step, condition, score, attempt, error) {
+    async create (student, course, teacher, lab, step, stage, condition, score, attempt, error, question, penalty, finalquestion) {
       let snapshot = await ref().push({
         student: student,
         course: course,
         teacher: teacher,
         lab: lab,
         step: step,
+        stage: stage,
         condition: condition,
         score: score,
         attempt: attempt,
-        error: error
+        error: error,
+        question: question,
+        penalty: penalty,
+        finalquestion: finalquestion
       })
       return snapshot.key
     }
 
-    async update (wid, student, course, teacher, lab, step, condition, score, attempt, error) {
+    async update (wid, student, course, teacher, lab, step, stage, condition, score, attempt, error, question, penalty, finalquestion) {
       await ref().child(wid).set({
         student: student,
         course: course,
         teacher: teacher,
         lab: lab,
         step: step,
+        stage: stage,
         condition: condition,
         score: score,
         attempt: attempt,
-        error: error
+        error: error,
+        question: question,
+        penalty: penalty,
+        finalquestion: finalquestion
       })
     }
 
