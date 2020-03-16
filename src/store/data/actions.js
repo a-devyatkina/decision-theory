@@ -228,7 +228,7 @@ export async function createStudent ({ state }, { name, group, email, phone, add
           await model.works.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', '', '', 0)
         }
         for (let lid in state.courses[cid].groups[group].lab3) {
-          await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 'unassign', 0, 0, [])
+          await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 0, 'unassign', '', 0, 0, '', '', 0, '')
         }
       }
     }
@@ -571,7 +571,7 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
           if (state.students[sid].group === gid) {
             let work = getters['getStudentWork3'](sid, lid)
             if (!work) {
-              await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 'unassign', 0, 0, [])
+              await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 0, 'unassign', '', 0, 0, '', '', 0, '')
             }
           }
         }
@@ -791,7 +791,6 @@ export async function unlistenWorks3 ({ commit }) {
   model.work3.unlisten()
 }
 
-export async function updateWork3 ({ commit }, { wid, work, history }) {
-  await model.work3.update(wid, work.student, work.course, work.teacher, work.lab, work.step, work.condition, work.score, work.attempt, work.error)
-  await model.histories.update(wid, history)
+export async function updateWork3 ({ commit }, { wid, work }) {
+  await model.work3.update(wid, work.student, work.course, work.teacher, work.lab, work.step, work.stage, work.condition, work.score, work.attempt, work.error, work.question, work.penalty, work.finalquestion)
 }
