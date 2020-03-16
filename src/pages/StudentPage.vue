@@ -144,7 +144,7 @@ export default {
                 id: data.wid,
                 name: lab ? lab.name : '',
                 description: lab ? lab.description : '',
-                stage: data.work.step,
+                stage: data.work.stage,
                 score: data.work.score,
                 isLab3: true
               })
@@ -163,7 +163,7 @@ export default {
       if (isSteplab) {
         this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
       } else if (isLab3) {
-        this.$router.push(`/workflow3?wid=${task}`)
+        this.$router.push(`/work3flow?wid=${task}`)
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }
