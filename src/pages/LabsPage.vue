@@ -9,10 +9,6 @@
         <q-item-main :label="$t('Stepwise tasks')" :sublabel="$t('Tasks for stepwise laboratory works')"  />
       </q-item>
       <steplabs-table/>
-      <q-item class="q-mt-lg">
-        <q-item-main :label="$t('Stepwise tasks')" :sublabel="$t('Tasks for stepwise laboratory works')"  />
-      </q-item>
-      <siblinghierarchies-table/>
     </q-list>
   </q-page>
 </template>

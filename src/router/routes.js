@@ -138,10 +138,30 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/SiblingHierarchiesPreview.vue') }
     ]
+  },
+  {
+    path: '/sibling_hierarchies',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/SiblingHierarchies.vue') }
+    ]
+  },
+  {
+    path: '/layered_hierarchies_preview',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LayeredHierarchiesPreview.vue') }
+    ]
+  },
+  {
+    path: '/layered_hierarchies',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LayeredHierarchies.vue') }
+    ]
   }
 ]
 
-// Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',

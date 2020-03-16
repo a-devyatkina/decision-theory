@@ -146,7 +146,13 @@ export default {
   methods: {
     view (task, isSteplab) {
       if (isSteplab) {
-        this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
+        if (task === '-M2XtboAVPNKQFglZ-qY') {
+          this.$router.push(`/sibling_hierarchies`)
+        } else if (task === '-M2Y2qjwMJJ3IjF-Cd6J') {
+          this.$router.push(`/layered_hierarchies`)
+        } else {
+          this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
+        }
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }

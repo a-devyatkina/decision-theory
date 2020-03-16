@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <h3>
-      Вариант 1
+      Вариант {{info.var}}
     </h3>
     <q-stepper
             v-model="step"
@@ -50,16 +50,26 @@
               icon="assignment"
               :done="step > 2"
       >
-        <q-item id="question">{{intro_test.info.question}}<br></q-item>
-        <div class="q-pa-md q-gutter-sm">
-          <div v-for="(answer) in intro_test.info.answers" :key="answer" class="answer">
-            <q-radio v-model="intro_test.shape" :val="answer" dense> {{answer}} </q-radio>
+
+        <div v-if="!intro_test.isLoaded">
+          <q-btn @click="getIntroTest()" color="secondary" label="Начать тест"/>
+        </div>
+        <div v-else-if="!intro_test.isOver">
+          <q-item id="question">{{intro_test.info.question}}<br></q-item>
+          <div class="q-pa-md q-gutter-sm">
+            <div id="answerid" v-for="(answer) in intro_test.info.answers" :key="answer" class="answer">
+              <q-radio v-model="intro_test.shape" :val="answer" dense> {{answer}} </q-radio>
+            </div>
+            <q-btn @click="checkIntroAnswer(index)" color="secondary" :disabled="!isTestFormValid(intro_test.shape)" label="Проверить"/>
           </div>
-          <q-btn @click="someAction()" color="secondary" :disabled="true" label="Проверить"/>
+        </div>
+        <div v-else>
+          <h3>Тест успешно пройден!</h3>
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 3" color="secondary" label="Continue" class="q-ml-sm"/>
+            <q-btn @click="step = 3" color="secondary" label="Skip" />
+          <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -71,16 +81,26 @@
               icon="assignment"
               :done="step > 3"
       >
-        <q-item id="question">{{practice_test.info.question}}<br></q-item>
-        <div class="q-pa-md q-gutter-sm">
-          <div id="answerid" v-for="(answer) in practice_test.info.answers" :key="answer" class="answer">
-            <q-radio v-model="practice_test.shape" :val="answer" dense> {{answer}} </q-radio>
+
+        <div v-if="!practice_test.isLoaded">
+          <q-btn @click="getPracticeTest()" color="secondary" label="Начать тест"/>
+        </div>
+        <div v-else-if="!practice_test.isOver">
+          <q-item id="question">{{practice_test.info.question}}<br></q-item>
+          <div class="q-pa-md q-gutter-sm">
+            <div id="answerid" v-for="(answer) in practice_test.info.answers" :key="answer" class="answer">
+              <q-radio v-model="practice_test.shape" :val="answer" dense> {{answer}} </q-radio>
+            </div>
+            <q-btn @click="checkPracticeAnswer(index)" color="secondary" :disabled="!isTestFormValid(practice_test.shape)" label="Проверить"/>
           </div>
-          <q-btn @click=someAction() color="secondary" :disabled="true" label="Проверить"/>
+        </div>
+        <div v-else>
+          <h3>Тест успешно пройден!</h3>
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="secondary" label="Continue" class="q-ml-sm"/>
+            <q-btn @click="step = 4" color="secondary" label="Skip" />
+          <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -117,7 +137,8 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 5" color="secondary" label="Continue" class="q-ml-sm" />
+            <q-btn @click="step = 5" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(passport_data[0], 'target_matrix')" color="secondary" label="Continue" class="q-ml-sm" />
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
 
@@ -155,7 +176,8 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 6" color="secondary" label="Continue" class="q-ml-sm"/>
+            <q-btn @click="step = 6" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(passport_data[1], 'criterion_matrix1')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
 
@@ -193,7 +215,8 @@
         </form>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 7" color="secondary" label="Continue" class="q-ml-sm"/>
+            <q-btn @click="step = 7" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(passport_data[2], 'criterion_matrix2')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -230,7 +253,8 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 8" color="secondary" label="Continue" class="q-ml-sm" />
+            <q-btn @click="step = 8" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(passport_data[3], 'criterion_matrix3')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 6" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
 
@@ -268,7 +292,8 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 9" color="secondary" label="Continue" class="q-ml-sm" />
+          <q-btn @click="step = 9" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(passport_data[4], 'criterion_matrix4')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 7" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -384,6 +409,9 @@
                     name="matrix"
             >
             </div>
+            <div class="error" v-if="errors.has('matrix')">
+              {{ errors.first('matrix') }}
+            </div>
           </div>
           <div class="field">
             <label for="passport_data">
@@ -421,6 +449,9 @@
                     data-vv-as="вектор приоритетов"
                     name="vector"
             >
+            <div class="error" v-if="errors.has('vector')">
+              {{ errors.first('vector') }}
+            </div>
           </div>
           <div class="field">
             <label for="passport_data">
@@ -434,11 +465,15 @@
                     data-vv-as="вектор приоритетов"
                     name="alternative"
             >
+            <div class="error" v-if="errors.has('alternative')">
+              {{ errors.first('alternative') }}
+            </div>
           </div>
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 10" color="secondary" label="Continue" class="q-ml-sm" />
+          <q-btn @click="step = 10" color="secondary" label="Skip" />
+          <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -450,16 +485,22 @@
               icon="assignment"
               :done="step > 10"
       >
+
+      <div v-if="!add_test.isLoaded">
+          <q-btn @click="getAddTest()" color="secondary" label="Начать тест"/>
+        </div>
+      <div v-else-if="!add_test.isOver">
         <q-item id="question">{{add_test.info.question}}<br></q-item>
         <div class="q-pa-md q-gutter-sm">
           <div id="answerid" v-for="(answer) in add_test.info.answers" :key="answer" class="answer">
             <q-radio v-model="add_test.shape" :val="answer" dense> {{answer}} </q-radio>
           </div>
-          <q-btn @click="someAction()" color="secondary" :disabled="true" label="Проверить"/>
+          <q-btn @click="checkAddAnswer(index)" color="secondary" :disabled="!isTestFormValid(add_test.shape)" label="Проверить"/>
         </div>
+      </div>
 
         <q-stepper-navigation>
-          <q-btn color="secondary" label="Finish" @click="labpage()"/>
+          <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="labpage()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -489,25 +530,31 @@
 </style>
 
 <script>
-import { varPreview, introTestPreview, practiceTestPreview, addTestPreview } from '../store/data/siblinghierarchy/test_var.js'
+const axios = require('axios')
 export default {
   data: () => {
     return {
-      info: varPreview,
       session_id: 0,
       step: 1,
       inner_step: 2,
+      info: null,
       intro_test: {
         shape: '',
-        info: introTestPreview
+        info: null,
+        isLoaded: false,
+        isOver: false
       },
       practice_test: {
         shape: '',
-        info: practiceTestPreview
+        info: null,
+        isLoaded: false,
+        isOver: false
       },
       add_test: {
         shape: '',
-        info: addTestPreview
+        info: null,
+        isLoaded: false,
+        isOver: false
       },
       passport_data: [
         [{}, {}, {}, {}, {}, {}, {}],
@@ -542,14 +589,167 @@ export default {
       mark: 0
     }
   },
+  computed: {
+    user () {
+      return this.$store.getters['data/getUser']()
+    },
+    isFormValid () {
+      return Object.keys(this.fields).every(field => this.fields[field].valid)
+    }
+  },
   methods: {
+    isTestFormValid (shape) {
+      return shape !== ''
+    },
+    getIntroTest () {
+      axios.post(
+        'http://localhost:8000/intro_test',
+        { session_id: this.session_id }
+      ).then(response => {
+        console.log(response.data)
+        this.intro_test.info = response.data
+        this.intro_test.isLoaded = true
+      })
+    },
+    checkIntroAnswer (index) {
+      var data = {
+        question_id: this.intro_test.info._id,
+        answer: this.intro_test.shape,
+        session_id: this.session_id
+      }
+      axios.post(
+        'http://localhost:8000/intro_test_validate',
+        data
+      ).then(response => {
+        switch (response.data.status) {
+          case 'done':
+            this.intro_test.isOver = true
+            break
+          case 'right':
+            this.intro_test.info = response.data.question
+            break
+          case 'wrong':
+            this.intro_test.info = response.data.question
+            alert('Ошибка!')
+            break
+          case 'over':
+            this.$router.push('/lab1')
+            alert('Попробуйте еще раз позже')
+            break
+        }
+      })
+    },
+    getPracticeTest () {
+      axios.post(
+        'http://localhost:8000/practice_test',
+        { session_id: this.session_id }
+      ).then(response => {
+        console.log(response.data)
+        this.practice_test.info = response.data
+        this.practice_test.isLoaded = true
+      })
+    },
+    checkPracticeAnswer (index) {
+      var data = {
+        question_id: this.practice_test.info._id,
+        answer: this.practice_test.shape,
+        session_id: this.session_id
+      }
+      axios.post(
+        'http://localhost:8000/practice_test_validate',
+        data
+      ).then(response => {
+        switch (response.data.status) {
+          case 'done':
+            this.practice_test.isOver = true
+            break
+          case 'right':
+            this.practice_test.info = response.data.question
+            break
+          case 'wrong':
+            this.practice_test.info = response.data.question
+            alert('Ошибка!')
+            break
+          case 'over':
+            this.$router.push('/lab1')
+            alert('Попробуйте еще раз позже')
+            break
+        }
+      })
+    },
+    getAddTest () {
+      axios.post(
+        'http://localhost:8000/add_test',
+        { session_id: this.session_id }
+      ).then(response => {
+        console.log(response.data)
+        this.add_test.info = response.data
+        this.add_test.isLoaded = true
+      })
+    },
+    checkAddAnswer () {
+      var data = {
+        question_id: this.add_test.info._id,
+        answer: this.add_test.shape,
+        session_id: this.session_id
+      }
+      axios.post(
+        'http://localhost:8000/add_test_validate',
+        data
+      ).then(response => {
+        console.log(response.data)
+        switch (response.data.status) {
+          case 'done':
+            this.add_test.isOver = true
+            this.mark = response.data.mark
+            break
+          case 'right':
+            this.add_test.info = response.data.question
+            break
+          case 'wrong':
+            this.add_test.info = response.data.question
+            alert('Ошибка!')
+            break
+          case 'over':
+            this.$router.push('/lab1')
+            alert('Попробуйте еще раз позже')
+            break
+        }
+      })
+    },
+    labIntermediate (value, step) {
+      var data = {
+        session_id: this.session_id,
+        id: this.info._id,
+        value: value,
+        step: step
+      }
+      axios.post(
+        'http://localhost:8000/lab_validate',
+        data
+      ).then(response => {
+        switch (response.data.status) {
+          case 'right':
+            this.step++
+            break
+          case 'wrong':
+            alert('Ошибка\n' + response.data.body)
+            break
+          case 'over':
+            this.$router.push('/lab1')
+            alert('Попробуйте еще раз позже')
+            break
+        }
+      })
+    },
     labpage () {
       this.$q.dialog({
-        message: 'Вернуться обратно?',
+        title: 'Ваша оценка ' + this.mark,
+        message: 'Завершить лабораторную работу?',
         ok: 'Да',
         cancel: 'Нет'
       }).then(() => {
-        this.$router.push('/labs')
+        this.$router.push('/works')
       })
     },
     compare: function (arr1, arr2) {
@@ -570,6 +770,15 @@ export default {
       }
       return true
     }
+  },
+  mounted () {
+    axios.post(
+      'http://localhost:8000/lab1a',
+      { user_id: this.user.id }
+    ).then(response => {
+      this.info = response.data.data
+      this.session_id = response.data.session_id
+    })
   }
 }
 </script>

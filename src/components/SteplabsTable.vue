@@ -17,10 +17,8 @@
         <q-btn icon-right="find_in_page" color="secondary" no-caps no-wrap :label="$t('View')" rounded @click="previewSteplab(props.row.lid)" />
       </q-td>
       <q-td key="actions" :props="props">
-        <div v-if="!checkIfSiblingHierarchies(props.row.id)">
-          <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.lid" />
-          <q-btn icon="delete" round flat @click="removeSteplab(props.row.lid, props.row.steplab.name)" />
-        </div>
+        <steplab-button icon="edit" :title="$t('Edit lab')" flat :lab="props.row.lid" />
+        <q-btn icon="delete" round flat @click="removeSteplab(props.row.lid, props.row.steplab.name)" />
       </q-td>
     </q-tr>
   </q-table>
@@ -106,8 +104,10 @@ export default {
     },
     async previewSteplab (lid) {
       try {
-        if (lid === '-M2Nblxlb2mvJGuklWDZ') {
+        if (lid === '-M2XtboAVPNKQFglZ-qY') {
           this.$router.push('/sibling_hierarchies_preview?' + '&user=' + this.user.id)
+        } else if (lid === '-M2Y2qjwMJJ3IjF-Cd6J') {
+          this.$router.push('/layered_hierarchies_preview?' + '&user=' + this.user.id)
         } else {
           await this.$store.dispatch('data/removeSteplab', { lid, uid: this.user.id })
           await this.$store.dispatch('data/createSteplab', { lid, uid: this.user.id })
@@ -132,9 +132,6 @@ export default {
       } catch (error) {
         this.$q.notify(error.message)
       }
-    },
-    checkIfSiblingHierarchies (id) {
-      return id === '-M2Nblxlb2mvJGuklWDZ'
     }
   }
 }
