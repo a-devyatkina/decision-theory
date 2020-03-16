@@ -91,8 +91,8 @@
         @success = 'Answer()'
         />
         <q-stepper-navigation>
-          <q-btn @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
-          <q-btn flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='correctStep > index + 1' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
+          <q-btn v-if='correctStep > index + 1' flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
@@ -102,7 +102,7 @@
         icon='assignment'
         :done='correctStep > 3'
       >
-        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
       </q-step>
       <q-step
         :name='7'
@@ -110,7 +110,7 @@
         icon='assignment'
         :done='correctStep > 4'
       >
-        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
       </q-step>
       <q-step
         :name='8'
@@ -118,7 +118,7 @@
         icon='assignment'
         :done='correctStep > 5'
       >
-        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -127,7 +127,7 @@
         icon='assignment'
         :done='correctStep > 6'
       >
-        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back()'></alternatives-evaluation>
+        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -136,7 +136,7 @@
         :done='correctStep > 7'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back()' ></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back' ></theoretical-choice>
       </q-step>
 
       <q-step
@@ -144,7 +144,7 @@
         title='Нечеткие'
         icon='assignment'
       >
-        <r-functions :altsEvals='altsEvals' :step='step' :correctStep='correctStep' :condition='condition' @answer='getFunctions' @back='back()'></r-functions>
+        <r-functions :altsEvals='altsEvals' :step='step' :correctStep='correctStep' :condition='condition' @answer='getFunctions' @back='back'></r-functions>
       </q-step>
 
       <q-step
@@ -153,7 +153,7 @@
         :done='correctStep > 9'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back()'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back'></theoretical-choice>
       </q-step>
 
       <q-step
@@ -162,7 +162,7 @@
         icon='assignment'
         :done='correctStep > 10'
       >
-        <squares :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getSquares' @back='back()'></squares>
+        <squares :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getSquares' @back='back'></squares>
       </q-step>
 
       <q-step
@@ -171,7 +171,7 @@
         :done='correctStep > 11'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back()'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back'></theoretical-choice>
       </q-step>
 
       <q-step
@@ -180,7 +180,7 @@
         icon='assignment'
         :done='correctStep > 12'
       >
-        <coords-and-answer :squares='squares' :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getAnswer' @back='back()'></coords-and-answer>
+        <coords-and-answer :squares='squares' :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getAnswer' @back='back' @finish='finish'></coords-and-answer>
       </q-step>
 
       <q-step
@@ -189,11 +189,17 @@
         icon='assignment'
         :done='correctStep > 13'
       >
-        <theoretical-input :question='question[4]' @back='back()'></theoretical-input>
+        <theoretical-input :question='question[4]' @back='back' @finish="finish"></theoretical-input>
       </q-step>
     </q-stepper>
-    {{ error }}
-    {{ mark }}
+    <div class="lab-info">
+      <div class="mark">
+        Количество баллов: {{ score }}. Прогресс
+      </div>
+      <div class="step">
+        {{step}}/16
+      </div>
+    </div>
   </div>
 </template>
 
@@ -203,15 +209,17 @@ export default {
   data () {
     return {
       step: 0,
-      correctStep: 20,
-      error: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      correctStep: 0,
+      error: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
       altsEvals: [],
       r_functions: [],
       squares: [],
       condition: {},
-      mark: 100,
+      score: 100,
       question: [],
-      uid: ''
+      work3: {},
+      limits: [ 8, 13, 13, 13, 13, 13, 13, 13, 13, 10, 5, 19 ]
+      // user: {}
     }
   },
   computed: {
@@ -303,23 +311,27 @@ export default {
     generateVariant () {
       let linguistic = []
       let first = Math.random() * (0.2 - 0.1) + 0.1
-      first = Math.round(first * 100) / 100
+      // first = Math.round(first * 100) / 100
+      first = Number(first.toFixed(2))
+
       let cur = 0
       for (let i = 0; i < 4; i++) {
-        linguistic.push(first)
+        linguistic.push(first.toFixed(2))
         // first += 0.2
         cur = Math.random() * (0.25 - 0.15) + 0.15
-        first += Math.round(cur * 100) / 100
+        // first += Math.round(cur * 100) / 100
+        first += Number(cur.toFixed(2))
       }
 
       let importance = []
       first = Math.random() * (0.2 - 0.1) + 0.1
-      first = Math.round(first * 100) / 100
+      // first = Math.round(first * 100) / 100
 
       for (let i = 0; i < 3; i++) {
-        importance.push(first)
+        importance.push(first.toFixed(2))
         cur = Math.random() * (0.3 - 0.2) + 0.2
-        first += Math.round(cur * 100) / 100
+        // first += Math.round(cur * 100) / 100
+        first += Number(cur.toFixed(2))
       }
       return {
         importance,
@@ -327,25 +339,76 @@ export default {
       }
     },
     err (penalty) {
-      this.error[this.step - 1] += 1
-      this.mark -= penalty
+      this.error.splice(this.step, 1, this.error[this.step] + 1)
+    
+      this.limits[this.step] -= penalty
+      if (this.limits[this.step] < 0) {
+        this.limits[this.step] = 0
+      }
+      this.score -= penalty
+      this.work3.work.score = this.score
+      this.work3.work.error = this.error
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
+      console.log('err signal handler')
+      console.log(this.error)
+    },
+    finish () {
+      this.work3.work.stage = 'done'
+      console.log(this.question[4])
+      this.work3.work.finalquestion = {...this.question[4]}
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
     }
   },
-  mounted () {
-    this.uid = this.$store.getters['data/getUser']().id
-    checkLab.call(this)
+  created () {
+    let user = this.$store.getters['data/getUser']()
+    this.work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
+    checkLab.call(this, 'additiveLab')
   },
   watch: {
     correctStep: {
-      handler: function (oldStep, newStep) {
+      handler: function (newStep) {
         // firebase.database().ref('lab3/current/' + this.uid).update({step: newStep})
+        console.log('correctStep watcher')
+        this.work3.work.step = newStep
+        console.log(newStep)
+        console.log(this.work3)
+        this.$store.dispatch('data/updateWork3', {
+          wid: this.work3.wid,
+          work: this.work3.work
+        })
       }
     },
     step: {
-      handler: function (oldStep, newStep) {
+      handler: function (newStep, oldStep) {
         console.log(`step: ${this.step}, correctStep: ${this.correctStep}`)
       }
     }
   }
 }
 </script>
+<style>
+  .lab-info{
+    display: flex;
+    align-items: center;
+  }
+  .mark{
+    color: #26a69a;
+    font-size: 20px;
+    margin: 5px;
+  }
+  .step{
+    border: 1px solid #26a69a;
+    border-radius: 50%;
+    margin: 5px;
+    padding: 5px;
+    color: #26a69a;
+    height: 45px;
+    padding-top: 10px;
+  }
+</style>
