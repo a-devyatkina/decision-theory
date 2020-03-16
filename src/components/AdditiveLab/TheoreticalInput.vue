@@ -6,10 +6,11 @@
         <img v-if="question.path" :src="question.path"/>
         <div class="q-pa-md">
             <div class="q-gutter-md">
-                <q-input type="textarea" autogrow outlined v-model="finalAnswer" label="Ответ" color="secondary"/>
+                <q-input type="textarea" autogrow outlined v-model="question.answer" label="Ответ" color="secondary"/>
             </div>
         </div>
-        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' label="Завершить"/>
+        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @click="$emit('finish')" label="Завершить"/>
+        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @back="$emit('back')" label="Назад"/>
     </div>
 </template>
 
