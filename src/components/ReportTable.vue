@@ -19,7 +19,7 @@
         </router-link>
       </q-td>
       <q-td v-for="work in props.row.work3" :key="work.lid" :props="props">
-        <router-link :to="`workflow3?wid=${work.wid}`">
+        <router-link :to="`work3flow?wid=${work.wid}`">
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
@@ -168,7 +168,7 @@ export default {
           console.log(data)
           if (data) {
             row.score += data.work.score
-            row.work3.push({ lid: lid, stage: data.work.step, wid: data.wid })
+            row.work3.push({ lid: lid, stage: data.work.stage, wid: data.wid })
           } else {
             row.work3.push({ lid: lid, stage: '', wid: '' })
           }
