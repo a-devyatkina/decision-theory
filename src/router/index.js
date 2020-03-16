@@ -25,12 +25,6 @@ import CoordsAndAnswer from 'components/AdditiveLab/CoordsAndAnswer.vue'
 import importanceTable from 'components/AdditiveLab/importanceTable'
 import linguisticTable from 'components/AdditiveLab/linguisticTable'
 
-import Alternative from 'components/LogicsLab/Alternative.vue'
-import ThirdQuest from 'components/LogicsLab/ThirdQuest.vue'
-import LogicsCondition from 'components/LogicsLab/LogicsCondition.vue'
-import LogicsImplementation from 'pages/LogicsLab/Implementation.vue'
-import Question from 'components/LogicsLab/Question.vue'
-
 import FirstStep from '../pages/PreferenceLab/components/FirstStep.vue'
 import SecondStep from '../pages/PreferenceLab/components/SecondStep.vue'
 import ThirdStep from '../pages/PreferenceLab/components/ThirdStep.vue'
@@ -38,8 +32,18 @@ import FourthStep from '../pages/PreferenceLab/components/FourthStep.vue'
 import LastStep from '../pages/PreferenceLab/components/LastStep.vue'
 import FillTable from '../pages/PreferenceLab/components/FillTable.vue'
 import InputTable from '../pages/PreferenceLab/components/InputTable.vue'
+import QuestionInput from '../pages/PreferenceLab/components/QuestionInput.vue'
+import ConditionPref from '../pages/PreferenceLab/components/Condition'
+import QuestionPref from '../pages/PreferenceLab/components/Question.vue'
+
+import AlternativeLogics from '../pages/LogicsLab/Alternative.vue'
+import ButtonNext from '../pages/LogicsLab/ButtonNext.vue'
+import ConditionLogics from '../pages/LogicsLab/Condition.vue'
+import FunctionLogics from '../pages/LogicsLab/Function.vue'
+import QuestionLigics from '../pages/LogicsLab/Question.vue'
 
 import Lab3Table from '../components/Lab3Table.vue'
+import Work3flowAction from '../components/Work3flowAction.vue'
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -68,12 +72,6 @@ Vue.component('r-functions', RFunctions)
 Vue.component('squares', Squares)
 Vue.component('coords-and-answer', CoordsAndAnswer)
 
-Vue.component('alternative', Alternative)
-Vue.component('thirdquest', ThirdQuest)
-Vue.component('logics-condition', LogicsCondition)
-Vue.component('logics-implementation', LogicsImplementation)
-Vue.component('question', Question)
-
 Vue.component('FirstStep', FirstStep)
 Vue.component('SecondStep', SecondStep)
 Vue.component('ThirdStep', ThirdStep)
@@ -81,8 +79,20 @@ Vue.component('FourthStep', FourthStep)
 Vue.component('LastStep', LastStep)
 Vue.component('FillTable', FillTable)
 Vue.component('InputTable', InputTable)
+Vue.component('QuestionInput', QuestionInput)
+Vue.component('ConditionPref', ConditionPref)
+Vue.component('QuestionPref', QuestionPref)
 
 Vue.component('lab3-table', Lab3Table)
+Vue.component('work3flow-action', Work3flowAction)
+
+Vue.component('alternative-logics', AlternativeLogics)
+Vue.component('button-next', ButtonNext)
+Vue.component('condition-logics', ConditionLogics)
+Vue.component('function-logics', FunctionLogics)
+Vue.component('question-logics', QuestionLigics)
+
+export const bus = new Vue()
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation

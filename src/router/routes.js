@@ -118,10 +118,10 @@ const routes = [
     beforeEnter: checkStudentOrTeacher
   },
   {
-    path: '/workflow3',
+    path: '/work3flow',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LabFlowPage.vue') }
+      { path: '', component: () => import('pages/Lab3FlowPage.vue') }
     ],
     beforeEnter: checkStudentOrTeacher
   },
@@ -151,7 +151,7 @@ const routes = [
     path: '/logicsLab',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LogicsLab/Implementation.vue') }
+      { path: '', component: () => import('pages/LogicsLab/Index.vue') }
     ]
   },
   {
