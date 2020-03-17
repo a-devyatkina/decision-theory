@@ -29,11 +29,11 @@ app.use(express.static('dist/spa-mat'));
 
 app.get('/', (req, res) => res.sendFile('/spa-mat/index.html'));
 
-MongoClient.connect(mongoUrl, (err, client) => {
-    if (err) throw err
-    db = client.db(dbName)
-    require('./routes/sibling_hierarchies')(app, db, ObjectID)
+// MongoClient.connect(mongoUrl, (err, client) => {
+//     if (err) throw err
+//     db = client.db(dbName)
+//     require('./routes/sibling_hierarchies')(app, db, ObjectID)
     app.listen(config.port, () => {
         console.log(`listening on port ${config.port}`)
     })
-})
+// })

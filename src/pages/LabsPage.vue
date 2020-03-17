@@ -10,7 +10,7 @@
       </q-item>
       <steplabs-table/>
       <q-item class="q-mt-lg">
-        <q-item-main :label="$t('Stepwise tasks')" :sublabel="$t('Tasks for stepwise laboratory works')"  />
+        <q-item-main :label="$t('Hierarchies laboratory works')" :sublabel="$t('Siblings and Layered hierarchies')"  />
       </q-item>
       <hierarchieslabs-table/>
     </q-list>
