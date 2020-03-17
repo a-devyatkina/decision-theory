@@ -565,7 +565,6 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
       }
       Vue.set(plan, 'steplabs', steplabs)
 
-      console.log('STEP2')
       for (let lid in hierarchieslab) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
@@ -577,7 +576,6 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'hierarchieslab', hierarchieslab)
-      console.log('STEP3')
 
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
