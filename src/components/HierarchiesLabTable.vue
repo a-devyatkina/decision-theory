@@ -72,7 +72,6 @@ export default {
           description: lab.description
         })
       }
-      console.log(content)
       return content
     },
     user () {

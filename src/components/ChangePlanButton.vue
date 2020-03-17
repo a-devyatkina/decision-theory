@@ -91,6 +91,19 @@ export default {
           isStepLab: true
         })
       }
+
+      let hierarchieslab = this.$store.getters['data/getHierarchieslabs']()
+      for (let lid in hierarchieslab) {
+        let selected = this.group.hierarchieslab !== undefined && this.group.hierarchieslab[lid] !== undefined
+        let maxScore = selected ? this.group.hierarchieslab[lid].maxScore : 0
+        content.push({
+          lid: lid,
+          name: hierarchieslab[lid].name,
+          maxScore: maxScore,
+          selected: selected,
+          isHierarchieslab: true
+        })
+      }
       let selected = this.group.attendance !== undefined
       let maxScore = selected ? this.group.attendance.maxScore : 0
       content.push({
@@ -105,6 +118,7 @@ export default {
       this.opened = false
       let labs = {}
       let steplabs = {}
+      let hierarchieslab = {}
       let attendance = null
       for (let item of this.content) {
         if (item.selected) {
@@ -112,6 +126,8 @@ export default {
             attendance = item.maxScore
           } else if (item.isStepLab) {
             steplabs[item.lid] = { maxScore: item.maxScore }
+          } else if (item.isHierarchieslab) {
+            hierarchieslab[item.lid] = { maxScore: item.maxScore }
           } else {
             labs[item.lid] = { maxScore: item.maxScore }
           }
@@ -122,6 +138,7 @@ export default {
         gid: this.gid,
         labs: labs,
         steplabs: steplabs,
+        hierarchieslab: hierarchieslab,
         attendance: attendance !== null ? { maxScore: attendance } : undefined
       })
     },

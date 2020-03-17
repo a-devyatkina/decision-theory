@@ -1,4 +1,3 @@
-<script src="../store/data/model/attendance.js"></script>
 <template>
   <q-table separator="cell" :data="content" :columns="columns" row-key="sid" rows-per-page-options="0" :pagination.sync="pagination" hide-bottom class="bg-grey-2">
     <template slot="top-right" slot-scope="props">
@@ -17,6 +16,11 @@
       <q-td v-for="lab in props.row.steplabs" :key="lab.lid" :props="props">
         <router-link :to="`steplab?lab=${lab.lid}&user=${lab.uid}`">
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(lab.state)}}</q-chip>
+        </router-link>
+      </q-td>
+      <q-td v-for="work in props.row.hierarchieswork" :key="work.lid" :props="props">
+        <router-link :to="`hierarchiesworkflow?wid=${work.wid}`">
+          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
       <q-td key="attendance" :props="props">
@@ -38,7 +42,6 @@
 </template>
 
 <script>
-
 export default {
   props: [ 'cid', 'gid', 'plan', 'editable' ],
   data () {
@@ -90,7 +93,7 @@ export default {
         }
       }
       for (let lid in this.plan.hierarchieslab) {
-        let lab = this.$store.getters['data/getHierarchieslabHandle'](lid)
+        let lab = this.$store.getters['data/getHierarchieslab'](lid)
         if (lab) {
           cols.push({
             name: lid,
@@ -138,7 +141,8 @@ export default {
           name: student.name,
           score: 0,
           works: [],
-          steplabs: []
+          steplabs: [],
+          hierarchieswork: []
         }
         for (let lid in this.plan.labs) {
           let data = this.$store.getters['data/getStudentWork'](sid, lid)
@@ -156,6 +160,15 @@ export default {
             row.steplabs.push({ lid: lid, state: steplab[sid].state, uid: sid })
           } else {
             row.works.push({ lid: lid, state: '' })
+          }
+        }
+        for (let lid in this.plan.hierarchieslab) {
+          let data = this.$store.getters['data/getStudentHierarchieswork'](sid, lid)
+          if (data) {
+            row.score += data.work.score
+            row.hierarchieswork.push({ lid: lid, stage: data.work.stage, wid: data.wid })
+          } else {
+            row.hierarchieswork.push({ lid: lid, stage: '', wid: '' })
           }
         }
         if (this.plan.attendance !== undefined) {

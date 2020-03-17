@@ -118,6 +118,14 @@ const routes = [
     beforeEnter: checkStudentOrTeacher
   },
   {
+    path: '/hierarchiesworkflow',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/HierarchieslabFlowPage.vue') }
+    ],
+    beforeEnter: checkStudentOrTeacher
+  },
+  {
     path: '/works',
     component: () => import('layouts/MainLayout.vue'),
     children: [

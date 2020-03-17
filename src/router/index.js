@@ -6,6 +6,7 @@ import TeacherButton from '../components/TeacherButton.vue'
 import GroupTable from '../components/GroupTable.vue'
 import ReportTable from '../components/ReportTable.vue'
 import WorkflowAction from '../components/WorkflowAction.vue'
+import HierarchiesWorkflowAction from '../components/HierarchiesworkflowAction.vue'
 import ChangePlanButton from '../components/ChangePlanButton.vue'
 import LabsTable from '../components/LabsTable.vue'
 import SteplabsTable from '../components/SteplabsTable.vue'
@@ -23,6 +24,7 @@ Vue.component('teacher-button', TeacherButton)
 Vue.component('group-table', GroupTable)
 Vue.component('report-table', ReportTable)
 Vue.component('workflow-action', WorkflowAction)
+Vue.component('hierarchiesworkflow-action', HierarchiesWorkflowAction)
 Vue.component('change-plan-button', ChangePlanButton)
 Vue.component('labs-table', LabsTable)
 Vue.component('steplabs-table', SteplabsTable)
