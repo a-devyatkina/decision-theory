@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     content () {
-      let labs = this.$store.getters['data/getHierarchiesLabs']()
+      let labs = this.$store.getters['data/getHierarchieslabs']()
       let content = []
       for (let lid in labs) {
         let lab = labs[lid]
