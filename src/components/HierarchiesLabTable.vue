@@ -10,8 +10,8 @@
       <q-td key="desc" :props="props">
         <div style="white-space:pre-wrap">{{ props.row.description }}</div>
       </q-td>
-      <q-td key="link" :props="props">
-        <router-link class="q-btn" :to="props.row.link">{{ props.row.name }}</router-link>
+      <q-td key="preview">
+        <q-btn icon-right="find_in_page" color="secondary" no-caps no-wrap :label="$t('View')" rounded @click="previewLab(props.row.id)" />
       </q-td>
     </q-tr>
   </q-table>
@@ -72,6 +72,7 @@ export default {
           description: lab.description
         })
       }
+      console.log(content)
       return content
     },
     user () {
@@ -84,6 +85,17 @@ export default {
       return rows.filter(
         row => cols.some(col => (cellValue(col, row) + '').toLowerCase().indexOf(lowerTerms) !== -1)
       )
+    },
+    async previewLab (lid) {
+      try {
+        if (lid === 'siblinghierarchies') {
+          this.$router.push('/sibling_hierarchies_preview?' + '&user=' + this.user.id)
+        } else if (lid === 'layeredhierarchies') {
+          this.$router.push('/layered_hierarchies_preview?' + '&user=' + this.user.id)
+        }
+      } catch (error) {
+        this.$q.notify(error.message)
+      }
     }
   }
 }
