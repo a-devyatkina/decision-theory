@@ -1,10 +1,12 @@
 import user from './user'
 import labs from './labs'
+import hierarchieslab from './hierarchieslab'
 import groups from './groups'
 import teachers from './teachers'
 import students from './students'
 import courses from './courses'
 import works from './works'
+import hierarchieswork from './hierarchieswork'
 import attendance from './attendance'
 import histories from './histories'
 import storage from './storage'
@@ -23,5 +25,7 @@ export default {
   teachers: teachers,
   storage: storage,
   steplabs: steplabs,
-  registrations: registrations
+  registrations: registrations,
+  hierarсhieslab: hierarchieslab,
+  hierarchieswork: hierarchieswork
 }

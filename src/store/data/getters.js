@@ -187,3 +187,44 @@ export const getRegistrations = (state) => () => {
 export const getRegistration = (state) => (rid) => {
   return state.registrations[rid]
 }
+
+export const getHierarchiesLab = (state) => (lid) => {
+  return state.hierarchieslab[lid]
+}
+
+export const getHierarchiesLabs = (state) => () => {
+  return state.hierarchieslab
+}
+
+export const getHierarchiesWork = (state) => (wid) => {
+  return state.hierarchieswork[wid]
+}
+
+export const getStudentHierarchiesWorks = (state) => (sid) => {
+  let works = {}
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].student === sid) {
+      works[wid] = state.hierarchieswork[wid]
+    }
+  }
+  return works
+}
+
+export const getStudentHierarchiesWork = (state) => (sid, lid) => {
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].student === sid && state.hierarchieswork[wid].lab === lid) {
+      return { wid: wid, work: state.hierarchieswork[wid] }
+    }
+  }
+  return null
+}
+
+export const getCourseStudentHierarchiesWorks = (state) => (sid, cid) => {
+  let works = {}
+  for (let wid in state.hierarchieswork) {
+    if (state.workhierarchies[wid].student === sid && state.hierarchieswork[wid].course === cid) {
+      works[wid] = state.hierarchieswork[wid]
+    }
+  }
+  return works
+}

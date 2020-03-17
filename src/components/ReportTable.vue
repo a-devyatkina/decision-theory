@@ -1,3 +1,4 @@
+<script src="../store/data/model/attendance.js"></script>
 <template>
   <q-table separator="cell" :data="content" :columns="columns" row-key="sid" rows-per-page-options="0" :pagination.sync="pagination" hide-bottom class="bg-grey-2">
     <template slot="top-right" slot-scope="props">
@@ -80,6 +81,21 @@ export default {
             name: lid,
             required: true,
             label: steplab.name,
+            align: 'center',
+            field: lid,
+            sortable: true,
+            classes: '',
+            style: ''
+          })
+        }
+      }
+      for (let lid in this.plan.hierarchieslab) {
+        let lab = this.$store.getters['data/getHierarchieslabHandle'](lid)
+        if (lab) {
+          cols.push({
+            name: lid,
+            required: true,
+            label: lab.name,
             align: 'center',
             field: lid,
             sortable: true,
