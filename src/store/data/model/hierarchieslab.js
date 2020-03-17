@@ -6,7 +6,7 @@ export default (function () {
 
   function ref () {
     if (!reference) {
-      reference = firebase.database().ref('hierarchieslabs/labinfo')
+      reference = firebase.database().ref('hierarchieslab/labinfo')
     }
     return reference
   }
