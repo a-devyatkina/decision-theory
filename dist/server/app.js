@@ -8,7 +8,7 @@ const cors = require('cors')
 const fileupload = require('express-fileupload');
 const auth = require('./routes/authorization.js');
 const labs = require('./routes/steplabs.js');
-const hierarchies = require('./routes/sibling_hierarchies')
+const hierarchies = require('./routes/hierarchies')
 const mongoUrl = ('mongodb://localhost:27017/')
 const dbName = 'labs'
 let db

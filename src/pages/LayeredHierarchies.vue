@@ -26,7 +26,7 @@ export default {
   methods: {
     chooseTheme () {
       var data = {
-        user_id: this.user_id,
+        user_id: this.user.id,
         $set: {
           'theme': this.theme
         }

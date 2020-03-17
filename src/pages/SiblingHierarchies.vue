@@ -1,5 +1,9 @@
 <template>
   <div class="q-pa-md">
+    <div v-if="this.step < 1">
+      <q-btn @click="getVar()" color="secondary" label="Начать"/>
+    </div>
+    <div v-else>
     <h3>
       Вариант {{info.var}}
     </h3>
@@ -409,9 +413,6 @@
                     name="matrix"
             >
             </div>
-            <div class="error" v-if="errors.has('matrix')">
-              {{ errors.first('matrix') }}
-            </div>
           </div>
           <div class="field">
             <label for="passport_data">
@@ -449,9 +450,6 @@
                     data-vv-as="вектор приоритетов"
                     name="vector"
             >
-            <div class="error" v-if="errors.has('vector')">
-              {{ errors.first('vector') }}
-            </div>
           </div>
           <div class="field">
             <label for="passport_data">
@@ -465,9 +463,6 @@
                     data-vv-as="вектор приоритетов"
                     name="alternative"
             >
-            <div class="error" v-if="errors.has('alternative')">
-              {{ errors.first('alternative') }}
-            </div>
           </div>
         </form>
 
@@ -505,6 +500,7 @@
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
+    </div>
   </div>
 </template>
 
@@ -535,7 +531,7 @@ export default {
   data: () => {
     return {
       session_id: 0,
-      step: 1,
+      step: 0,
       inner_step: 2,
       info: null,
       intro_test: {
@@ -590,14 +586,24 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters['data/getUser']()
+    userId () {
+      return this.$store.getters['data/getUser']().id
     },
     isFormValid () {
       return Object.keys(this.fields).every(field => this.fields[field].valid)
     }
   },
   methods: {
+    getVar () {
+      axios.post(
+        'restapi/hierarchies/lab1a',
+        { user_id: this.userId }
+      ).then(response => {
+        this.info = response.data.data
+        this.session_id = response.data.session_id
+        this.step++
+      })
+    },
     isTestFormValid (shape) {
       return shape !== ''
     },
@@ -606,7 +612,6 @@ export default {
         '/restapi/hierarchies/intro_test',
         { session_id: this.session_id }
       ).then(response => {
-        console.log(response.data)
         this.intro_test.info = response.data
         this.intro_test.isLoaded = true
       })
@@ -644,7 +649,6 @@ export default {
         '/restapi/hierarchies/practice_test',
         { session_id: this.session_id }
       ).then(response => {
-        console.log(response.data)
         this.practice_test.info = response.data
         this.practice_test.isLoaded = true
       })
@@ -682,7 +686,6 @@ export default {
         '/restapi/hierarchies/add_test',
         { session_id: this.session_id }
       ).then(response => {
-        console.log(response.data)
         this.add_test.info = response.data
         this.add_test.isLoaded = true
       })
@@ -697,7 +700,6 @@ export default {
         '/restapi/hierarchies/add_test_validate',
         data
       ).then(response => {
-        console.log(response.data)
         switch (response.data.status) {
           case 'done':
             this.add_test.isOver = true
@@ -770,15 +772,6 @@ export default {
       }
       return true
     }
-  },
-  mounted () {
-    axios.post(
-      '/restapi/hierarchies/lab1a',
-      { user_id: this.user.id }
-    ).then(response => {
-      this.info = response.data.data
-      this.session_id = response.data.session_id
-    })
   }
 }
 </script>
