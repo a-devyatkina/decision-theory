@@ -1,5 +1,5 @@
 module.exports = function(app, db, ObjectID) {
-    app.post('/intro_test', (req, res) => {
+    app.post('/restapi/hierarchies/intro_test', (req, res) => {
         db.collection('test').find().project({correct: 0}).toArray((err, result) => {
             if (err) {
                 res.end()
@@ -29,14 +29,14 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/intro_test_validate', (req, res) => {
+    app.post('/restapi/hierarchies/intro_test_validate', (req, res) => {
         db.collection('test').findOne({'_id': ObjectID(req.body.question_id)}, (err, result) => {
             if (err) {
                 res.end()
                 throw err
             }
             var question = result
-            
+
             db.collection('session').findOne({'_id': ObjectID(req.body.session_id)}, (err, result) => {
                 if (err) {
                     res.end()
@@ -201,7 +201,7 @@ module.exports = function(app, db, ObjectID) {
                                             res.end()
                                             throw err
                                         }
-        
+
                                         var response = {
                                             status: 'wrong',
                                             question: new_question
@@ -210,14 +210,14 @@ module.exports = function(app, db, ObjectID) {
                                     })
                                 })
                             })
-                        }                      
+                        }
                     }
                 }
             })
         })
     })
 
-    app.post('/practice_test', (req, res) => {
+    app.post('/restapi/hierarchies/practice_test', (req, res) => {
         db.collection('test2').find().project().toArray((err, result) => {
             if (err) {
                 res.end()
@@ -251,7 +251,7 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/practice_test_validate', (req, res) => {
+    app.post('/restapi/hierarchies/practice_test_validate', (req, res) => {
         db.collection('session').findOne({'_id': ObjectID(req.body.session_id)}, (err, result) => {
             if (err) {
                 res.end()
@@ -339,7 +339,7 @@ module.exports = function(app, db, ObjectID) {
                                 res.end()
                                 throw err
                             }
-        
+
                             var new_questions = result
                             var new_question
                             for (i = 0; i < new_questions.length; i++) {
@@ -429,7 +429,7 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/add_test', (req, res) => {
+    app.post('/restapi/hierarchies/add_test', (req, res) => {
         db.collection('test3').find().toArray((err, result) => {
             if (err) {
                 res.end()
@@ -457,13 +457,13 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/add_test_validate', (req, res) => {
+    app.post('/restapi/hierarchies/add_test_validate', (req, res) => {
         db.collection('test3').findOne({'_id': ObjectID(req.body.question_id)}, (err, result) => {
             var question = result
             db.collection('session').findOne({'_id': ObjectID(req.body.session_id)}, (err, result) => {
                 var response, update
                 if (req.body.answer === question.correct) {
-                    mark = result.intro.points + 
+                    mark = result.intro.points +
                     result.practice.points +
                     result.target_matrix.points +
                     result.criterion_matrix1.points +
@@ -471,7 +471,7 @@ module.exports = function(app, db, ObjectID) {
                     result.criterion_matrix3.points +
                     result.criterion_matrix4.points +
                     result.hierarchical_synthesis.points +
-                    result.add_test.points 
+                    result.add_test.points
 
                     response = {
                         status: 'done',
@@ -494,7 +494,7 @@ module.exports = function(app, db, ObjectID) {
                         }
                     } else {
 
-                        mark = result.intro.points + 
+                        mark = result.intro.points +
                             result.practice.points +
                             result.target_matrix.points +
                             result.criterion_matrix1.points +

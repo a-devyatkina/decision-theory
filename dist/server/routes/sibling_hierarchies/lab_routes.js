@@ -1,7 +1,7 @@
-math = require('mathjs')
+const math = require('mathjs')
 
 module.exports = function(app, db, ObjectID) {
-    app.post('/lab1a', (req, res) => {
+    app.post('/restapi/hierarchies/lab1a', (req, res) => {
         db.collection('lab').find().toArray((err, result) => {
             if (err) {
                 res.end()
@@ -93,7 +93,7 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/lab_validate', (req, res) => {
+    app.post('/restapi/hierarchies/lab_validate', (req, res) => {
         db.collection('lab').findOne({"_id": ObjectID(req.body.id)}, (err, result) => {
             if (err) {
                 res.end()
@@ -317,7 +317,7 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.get('/lab1b', (req, res) => {
+    app.get('/restapi/hierarchies/lab1b', (req, res) => {
         var query = {
             owner: null
         }
@@ -333,7 +333,7 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/theme', (req, res) => {
+    app.post('/restapi/hierarchies/theme', (req, res) => {
         var filter = {
             '_id': ObjectID(req.body.theme)
         }

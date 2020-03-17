@@ -31,7 +31,7 @@ export default {
   },
   mounted () {
     axios.get(
-      'http://localhost:8000/lab1b'
+      'restapi/hierarchies/lab1b'
     ).then(response => {
       for (var i = 0; i < response.data.length; i++) {
         var theme = {

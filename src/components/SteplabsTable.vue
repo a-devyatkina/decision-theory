@@ -104,15 +104,9 @@ export default {
     },
     async previewSteplab (lid) {
       try {
-        if (lid === '-M2XtboAVPNKQFglZ-qY') {
-          this.$router.push('/sibling_hierarchies_preview?' + '&user=' + this.user.id)
-        } else if (lid === '-M2Y2qjwMJJ3IjF-Cd6J') {
-          this.$router.push('/layered_hierarchies_preview?' + '&user=' + this.user.id)
-        } else {
-          await this.$store.dispatch('data/removeSteplab', { lid, uid: this.user.id })
-          await this.$store.dispatch('data/createSteplab', { lid, uid: this.user.id })
-          this.$router.push('/steplab?lab=' + lid + '&user=' + this.user.id)
-        }
+        await this.$store.dispatch('data/removeSteplab', { lid, uid: this.user.id })
+        await this.$store.dispatch('data/createSteplab', { lid, uid: this.user.id })
+        this.$router.push('/steplab?lab=' + lid + '&user=' + this.user.id)
       } catch (error) {
         this.$q.notify(error.message)
       }

@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab)">
+            <router-link to="" @click.native="view(props.row.id, props.row.lid, props.row.isSteplab, props.row.isHierarchieslab)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -135,6 +135,22 @@ export default {
               })
             }
           }
+          for (let lid in course.hierarchieslab) {
+            let data = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, lid)
+            if (data) {
+              sessions[cid].score += data.work.score
+              let lab = this.$store.getters['data/getHierarchieslab'](lid)
+              sessions[cid].tasks.push({
+                id: data.wid,
+                lid: lid,
+                name: lab ? lab.name : '',
+                description: lab ? lab.description : '',
+                stage: data.work.stage,
+                score: data.work.score,
+                isHierarchieslab: true
+              })
+            }
+          }
         }
       }
       return sessions
@@ -144,15 +160,11 @@ export default {
     }
   },
   methods: {
-    view (task, isSteplab) {
+    view (task, lid, isSteplab, isHierarchieslab) {
       if (isSteplab) {
-        if (task === '-M2XtboAVPNKQFglZ-qY') {
-          this.$router.push(`/sibling_hierarchies`)
-        } else if (task === '-M2Y2qjwMJJ3IjF-Cd6J') {
-          this.$router.push(`/layered_hierarchies`)
-        } else {
-          this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
-        }
+        this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
+      } else if (isHierarchieslab) {
+        this.$router.push(`/${lid}`)
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }

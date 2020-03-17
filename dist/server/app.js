@@ -8,32 +8,32 @@ const cors = require('cors')
 const fileupload = require('express-fileupload');
 const auth = require('./routes/authorization.js');
 const labs = require('./routes/steplabs.js');
+const hierarchies = require('./routes/sibling_hierarchies')
 const mongoUrl = ('mongodb://localhost:27017/')
 const dbName = 'labs'
 let db
 const app = express();
 
-app.use(fileupload({
-  useTempFiles: true,
-  tempFileDir: __dirname + "/office/temp/"
-}));
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use(cors())
+MongoClient.connect(mongoUrl, (err, client) => {
+    if (err) throw err
+    db = client.db(dbName)
+    app.use(fileupload({
+        useTempFiles: true,
+        tempFileDir: __dirname + "/office/temp/"
+    }));
+    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json());
+    app.use(cors())
 
-auth.init(app);
-labs.init(app);
+    auth.init(app);
+    labs.init(app);
+    hierarchies.init(app, db, ObjectID);
 
-app.use(history());
-app.use(express.static('dist/spa-mat'));
+    app.use(history());
+    app.use(express.static('dist/spa-mat'));
 
-app.get('/', (req, res) => res.sendFile('/spa-mat/index.html'));
-
-// MongoClient.connect(mongoUrl, (err, client) => {
-//     if (err) throw err
-//     db = client.db(dbName)
-//     require('./routes/sibling_hierarchies')(app, db, ObjectID)
+    app.get('/', (req, res) => res.sendFile('/spa-mat/index.html'));
     app.listen(config.port, () => {
         console.log(`listening on port ${config.port}`)
     })
-// })
+})

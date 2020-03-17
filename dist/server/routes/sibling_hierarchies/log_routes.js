@@ -1,5 +1,5 @@
 module.exports = function(app, db, ObjectID) {
-    app.post('/log', (req, res) => {
+    app.post('restapi/hierarchies/log', (req, res) => {
         var query = { session: req.body.session }
         var update = {
             $set: req.body.value

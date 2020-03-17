@@ -141,28 +141,28 @@ const routes = [
     ]
   },
   {
-    path: '/sibling_hierarchies_preview',
+    path: '/siblinghierarchies_preview',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/SiblingHierarchiesPreview.vue') }
     ]
   },
   {
-    path: '/sibling_hierarchies',
+    path: '/siblinghierarchies',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/SiblingHierarchies.vue') }
     ]
   },
   {
-    path: '/layered_hierarchies_preview',
+    path: '/layeredhierarchies_preview',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/LayeredHierarchiesPreview.vue') }
     ]
   },
   {
-    path: '/layered_hierarchies',
+    path: '/layeredhierarchies',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/LayeredHierarchies.vue') }

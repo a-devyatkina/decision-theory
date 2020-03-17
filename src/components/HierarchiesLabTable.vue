@@ -87,11 +87,7 @@ export default {
     },
     async previewLab (lid) {
       try {
-        if (lid === 'siblinghierarchies') {
-          this.$router.push('/sibling_hierarchies_preview?' + '&user=' + this.user.id)
-        } else if (lid === 'layeredhierarchies') {
-          this.$router.push('/layered_hierarchies_preview?' + '&user=' + this.user.id)
-        }
+        this.$router.push(`/${lid}_preview?' + '&user=' + this.user.id`)
       } catch (error) {
         this.$q.notify(error.message)
       }

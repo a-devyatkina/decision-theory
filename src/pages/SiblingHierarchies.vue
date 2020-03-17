@@ -603,7 +603,7 @@ export default {
     },
     getIntroTest () {
       axios.post(
-        'http://localhost:8000/intro_test',
+        '/restapi/hierarchies/intro_test',
         { session_id: this.session_id }
       ).then(response => {
         console.log(response.data)
@@ -618,7 +618,7 @@ export default {
         session_id: this.session_id
       }
       axios.post(
-        'http://localhost:8000/intro_test_validate',
+        '/restapi/hierarchies/intro_test_validate',
         data
       ).then(response => {
         switch (response.data.status) {
@@ -641,7 +641,7 @@ export default {
     },
     getPracticeTest () {
       axios.post(
-        'http://localhost:8000/practice_test',
+        '/restapi/hierarchies/practice_test',
         { session_id: this.session_id }
       ).then(response => {
         console.log(response.data)
@@ -656,7 +656,7 @@ export default {
         session_id: this.session_id
       }
       axios.post(
-        'http://localhost:8000/practice_test_validate',
+        '/restapi/hierarchies/practice_test_validate',
         data
       ).then(response => {
         switch (response.data.status) {
@@ -679,7 +679,7 @@ export default {
     },
     getAddTest () {
       axios.post(
-        'http://localhost:8000/add_test',
+        '/restapi/hierarchies/add_test',
         { session_id: this.session_id }
       ).then(response => {
         console.log(response.data)
@@ -694,7 +694,7 @@ export default {
         session_id: this.session_id
       }
       axios.post(
-        'http://localhost:8000/add_test_validate',
+        '/restapi/hierarchies/add_test_validate',
         data
       ).then(response => {
         console.log(response.data)
@@ -725,7 +725,7 @@ export default {
         step: step
       }
       axios.post(
-        'http://localhost:8000/lab_validate',
+        '/restapi/hierarchies/lab_validate',
         data
       ).then(response => {
         switch (response.data.status) {
@@ -773,7 +773,7 @@ export default {
   },
   mounted () {
     axios.post(
-      'http://localhost:8000/lab1a',
+      '/restapi/hierarchies/lab1a',
       { user_id: this.user.id }
     ).then(response => {
       this.info = response.data.data
