@@ -52,25 +52,14 @@
                   <div style="white-space: pre-wrap">{{lab.description}}</div>
                 </q-item-main>
               </q-item>
-              <!-- <q-item>
-                <q-item-main :sublabel="$t('Task')" />
-                <q-item-side right><router-link to="" @click.native="getLink(work.task, work.teacher)" :download="work.task">{{work.task}}</router-link></q-item-side>
+              <q-item v-if="work.lab === 'layeredhierarchies'">
+                <q-item-main :sublabel="$t('Chosen theme')" />
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{value}}</q-chip></q-item-side>
               </q-item>
-              <q-item>
-                <q-item-main :sublabel="$t('Solution')" />
-                <q-item-side right><router-link to="" @click.native="getLink(work.solution, work.student)" :download="work.solution">{{work.solution}}</router-link></q-item-side>
-              </q-item> -->
               <q-item>
                 <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{work.score - work.penalty}}</q-chip></q-item-side>
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{work.score}}</q-chip></q-item-side>
               </q-item>
-              <q-item v-if="isTeacherSession()">
-                    <div><b>{{work.finalquestion.question}}</b></div>
-                    <img v-if="work.finalquestion.path" :src="work.finalquestion.path"/>
-              </q-item>
-                    <div>
-                      {{work.finalquestion.answer}}
-                    </div>
             </q-list>
           </q-item-main>
         </q-item>
@@ -80,8 +69,13 @@
 </template>
 
 <script>
-
+const axios = require('axios')
 export default {
+  data: () => {
+    return {
+      value: ''
+    }
+  },
   computed: {
     wid () {
       return this.$router.currentRoute.query.wid
@@ -147,6 +141,19 @@ export default {
       this.$store.dispatch('data/updateHierarchieswork', {
         wid: this.wid,
         work: this.work
+      })
+    }
+  },
+  mounted () {
+    let data = {
+      user_id: this.work.student
+    }
+    if (this.work.stage === 'resolve') {
+      axios.post(
+        'restapi/hierarchies/get_theme',
+        data
+      ).then(response => {
+        this.value = response.data.theme
       })
     }
   }

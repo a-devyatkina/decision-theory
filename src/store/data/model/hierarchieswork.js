@@ -23,15 +23,9 @@ export default (function () {
             course: val.course,
             teacher: val.teacher,
             lab: val.lab,
-            step: val.step,
             stage: val.stage,
-            condition: val.condition,
             score: val.score,
-            attempt: val.attempt,
-            error: val.error,
-            question: val.question,
-            penalty: val.penalty,
-            finalquestion: val.finalquestion
+            session: val.session
           }
         })
       }, error => {
@@ -47,15 +41,9 @@ export default (function () {
             course: val.course,
             teacher: val.teacher,
             lab: val.lab,
-            step: val.step,
             stage: val.stage,
-            condition: val.condition,
             score: val.score,
-            attempt: val.attempt,
-            error: val.error,
-            question: val.question,
-            penalty: val.penalty,
-            finalquestion: val.finalquestion
+            session: val.session
           }
         })
       }, error => {
@@ -73,40 +61,28 @@ export default (function () {
       ref().off()
     }
 
-    async create (student, course, teacher, lab, step, stage, condition, score, attempt, error, question, penalty, finalquestion) {
+    async create (student, course, teacher, lab, stage, score, session) {
       let snapshot = await ref().push({
         student: student,
         course: course,
         teacher: teacher,
         lab: lab,
-        step: step,
         stage: stage,
-        condition: condition,
         score: score,
-        attempt: attempt,
-        error: error,
-        question: question,
-        penalty: penalty,
-        finalquestion: finalquestion
+        session: session
       })
       return snapshot.key
     }
 
-    async update (wid, student, course, teacher, lab, step, stage, condition, score, attempt, error, question, penalty, finalquestion) {
+    async update (wid, student, course, teacher, lab, stage, score, session) {
       await ref().child(wid).set({
         student: student,
         course: course,
         teacher: teacher,
         lab: lab,
-        step: step,
         stage: stage,
-        condition: condition,
         score: score,
-        attempt: attempt,
-        error: error,
-        question: question,
-        penalty: penalty,
-        finalquestion: finalquestion
+        session: session
       })
     }
 

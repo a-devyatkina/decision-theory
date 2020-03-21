@@ -72,7 +72,6 @@
         </div>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 3" color="secondary" label="Skip" />
           <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -103,7 +102,6 @@
         </div>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 4" color="secondary" label="Skip" />
           <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -141,7 +139,6 @@
         </form>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 5" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(passport_data[0], 'target_matrix')" color="secondary" label="Continue" class="q-ml-sm" />
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -180,7 +177,6 @@
         </form>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 6" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(passport_data[1], 'criterion_matrix1')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -219,7 +215,6 @@
         </form>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 7" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(passport_data[2], 'criterion_matrix2')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -257,7 +252,6 @@
         </form>
 
         <q-stepper-navigation>
-            <q-btn @click="step = 8" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(passport_data[3], 'criterion_matrix3')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 6" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -296,7 +290,6 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 9" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(passport_data[4], 'criterion_matrix4')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 7" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -467,7 +460,6 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 10" color="secondary" label="Skip" />
           <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -589,6 +581,9 @@ export default {
     userId () {
       return this.$store.getters['data/getUser']().id
     },
+    work () {
+      return this.$store.getters['data/getStudentHierarchieswork'](this.userId, 'siblinghierarchies')
+    },
     isFormValid () {
       return Object.keys(this.fields).every(field => this.fields[field].valid)
     }
@@ -602,6 +597,12 @@ export default {
         this.info = response.data.data
         this.session_id = response.data.session_id
         this.step++
+        this.work.work.session = this.session_id
+        console.log(this.work)
+        this.$store.dispatch('data/updateHierarchieswork', {
+          wid: this.work.wid,
+          work: this.work.work
+        })
       })
     },
     isTestFormValid (shape) {
@@ -747,10 +748,14 @@ export default {
     labpage () {
       this.$q.dialog({
         title: 'Ваша оценка ' + this.mark,
-        message: 'Завершить лабораторную работу?',
-        ok: 'Да',
-        cancel: 'Нет'
+        ok: 'Продолжить'
       }).then(() => {
+        this.work.work.stage = 'resolve'
+        this.work.work.score = this.mark
+        this.$store.dispatch('data/updateHierarchieswork', {
+          wid: this.work.wid,
+          work: this.work.work
+        })
         this.$router.push('/works')
       })
     },

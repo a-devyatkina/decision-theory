@@ -172,7 +172,6 @@ module.exports = function(app, db, ObjectID) {
                             var upper = Math.round(calculations[i][j]*100+1)/100
                             var lower = Math.round(calculations[i][j]*100-1)/100
                             var tmp = req.body.value[i][j]
-                            console.log(tmp)
                             if (lower > tmp || tmp > upper || !tmp) {
                                 response.status = 'wrong'
                                 response.errors.push(i)
@@ -333,12 +332,30 @@ module.exports = function(app, db, ObjectID) {
         })
     })
 
-    app.post('/restapi/hierarchies/theme', (req, res) => {
+    app.post('/restapi/hierarchies/get_theme', (req, res) => {
+        var filter = {
+            'owner': req.body.user_id
+        }
+        db.collection('themes').findOne(filter, (err, result) => {
+            if (err) {
+                res.end()
+                throw err
+            }
+            var body = {
+                theme: result.name
+            }
+            res.send(body)
+        })
+    })
+
+    app.post('/restapi/hierarchies/choose_theme', (req, res) => {
         var filter = {
             '_id': ObjectID(req.body.theme)
         }
         var update = {
-            'owner': req.body.user_id
+            $set: {
+                'owner': req.body.user_id
+            }
         }
         db.collection('themes').updateOne(filter, update, (err, result) => {
             if (err) {

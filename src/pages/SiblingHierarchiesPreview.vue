@@ -489,7 +489,7 @@
 </style>
 
 <script>
-import { varPreview, introTestPreview, practiceTestPreview, addTestPreview } from '../store/data/siblinghierarchy/test_var.js'
+import { varPreview, introTestPreview, practiceTestPreview, addTestPreview } from '../store/data/hierarchy/test_var.js'
 export default {
   data: () => {
     return {
