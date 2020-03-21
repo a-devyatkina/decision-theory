@@ -24,151 +24,151 @@ const varPreview = {
   input: {
     target_matrix: [
       {
-        name: 'priority',
+        name: 'Вектор приоритетов',
         answer: ['0', '0', '0', '0']
       },
       {
-        name: 'weight',
+        name: 'Веса критериев',
         answer: ['0', '0', '0', '0']
       },
       {
-        name: 'mweight',
+        name: '(M*w)',
         answer: ['0', '0', '0', '0']
       },
       {
-        name: 'lambda',
+        name: 'Лямбда',
         answer: ['0', '0', '0', '0']
       },
       {
-        name: 'lambda_max',
+        name: 'Среднее значение лямбда',
         answer: '0'
       },
       {
-        name: 'ci',
+        name: 'Индекс согласованности',
         answer: '0'
       },
       {
-        name: 'cc',
+        name: 'Отношение согласованности',
         answer: '0'
       }
     ],
     criterion_matrix1: [
       {
-        name: 'priority',
+        name: 'Вектор приоритетов',
         answer: ['0', '0', '0']
       },
       {
-        name: 'weight',
+        name: 'Веса критериев',
         answer: ['0', '0', '0']
       },
       {
-        name: 'mweight',
+        name: '(M*w)',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda',
+        name: 'Лямбда',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda_max',
+        name: 'Среднее значение лямбда',
         answer: '0'
       },
       {
-        name: 'ci',
+        name: 'Индекс согласованности',
         answer: '0'
       },
       {
-        name: 'cc',
+        name: 'Отношение согласованности',
         answer: '0'
       }
     ],
     criterion_matrix2: [
       {
-        name: 'priority',
+        name: 'Вектор приоритетов',
         answer: ['0', '0', '0']
       },
       {
-        name: 'weight',
+        name: 'Веса критериев',
         answer: ['0', '0', '0']
       },
       {
-        name: 'mweight',
+        name: '(M*w)',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda',
+        name: 'Лямбда',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda_max',
+        name: 'Среднее значение лямбда',
         answer: '0'
       },
       {
-        name: 'ci',
+        name: 'Индекс согласованности',
         answer: '0'
       },
       {
-        name: 'cc',
+        name: 'Отношение согласованности',
         answer: '0'
       }
     ],
     criterion_matrix3: [
       {
-        name: 'priority',
+        name: 'Вектор приоритетов',
         answer: ['0', '0', '0']
       },
       {
-        name: 'weight',
+        name: 'Веса критериев',
         answer: ['0', '0', '0']
       },
       {
-        name: 'mweight',
+        name: '(M*w)',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda',
+        name: 'Лямбда',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda_max',
+        name: 'Среднее значение лямбда',
         answer: '0'
       },
       {
-        name: 'ci',
+        name: 'Индекс согласованности',
         answer: '0'
       },
       {
-        name: 'cc',
+        name: 'Отношение согласованности',
         answer: '0'
       }
     ],
     criterion_matrix4: [
       {
-        name: 'priority',
+        name: 'Вектор приоритетов',
         answer: ['0', '0', '0']
       },
       {
-        name: 'weight',
+        name: 'Веса критериев',
         answer: ['0', '0', '0']
       },
       {
-        name: 'mweight',
+        name: '(M*w)',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda',
+        name: 'Лямбда',
         answer: ['0', '0', '0']
       },
       {
-        name: 'lambda_max',
+        name: 'Среднее значение лямбда',
         answer: '0'
       },
       {
-        name: 'ci',
+        name: 'Индекс согласованности',
         answer: '0'
       },
       {
-        name: 'cc',
+        name: 'Отношение согласованности',
         answer: '0'
       }
     ]
