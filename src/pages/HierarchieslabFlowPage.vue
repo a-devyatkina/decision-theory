@@ -52,13 +52,13 @@
                   <div style="white-space: pre-wrap">{{lab.description}}</div>
                 </q-item-main>
               </q-item>
-              <q-item v-if="work.lab === 'layeredhierarchies'">
+              <q-item v-if="work.lab === 'layeredhierarchies' && work.stage === 'resolve'">
                 <q-item-main :sublabel="$t('Chosen theme')" />
                 <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{value}}</q-chip></q-item-side>
               </q-item>
               <q-item>
                 <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{work.score}}</q-chip></q-item-side>
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{work.score-work.penalty}}</q-chip></q-item-side>
               </q-item>
             </q-list>
           </q-item-main>

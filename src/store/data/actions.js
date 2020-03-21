@@ -228,7 +228,7 @@ export async function createStudent ({ state }, { name, group, email, phone, add
           await model.works.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', '', '', 0)
         }
         for (let lid in state.courses[cid].groups[group].hierarchieslab) {
-          await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, '')
+          await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, 0, '')
         }
       }
     }
@@ -570,9 +570,9 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
           if (state.students[sid].group === gid) {
             let work = getters['getStudentHierarchieswork'](sid, lid)
             if (!work) {
-              await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, '')
+              await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, 0, '')
             } else if (plan.hierarchieslab[lid] === undefined) {
-              await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, '')
+              await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, 0, '')
             }
           }
         }
@@ -766,5 +766,5 @@ export async function unlistenHierarchiesworks ({ commit }) {
 }
 
 export async function updateHierarchieswork ({ commit }, { wid, work }) {
-  await model.hierarchieswork.update(wid, work.student, work.course, work.teacher, work.lab, work.stage, work.score, work.session)
+  await model.hierarchieswork.update(wid, work.student, work.course, work.teacher, work.lab, work.stage, work.score, work.penalty, work.session)
 }

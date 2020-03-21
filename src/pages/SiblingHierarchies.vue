@@ -639,8 +639,13 @@ export default {
             alert('Ошибка!')
             break
           case 'over':
-            this.$router.push('/lab1')
-            alert('Попробуйте еще раз позже')
+            this.$q.dialog({
+              title: 'Вы допустили слишком много ошибок',
+              message: 'Попробуйте еще раз позже',
+              ok: 'Продолжить'
+            }).then(() => {
+              this.finishLab(0)
+            })
             break
         }
       })
@@ -676,8 +681,13 @@ export default {
             alert('Ошибка!')
             break
           case 'over':
-            this.$router.push('/lab1')
-            alert('Попробуйте еще раз позже')
+            this.$q.dialog({
+              title: 'Вы допустили слишком много ошибок',
+              message: 'Попробуйте еще раз позже',
+              ok: 'Продолжить'
+            }).then(() => {
+              this.finishLab(0)
+            })
             break
         }
       })
@@ -714,8 +724,13 @@ export default {
             alert('Ошибка!')
             break
           case 'over':
-            this.$router.push('/lab1')
-            alert('Попробуйте еще раз позже')
+            this.$q.dialog({
+              title: 'Вы допустили слишком много ошибок',
+              message: 'Попробуйте еще раз позже',
+              ok: 'Продолжить'
+            }).then(() => {
+              this.finishLab(0)
+            })
             break
         }
       })
@@ -739,8 +754,13 @@ export default {
             alert('Ошибка\n' + response.data.body)
             break
           case 'over':
-            this.$router.push('/lab1')
-            alert('Попробуйте еще раз позже')
+            this.$q.dialog({
+              title: 'Вы допустили слишком много ошибок',
+              message: 'Попробуйте еще раз позже',
+              ok: 'Продолжить'
+            }).then(() => {
+              this.finishLab(0)
+            })
             break
         }
       })
@@ -750,13 +770,7 @@ export default {
         title: 'Ваша оценка ' + this.mark,
         ok: 'Продолжить'
       }).then(() => {
-        this.work.work.stage = 'resolve'
-        this.work.work.score = this.mark
-        this.$store.dispatch('data/updateHierarchieswork', {
-          wid: this.work.wid,
-          work: this.work.work
-        })
-        this.$router.push('/works')
+        this.finishLab(this.mark)
       })
     },
     compare: function (arr1, arr2) {
@@ -776,6 +790,15 @@ export default {
         }
       }
       return true
+    },
+    finishLab (mark) {
+      this.work.work.stage = 'resolve'
+      this.work.work.score = mark
+      this.$store.dispatch('data/updateHierarchieswork', {
+        wid: this.work.wid,
+        work: this.work.work
+      })
+      this.$router.push('/works')
     }
   }
 }
