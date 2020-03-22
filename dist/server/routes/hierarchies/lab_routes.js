@@ -15,73 +15,43 @@ module.exports = function(app, db, ObjectID) {
                 variant: result[index].var,
                 intro: {
                     questions: [],
-                    points: 5
+                    points: 5,
+                    checked: false,
                 },
                 practice: {
                     questions: [],
-                    points: 15
+                    points: 15,
+                    checked: false
                 },
                 target_matrix: {
-                    priority: 0,
-                    weight: 0,
-                    mweight: 0,
-                    lambda: 0,
-                    lambda_max: 0,
-                    c_index: 0,
-                    c_relation: 0,
+                    checked: false,
                     points: 10
                 },
                 criterion_matrix1: {
-                    priority: 0,
-                    weight: 0,
-                    mweight: 0,
-                    lambda: 0,
-                    lambda_max: 0,
-                    c_index: 0,
-                    c_relation: 0,
+                    checked: false,
                     points: 10
                 },
                 criterion_matrix2: {
-                    priority: 0,
-                    weight: 0,
-                    mweight: 0,
-                    lambda: 0,
-                    lambda_max: 0,
-                    c_index: 0,
-                    c_relation: 0,
+                    checked: false,
                     points: 10
                 },
                 criterion_matrix3: {
-                    priority: 0,
-                    weight: 0,
-                    mweight: 0,
-                    lambda: 0,
-                    lambda_max: 0,
-                    c_index: 0,
-                    c_relation: 0,
+                    checked: false,
                     points: 10
                 },
                 criterion_matrix4: {
-                    priority: 0,
-                    weight: 0,
-                    mweight: 0,
-                    lambda: 0,
-                    lambda_max: 0,
-                    c_index: 0,
-                    c_relation: 0,
+                    checked: false,
                     points: 10
                 },
                 hierarchical_synthesis: {
-                    matrix: 0,
-                    vector: 0,
-                    alternative: 0,
-                    points: 20.0
+                    checked: false,
+                    points: 20
                 },
                 add_test: {
                     question: null,
-                    points: 10.0
+                    points: 10
                 },
-                logs: []    // step, action, timestamp
+                logs: []
             }
             db.collection('session').insertOne(session, () => {
                 var response = {
@@ -89,6 +59,41 @@ module.exports = function(app, db, ObjectID) {
                     session_id: session._id
                 }
                 res.send(response)
+            })
+        })
+    })
+
+    app.post('/restapi/hierarchies/get_session', (req, res) => {
+        db.collection('session').findOne({'_id':ObjectID(req.body.id)}, (err, result) => {
+            if (err) {
+                res.end()
+                throw err
+            }
+            var session = result
+            db.collection('lab').findOne({'var':result.variant}, (err, result) => {
+                if (err) {
+                    res.end()
+                    throw err
+                }
+                var response
+                response.info = result
+                res.send(result)
+                if (!session.intro.checked) {
+                    response.intro.isOver = false
+                    response.intro.isLoaded = (!session.intro.questions.length === 0)
+                    response.practice.isOver = response.practice.isLoaded = false
+                    response.add.isOver = response.add.isLoaded = false
+                    response.target = response.criterion1 = response.criterion2 = response.criterion3 = response.criterion4 = false
+                    response.synthesis = false
+                }
+                else if (!session.practice.checked) {
+                    response.intro.isOver = response.intro.isLoaded = true
+                    response.practice.isOver = false
+                    response.practice.isLoaded = (!session.practice.questions.length === 0)
+                    response.add.isOver = response.add.isLoaded = false
+                    response.target = response.criterion1 = response.criterion2 = response.criterion3 = response.criterion4 = false
+                    response.synthesis = false
+                }
             })
         })
     })
@@ -109,49 +114,74 @@ module.exports = function(app, db, ObjectID) {
 
                 var session = result
                 if (req.body.step != null) {
-                    var matrix, update, target
+                    var matrix, updateWrong, updateRight, target
                     switch (req.body.step) {
                         case 'target_matrix':
                             matrix = lab.data[0].value
-                            update = {
+                            updateWrong = {
                                 $inc: {
                                     'target_matrix.points': -2
+                                }
+                            }
+                            updateRight = {
+                                $set: {
+                                    'target_matrix.checked': true
                                 }
                             }
                             target = session.target_matrix
                             break
                         case 'criterion_matrix1':
                             matrix = lab.data[1].value
-                            update = {
+                            updateWrong = {
                                 $inc: {
                                     'criterion_matrix1.points': -2
+                                }
+                            }
+                            updateRight = {
+                                $set: {
+                                    'criterion_matrix1.checked': true
                                 }
                             }
                             target = session.criterion_matrix1
                             break
                         case 'criterion_matrix2':
                             matrix = lab.data[2].value
-                            update = {
+                            updateWrong = {
                                 $inc: {
                                     'criterion_matrix2.points': -2
+                                }
+                            }
+                            updateRight = {
+                                $set: {
+                                    'criterion_matrix2.checked': true
                                 }
                             }
                             target = session.criterion_matrix2
                             break
                         case 'criterion_matrix3':
                             matrix = lab.data[3].value
-                            update = {
+                            updateWrong = {
                                 $inc: {
                                     'criterion_matrix3.points': -2
+                                }
+                            }
+                            updateRight = {
+                                $set: {
+                                    'criterion_matrix3.checked': true
                                 }
                             }
                             target = session.criterion_matrix3
                             break
                         case 'criterion_matrix4':
                             matrix = lab.data[4].value
-                            update = {
+                            updateWrong = {
                                 $inc: {
                                     'criterion_matrix4.points': -2
+                                }
+                            }
+                            updateRight = {
+                                $set: {
+                                    'criterion_matrix4.checked': true
                                 }
                             }
                             target = session.criterion_matrix4
@@ -223,7 +253,15 @@ module.exports = function(app, db, ObjectID) {
                                 status: 'over'
                             }
                         }
-                        db.collection('session').updateOne(filter, update, (err, result) => {
+                        db.collection('session').updateOne(filter, updateWrong, (err, result) => {
+                            if (err) {
+                                res.end()
+                                throw err
+                            }
+                        })
+                    }
+                    else {
+                        db.collection('session').updateOne(filter, updateRight, (err, result) => {
                             if (err) {
                                 res.end()
                                 throw err
@@ -231,6 +269,7 @@ module.exports = function(app, db, ObjectID) {
                         })
                     }
                     res.send(response)
+
                 } else {
                     var matrix = []
                     var tmp
@@ -245,9 +284,14 @@ module.exports = function(app, db, ObjectID) {
                     var filter = {
                         '_id': ObjectID(req.body.session_id)
                     }
-                    var update = {
+                    var updateRight = {
                         $inc: {
                             'hierarchical_synthesis.points': -4
+                        }
+                    }
+                    var updateWrong = {
+                        $set: {
+                            'hierarchical_synthesis.checked': true
                         }
                     }
                     var response = {
@@ -256,12 +300,13 @@ module.exports = function(app, db, ObjectID) {
                     }
 
                     var request = req.body.value.matrix
-                    for (i = 0; i < matrix.length; i++) {
+                    for (i = 0; i < 3; i++) {
                         var row = matrix[i]
-                        for (j = 0; j < matrix.length; j++) {
+                        for (j = 0; j < 4; j++) {
                             var upper = Math.round(row[j]*100+1)/100
                             var lower = Math.round(row[j]*100-1)/100
-                            var tmp = parseFloat(request[i][j])
+                            var tmp = request[i][j]
+                            console.log(lower, tmp, upper)
                             if (lower > tmp || tmp > upper || !tmp) {
                                 response.status = 'wrong'
                                 response.body.add('Матрица')
@@ -273,7 +318,8 @@ module.exports = function(app, db, ObjectID) {
                     for (i = 0; i < criterion.length; i++) {
                         var upper = Math.round(criterion[i]*100+1)/100
                         var lower = Math.round(criterion[i]*100-1)/100
-                        var tmp = parseFloat(request[i])
+                        var tmp = request[i]
+                        console.log(lower, tmp, upper)
                         if (lower > tmp || tmp > upper || !tmp) {
                             response.status = 'wrong'
                             response.body.add('Вектор')
@@ -289,6 +335,7 @@ module.exports = function(app, db, ObjectID) {
                         }
                     }
 
+                    console.log(index)
                     request = req.body.value.alternative
                     if (index + 1 != request) {
                         response.status = 'wrong'
@@ -303,7 +350,14 @@ module.exports = function(app, db, ObjectID) {
                                 status: 'over'
                             }
                         }
-                        db.collection('session').updateOne(filter, update, (err, result) => {
+                        db.collection('session').updateOne(filter, updateRight, (err, result) => {
+                            if (err) {
+                                res.end()
+                                throw err
+                            }
+                        })
+                    } else {
+                        db.collection('session').updateOne(filter, updateWrong, (err, result) => {
                             if (err) {
                                 res.end()
                                 throw err

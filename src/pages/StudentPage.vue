@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" @click.native="view(props.row.id, props.row.lid, props.row.isSteplab, props.row.isHierarchieslab)">
+            <router-link to="" @click.native="view(props.row)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -160,13 +160,21 @@ export default {
     }
   },
   methods: {
-    view (task, lid, isSteplab, isHierarchieslab) {
-      if (isSteplab) {
-        this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
-      } else if (isHierarchieslab) {
-        this.$router.push(`/${lid}`)
+    view (lab) {
+      if (lab.isSteplab) {
+        this.$router.push(`/steplab?lab=${lab.task}&user=${this.user.id}`)
+      } else if (lab.isHierarchieslab) {
+        if ((lab.lid === 'siblinghierarchies' && lab.stage !== 'assign' && lab.stage !== 'improve') || (lab.lid === 'layeredhierarchies' && lab.stage === 'unassign')) {
+          this.$q.dialog({
+            title: 'Лабораторная работа недоступна',
+            message: 'Обратитесь к переподавателю',
+            ok: 'Продолжить'
+          })
+        } else {
+          this.$router.push(`/${lab.lid}`)
+        }
       } else {
-        this.$router.push(`/workflow?wid=${task}`)
+        this.$router.push(`/workflow?wid=${lab.task}`)
       }
     }
   }

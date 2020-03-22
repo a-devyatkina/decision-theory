@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     addNewStage ({action, penalty}) {
-      this.updateWork(action, penalty)
+      this.updateHierarchiesWork(action, penalty)
     },
     isDeletableStage (ind, author) {
       return ind === 0 && !this.archived && author === this.user.id
@@ -133,8 +133,9 @@ export default {
       let author = this.$store.getters['data/getStudent'](id) || this.$store.getters['data/getTeacher'](id)
       return author ? author.name : 'unknown'
     },
-    updateWork (stage, penalty) {
+    updateHierarchiesWork (stage, penalty) {
       this.work.stage = stage
+      this.work.session = ''
       if (stage === 'close') {
         this.work.penalty = penalty
       }

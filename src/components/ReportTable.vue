@@ -165,7 +165,7 @@ export default {
         for (let lid in this.plan.hierarchieslab) {
           let data = this.$store.getters['data/getStudentHierarchieswork'](sid, lid)
           if (data) {
-            row.score += data.work.score
+            row.score += data.work.score - data.work.penalty
             row.hierarchieswork.push({ lid: lid, stage: data.work.stage, wid: data.wid })
           } else {
             row.hierarchieswork.push({ lid: lid, stage: '', wid: '' })

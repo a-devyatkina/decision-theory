@@ -90,7 +90,21 @@ module.exports = function(app, db, ObjectID) {
                             })
                         })
                     } else {
-                        res.send({ status: 'done' })
+                        var filter = {
+                            '_id': ObjectID(req.body.session_id),
+                        }
+                        var update = {
+                            $set: {
+                                'intro.checked': true
+                            }
+                        }
+                        db.collection('session').updateOne(filter, update, (err, result) => {
+                            if (err) {
+                                res.end()
+                                throw err
+                            }
+                            res.send({status: 'done'})
+                        })
                     }
                 } else {
                     session.intro.points -= 0.5
@@ -306,10 +320,21 @@ module.exports = function(app, db, ObjectID) {
                         })
                     }
                     else {
-                        response = {
-                            status: 'done'
+                        var filter = {
+                            '_id': ObjectID(req.body.session_id),
                         }
-                        res.send(response)
+                        var update = {
+                            $set: {
+                                'practice.checked': true
+                            }
+                        }
+                        db.collection('session').updateOne(filter, update, (err, result) => {
+                            if (err) {
+                                res.end()
+                                throw err
+                            }
+                            res.send({status: 'done'})
+                        })
                     }
                 })
             } else {
@@ -479,7 +504,8 @@ module.exports = function(app, db, ObjectID) {
                     }
                     update = {
                         $set: {
-                            mark: mark
+                            'mark': mark,
+                            'add_test.checked': true
                         }
                     }
                 } else {

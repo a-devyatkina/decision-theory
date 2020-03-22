@@ -19,26 +19,17 @@
               icon="assignment"
               :done="step > 1"
       >
-
         <div class=matrix v-for="(matrix) in info.data" :key="matrix.id">
-          {{ matrix.name }}
-          <div v-for="(row) in matrix.value" :key="row.id">
-            <span v-for="(element) in row" :key="element.id">
-              {{ element }}
-            </span>
-          </div>
-          <br>
-        </div>
-        <div class=matrix v-for="(matrix) in info.data" :key="matrix.id">
-          <div class="q-pa-md">
+          <div class="q-pa-md" id="matrix_table">
             <q-table
-                    :title="matrix.name"
-                    :data="matrix.value"
-                    :columns="columns"
-                    color="primary"
-                    row-key="id"
-            >
-            </q-table>
+              :title="matrix.name"
+              :data="matrix.value"
+              :columns="columns"
+              color="primary"
+              row-key="id"
+              hide-header
+              hide-bottom
+            />
           </div>
         </div>
 
@@ -64,7 +55,7 @@
             <div id="answerid" v-for="(answer) in intro_test.info.answers" :key="answer" class="answer">
               <q-radio v-model="intro_test.shape" :val="answer" dense> {{answer}} </q-radio>
             </div>
-            <q-btn @click="checkIntroAnswer(index)" color="secondary" :disabled="!isTestFormValid(intro_test.shape)" label="Проверить"/>
+            <q-btn @click="checkIntroAnswer()" color="secondary" :disabled="!isTestFormValid(intro_test.shape)" label="Проверить"/>
           </div>
         </div>
         <div v-else>
@@ -72,6 +63,7 @@
         </div>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -94,7 +86,7 @@
             <div id="answerid" v-for="(answer) in practice_test.info.answers" :key="answer" class="answer">
               <q-radio v-model="practice_test.shape" :val="answer" dense> {{answer}} </q-radio>
             </div>
-            <q-btn @click="checkPracticeAnswer(index)" color="secondary" :disabled="!isTestFormValid(practice_test.shape)" label="Проверить"/>
+            <q-btn @click="checkPracticeAnswer()" color="secondary" :disabled="!isTestFormValid(practice_test.shape)" label="Проверить"/>
           </div>
         </div>
         <div v-else>
@@ -102,6 +94,7 @@
         </div>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -139,6 +132,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(passport_data[0], 'target_matrix')" color="secondary" label="Continue" class="q-ml-sm" />
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -177,6 +171,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(passport_data[1], 'criterion_matrix1')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -215,6 +210,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(passport_data[2], 'criterion_matrix2')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -252,6 +248,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(passport_data[3], 'criterion_matrix3')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 6" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -290,6 +287,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(passport_data[4], 'criterion_matrix4')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 7" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -460,6 +458,7 @@
         </form>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -487,6 +486,7 @@
       </div>
 
         <q-stepper-navigation>
+          <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="labpage()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -514,6 +514,9 @@
   .vector{
     display: flex;
     flex-direction: row;
+  }
+  #matrix_table{
+    width: 450px;
   }
 </style>
 
@@ -590,20 +593,20 @@ export default {
   },
   methods: {
     getVar () {
-      axios.post(
-        'restapi/hierarchies/lab1a',
-        { user_id: this.userId }
-      ).then(response => {
-        this.info = response.data.data
-        this.session_id = response.data.session_id
-        this.step++
-        this.work.work.session = this.session_id
-        console.log(this.work)
-        this.$store.dispatch('data/updateHierarchieswork', {
-          wid: this.work.wid,
-          work: this.work.work
+        axios.post(
+          'restapi/hierarchies/lab1a',
+          { user_id: this.userId }
+        ).then(response => {
+          this.info = response.data.data
+          this.session_id = response.data.session_id
+          this.step++
+          this.work.work.session = this.session_id
+          this.$store.dispatch('data/updateHierarchieswork', {
+            wid: this.work.wid,
+            work: this.work.work
+          })
         })
-      })
+      }
     },
     isTestFormValid (shape) {
       return shape !== ''
@@ -617,7 +620,7 @@ export default {
         this.intro_test.isLoaded = true
       })
     },
-    checkIntroAnswer (index) {
+    checkIntroAnswer () {
       var data = {
         question_id: this.intro_test.info._id,
         answer: this.intro_test.shape,
@@ -659,7 +662,7 @@ export default {
         this.practice_test.isLoaded = true
       })
     },
-    checkPracticeAnswer (index) {
+    checkPracticeAnswer () {
       var data = {
         question_id: this.practice_test.info._id,
         answer: this.practice_test.shape,

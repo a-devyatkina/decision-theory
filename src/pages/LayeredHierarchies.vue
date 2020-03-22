@@ -75,7 +75,6 @@ export default {
         'restapi/hierarchies/get_theme',
         data
       ).then(response => {
-        console.log(response.data)
         this.value = response.data.theme
       })
     }
