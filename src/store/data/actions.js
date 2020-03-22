@@ -569,9 +569,10 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
             let work = getters['getStudentHierarchieswork'](sid, lid)
+            console.log(plan.hierarchieslab)
             if (!work) {
               await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, 0, '')
-            } else if (plan.hierarchieslab[lid] === undefined) {
+            } else if (plan.hierarchieslab === undefined || plan.hierarchieslab[lid] === undefined) {
               await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'unassign', 0, 0, '')
             }
           }
