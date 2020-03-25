@@ -28,54 +28,7 @@
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @back='back'></theoretical-choice>
       </q-step>
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-      <!-- <q-step
-         :name='2'
-         title='Критерий'
-         icon='assignment'
-         :done='correctStep > 2'
-      >
-          <quantitativefunc @right='test()' @back='currentstep -= 1' @err='count += 1' :number='0' :condition='condition' />
-          <q-stepper-navigation><q-btn @click='test()' color='secondary' label='Продолжить без ответа' /></q-stepper-navigation>
-      </q-step>
 
-      <q-step
-        :name='3'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 2'
-      >
-        <quantitativefunc @right='test()' @back='currentstep -= 1' @err='count += 1' :number='1' :condition='condition' />
-        <q-stepper-navigation><q-btn @click='test()' color='secondary' label='Продолжить без ответа' /></q-stepper-navigation>
-      </q-step>
-      <q-step
-        :name='4'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 2'
-      >
-        <categoricalfunc
-          @right='test()'
-          @back='back()'
-          @err='count += 1'
-          :number='2'
-          :condition='condition'
-        >
-        </categoricalfunc>
-        <q-stepper-navigation>
-          <q-btn @click='test()' color='secondary' label='Продолжить без ответа' />
-        </q-stepper-navigation>
-      </q-step>
-
-      <q-step
-        :name='5'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 2'
-      >
-        <categoricalfunc @right='test()' @back='back()' @err='count += 1' :number='3' :condition='condition'/>
-        <q-stepper-navigation><q-btn @click='test()' color='secondary' label='Продолжить без ответа' /></q-stepper-navigation>
-      </q-step> -->
       <q-step v-for="(item, index) in condition.criterion" v-bind:key='index'
         :name='Number(index + 2)'
         :title='`Вычисление значений критерия С${index + 1}`'
@@ -340,7 +293,6 @@ export default {
     },
     err (penalty) {
       this.error.splice(this.step, 1, this.error[this.step] + 1)
-    
       this.limits[this.step] -= penalty
       if (this.limits[this.step] < 0) {
         this.limits[this.step] = 0
