@@ -35,6 +35,11 @@
                     <q-item-side icon="star_border" />
                     <q-item-main :label="$t('Estimate')" />
                   </q-item>
+                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.remove.opened = true">
+                    <work3flow-action action="remove" ref="remove" :title="$t('Recreate Task')" :callback="addNewStage"/>
+                    <q-item-side icon="autorenew" />
+                    <q-item-main :label="$t('Recreate')" />
+                  </q-item>
                 </q-list>
               </q-popover>
             </q-btn>
@@ -86,6 +91,9 @@ export default {
     wid () {
       return this.$router.currentRoute.query.wid
     },
+    cid () {
+      return this.$router.currentRoute.query.cid
+    },
     lab () {
       return this.$store.getters['data/getLab3'](this.work.lab)
     },
@@ -99,7 +107,7 @@ export default {
       return this.course.archived
     },
     course () {
-      return this.$store.getters['data/getCourse'](this.work.course)
+      return this.$store.getters['data/getCourse'](this.cid)
     },
     user () {
       return this.$store.getters['data/getUser']()
@@ -165,6 +173,18 @@ export default {
     },
     updateWork (stage, penalty) {
       this.work.stage = stage
+      if (stage === 'remove') {
+        this.work.step = 0
+        this.work.stage = 'unassign'
+        this.work.condition = ''
+        this.work.score = 0
+        this.work.attempt = 0
+        this.work.error = ''
+        this.work.question = ''
+        this.work.penalty = 0
+        this.work.finalquestion = ''
+        console.log(this.work)
+      }
       if (stage === 'close') {
         this.work.penalty = penalty
       }

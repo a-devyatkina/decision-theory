@@ -19,7 +19,7 @@
         </router-link>
       </q-td>
       <q-td v-for="work in props.row.work3" :key="work.lid" :props="props">
-        <router-link :to="`work3flow?wid=${work.wid}`">
+        <router-link :to="`work3flow?wid=${work.wid}&cid=${cid}`">
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
