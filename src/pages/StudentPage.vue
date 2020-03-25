@@ -29,7 +29,7 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab, props.row.isLab3)">
+            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab, props.row.isLab3, cid)">
               <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
           </q-td>
@@ -159,11 +159,11 @@ export default {
     }
   },
   methods: {
-    view (task, isSteplab, isLab3) {
+    view (task, isSteplab, isLab3, cid) {
       if (isSteplab) {
         this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
       } else if (isLab3) {
-        this.$router.push(`/work3flow?wid=${task}`)
+        this.$router.push(`/work3flow?wid=${task}&cid=${cid}`)
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }
