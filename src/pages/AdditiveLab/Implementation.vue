@@ -19,16 +19,14 @@
           <q-btn @click='step += 1' color='secondary' label='Продолжить' />
         </q-stepper-navigation>
       </q-step>
-
       <q-step
         :name='1'
         icon='assignment'
         title='Теория'
         :done='correctStep > 2'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @back='back'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
       </q-step>
-
       <q-step v-for="(item, index) in condition.criterion" v-bind:key='index'
         :name='Number(index + 2)'
         :title='`Вычисление значений критерия С${index + 1}`'
@@ -42,20 +40,20 @@
         :answers = 'funcAnswers[index]'
         :done='correctStep > 1 + index'
         @success = 'Answer()'
+        @error="err"
         />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > index + 1' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
           <q-btn v-if='correctStep > index + 1' flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
       <q-step
         :name='6'
         title='Критерий'
         icon='assignment'
         :done='correctStep > 3'
       >
-        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
+        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
       </q-step>
       <q-step
         :name='7'
@@ -63,7 +61,7 @@
         icon='assignment'
         :done='correctStep > 4'
       >
-        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
+        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
       </q-step>
       <q-step
         :name='8'
@@ -71,7 +69,7 @@
         icon='assignment'
         :done='correctStep > 5'
       >
-        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
+        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -80,7 +78,7 @@
         icon='assignment'
         :done='correctStep > 6'
       >
-        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back'></alternatives-evaluation>
+        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
       </q-step>
 
       <q-step
@@ -89,7 +87,7 @@
         :done='correctStep > 7'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back' ></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back' @error="err"></theoretical-choice>
       </q-step>
 
       <q-step
@@ -97,7 +95,7 @@
         title='Нечеткие'
         icon='assignment'
       >
-        <r-functions :altsEvals='altsEvals' :step='step' :correctStep='correctStep' :condition='condition' @answer='getFunctions' @back='back'></r-functions>
+        <r-functions :altsEvals='altsEvals' :step='step' :correctStep='correctStep' :condition='condition' @answer='getFunctions' @back='back' @error="err"></r-functions>
       </q-step>
 
       <q-step
@@ -106,7 +104,7 @@
         :done='correctStep > 9'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back' @error="err"></theoretical-choice>
       </q-step>
 
       <q-step
@@ -115,7 +113,7 @@
         icon='assignment'
         :done='correctStep > 10'
       >
-        <squares :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getSquares' @back='back'></squares>
+        <squares :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getSquares' @back='back' @error="err"></squares>
       </q-step>
 
       <q-step
@@ -124,7 +122,7 @@
         :done='correctStep > 11'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back' @error="err"></theoretical-choice>
       </q-step>
 
       <q-step
@@ -133,7 +131,7 @@
         icon='assignment'
         :done='correctStep > 12'
       >
-        <coords-and-answer :squares='squares' :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getAnswer' @back='back' @finish='finish'></coords-and-answer>
+        <coords-and-answer :squares='squares' :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getAnswer' @back='back' @finish='finish' @error="err"></coords-and-answer>
       </q-step>
 
       <q-step
@@ -158,20 +156,23 @@
 
 <script>
 import { checkLab } from '../../function/workWithFirebase'
+// import func from '../../../vue-temp/vue-editor-bridge'
 export default {
   data () {
     return {
       step: 0,
       correctStep: 0,
       error: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      penalties: [ 0, 8, 2, 2, 2, 2, 2, 2, 2, 2, 8, 2, 8, 2, 8, 3 ],
       altsEvals: [],
       r_functions: [],
       squares: [],
       condition: {},
       score: 100,
       question: [],
-      work3: {},
-      limits: [ 8, 13, 13, 13, 13, 13, 13, 13, 13, 10, 5, 19 ]
+      work3: {}
+      // limits: [ 8, 13, 13, 13, 13, 13, 13, 13, 13, 10, 5, 19 ]
+      // limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
       // user: {}
     }
   },
@@ -225,13 +226,6 @@ export default {
       console.log(this.altsEvals)
     },
     getFunctions (functions) {
-      /* if (this.step > this.correctStep && this.r_functions.length < 3) {
-        this.r_functions = functions
-        console.log('getFunctions:')
-        console.log(this.r_functions)
-        this.correctStep++
-      }
-      this.step++ */
       if (this.step > this.correctStep) {
         this.correctStep++
       }
@@ -241,12 +235,6 @@ export default {
       this.step++
     },
     getSquares (squares) {
-      /* if (this.step > this.correctStep && this.squares.length < 1) {
-        this.squares = squares
-        this.correctStep++
-        console.log('in getSquares')
-      }
-      this.step++ */
       if (this.step > this.correctStep) {
         this.correctStep++
       }
@@ -291,21 +279,24 @@ export default {
         linguistic
       }
     },
-    err (penalty) {
+    err (penalty, taskNum) {
+      // console.log('ERR CHANGED')
       this.error.splice(this.step, 1, this.error[this.step] + 1)
-      this.limits[this.step] -= penalty
+
+      /*  this.limits[taskNum] -= penalty
+
       if (this.limits[this.step] < 0) {
         this.limits[this.step] = 0
       }
-      this.score -= penalty
-      this.work3.work.score = this.score
+      this.score -= penalty */
+      /* this.work3.work.score = this.score
       this.work3.work.error = this.error
       this.$store.dispatch('data/updateWork3', {
         wid: this.work3.wid,
         work: this.work3.work
-      })
-      console.log('err signal handler')
-      console.log(this.error)
+      }) */
+      /*  console.log('err signal handler')
+      console.log(this.error) */
     },
     finish () {
       this.work3.work.stage = 'done'
@@ -315,6 +306,7 @@ export default {
         wid: this.work3.wid,
         work: this.work3.work
       })
+      this.$router.push('/works')
     }
   },
   created () {
@@ -325,8 +317,6 @@ export default {
   watch: {
     correctStep: {
       handler: function (newStep) {
-        // firebase.database().ref('lab3/current/' + this.uid).update({step: newStep})
-        console.log('correctStep watcher')
         this.work3.work.step = newStep
         console.log(newStep)
         console.log(this.work3)
@@ -340,6 +330,64 @@ export default {
       handler: function (newStep, oldStep) {
         console.log(`step: ${this.step}, correctStep: ${this.correctStep}`)
       }
+    },
+    error: {
+      handler: function (newError, oldError) {
+        console.log('ERROR WATCHER')
+        console.log(newError)
+        let limits = [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
+        for (let i = 1; i < this.error.length; i++) {
+          let limitsIndex // index in limits for tasks
+          switch (i) {
+            // indexes for theoreticalChoice steps
+            case 1: limitsIndex = 0; break
+            case 10: limitsIndex = 3; break
+            case 12: limitsIndex = 5; break
+            case 14: limitsIndex = 7; break
+
+            // indexes for funcAnswers steps
+            case 2:
+            case 3:
+            case 4:
+            case 5: limitsIndex = 1; break
+
+            // indexes for AlternativesEvaluation steps
+            case 6:
+            case 7:
+            case 8:
+            case 9: limitsIndex = 2; break
+
+            // indexes for RFunctions steps
+            case 11: limitsIndex = 4; break
+
+            // indexes for Squares steps
+            case 13: limitsIndex = 6; break
+
+            // indexes for CoordsAndAnswer steps
+            case 15: limitsIndex = 8; break
+          }
+          for (let j = 0; j < this.error[i]; j++) {
+            limits[limitsIndex] -= this.penalties[i]
+            if (limits[limitsIndex] < 0) {
+              console.log('меньше нуля')
+              console.log(limits[limitsIndex])
+              limits[limitsIndex] = 0
+              break
+            }
+          }
+        }
+        const arrSum = arr => arr.reduce((a, b) => a + b, 0)
+        this.score = arrSum(limits)
+        console.log(this.score)
+        console.log(limits)
+        this.work3.work.score = this.score
+        this.work3.work.error = this.error
+        this.$store.dispatch('data/updateWork3', {
+          wid: this.work3.wid,
+          work: this.work3.work
+        })
+      },
+      deep: true
     }
   }
 }
