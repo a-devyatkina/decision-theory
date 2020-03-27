@@ -15,24 +15,16 @@
               icon="assignment"
               :done="step > 1"
       >
-
         <div class=matrix v-for="(matrix) in info.data" :key="matrix.id">
-          {{ matrix.name }}
-          <div v-for="(row) in matrix.value" :key="row.id">
-            <span v-for="(element) in row" :key="element.id">
-              {{ element }}
-            </span>
-          </div>
-          <br>
-        </div>
-        <div class=matrix v-for="(matrix) in info.data" :key="matrix.id">
-          <div class="q-pa-md">
+          <div class="q-pa-md" id="matrix_table">
             <q-table
                     :title="matrix.name"
                     :data="matrix.value"
                     :columns="columns"
                     color="primary"
                     row-key="id"
+                    hide-header
+                    hide-bottom
             >
             </q-table>
           </div>
@@ -474,17 +466,18 @@
   .field {
     margin-bottom: 24px;
   }
-
   .field > label {
     margin-right: 8px;
   }
-
   .error {
     color: red;
   }
-  .vector{
+  .vector {
     display: flex;
     flex-direction: row;
+  }
+  #matrix_table{
+    width: 450px;
   }
 </style>
 

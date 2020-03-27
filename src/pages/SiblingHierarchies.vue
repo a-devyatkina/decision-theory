@@ -508,11 +508,9 @@
   .field {
     margin-bottom: 24px;
   }
-
   .field > label {
     margin-right: 8px;
   }
-
   .error {
     color: red;
   }
