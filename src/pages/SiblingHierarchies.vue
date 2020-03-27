@@ -593,216 +593,215 @@ export default {
   },
   methods: {
     getVar () {
-        axios.post(
-          'restapi/hierarchies/lab1a',
-          { user_id: this.userId }
-        ).then(response => {
-          this.info = response.data.data
-          this.session_id = response.data.session_id
-          this.step++
-          this.work.work.session = this.session_id
-          this.$store.dispatch('data/updateHierarchieswork', {
-            wid: this.work.wid,
-            work: this.work.work
-          })
+      axios.post(
+        'restapi/hierarchies/lab1a',
+        { user_id: this.userId }
+      ).then(response => {
+        this.info = response.data.data
+        this.session_id = response.data.session_id
+        this.step++
+        this.work.work.session = this.session_id
+        this.$store.dispatch('data/updateHierarchieswork', {
+          wid: this.work.wid,
+          work: this.work.work
         })
+      })
+    }
+  },
+  isTestFormValid (shape) {
+    return shape !== ''
+  },
+  getIntroTest () {
+    axios.post(
+      '/restapi/hierarchies/intro_test',
+      { session_id: this.session_id }
+    ).then(response => {
+      this.intro_test.info = response.data
+      this.intro_test.isLoaded = true
+    })
+  },
+  checkIntroAnswer () {
+    var data = {
+      question_id: this.intro_test.info._id,
+      answer: this.intro_test.shape,
+      session_id: this.session_id
+    }
+    axios.post(
+      '/restapi/hierarchies/intro_test_validate',
+      data
+    ).then(response => {
+      switch (response.data.status) {
+        case 'done':
+          this.intro_test.isOver = true
+          break
+        case 'right':
+          this.intro_test.info = response.data.question
+          break
+        case 'wrong':
+          this.intro_test.info = response.data.question
+          alert('Ошибка!')
+          break
+        case 'over':
+          this.$q.dialog({
+            title: 'Вы допустили слишком много ошибок',
+            message: 'Попробуйте еще раз позже',
+            ok: 'Продолжить'
+          }).then(() => {
+            this.finishLab(0)
+          })
+          break
       }
-    },
-    isTestFormValid (shape) {
-      return shape !== ''
-    },
-    getIntroTest () {
-      axios.post(
-        '/restapi/hierarchies/intro_test',
-        { session_id: this.session_id }
-      ).then(response => {
-        this.intro_test.info = response.data
-        this.intro_test.isLoaded = true
-      })
-    },
-    checkIntroAnswer () {
-      var data = {
-        question_id: this.intro_test.info._id,
-        answer: this.intro_test.shape,
-        session_id: this.session_id
+    })
+  },
+  getPracticeTest () {
+    axios.post(
+      '/restapi/hierarchies/practice_test',
+      { session_id: this.session_id }
+    ).then(response => {
+      this.practice_test.info = response.data
+      this.practice_test.isLoaded = true
+    })
+  },
+  checkPracticeAnswer () {
+    var data = {
+      question_id: this.practice_test.info._id,
+      answer: this.practice_test.shape,
+      session_id: this.session_id
+    }
+    axios.post(
+      '/restapi/hierarchies/practice_test_validate',
+      data
+    ).then(response => {
+      switch (response.data.status) {
+        case 'done':
+          this.practice_test.isOver = true
+          break
+        case 'right':
+          this.practice_test.info = response.data.question
+          break
+        case 'wrong':
+          this.practice_test.info = response.data.question
+          alert('Ошибка!')
+          break
+        case 'over':
+          this.$q.dialog({
+            title: 'Вы допустили слишком много ошибок',
+            message: 'Попробуйте еще раз позже',
+            ok: 'Продолжить'
+          }).then(() => {
+            this.finishLab(0)
+          })
+          break
       }
-      axios.post(
-        '/restapi/hierarchies/intro_test_validate',
-        data
-      ).then(response => {
-        switch (response.data.status) {
-          case 'done':
-            this.intro_test.isOver = true
-            break
-          case 'right':
-            this.intro_test.info = response.data.question
-            break
-          case 'wrong':
-            this.intro_test.info = response.data.question
-            alert('Ошибка!')
-            break
-          case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
-            break
-        }
-      })
-    },
-    getPracticeTest () {
-      axios.post(
-        '/restapi/hierarchies/practice_test',
-        { session_id: this.session_id }
-      ).then(response => {
-        this.practice_test.info = response.data
-        this.practice_test.isLoaded = true
-      })
-    },
-    checkPracticeAnswer () {
-      var data = {
-        question_id: this.practice_test.info._id,
-        answer: this.practice_test.shape,
-        session_id: this.session_id
+    })
+  },
+  getAddTest () {
+    axios.post(
+      '/restapi/hierarchies/add_test',
+      { session_id: this.session_id }
+    ).then(response => {
+      this.add_test.info = response.data
+      this.add_test.isLoaded = true
+    })
+  },
+  checkAddAnswer () {
+    var data = {
+      question_id: this.add_test.info._id,
+      answer: this.add_test.shape,
+      session_id: this.session_id
+    }
+    axios.post(
+      '/restapi/hierarchies/add_test_validate',
+      data
+    ).then(response => {
+      switch (response.data.status) {
+        case 'done':
+          this.add_test.isOver = true
+          this.mark = response.data.mark
+          break
+        case 'right':
+          this.add_test.info = response.data.question
+          break
+        case 'wrong':
+          this.add_test.info = response.data.question
+          alert('Ошибка!')
+          break
+        case 'over':
+          this.$q.dialog({
+            title: 'Вы допустили слишком много ошибок',
+            message: 'Попробуйте еще раз позже',
+            ok: 'Продолжить'
+          }).then(() => {
+            this.finishLab(0)
+          })
+          break
       }
-      axios.post(
-        '/restapi/hierarchies/practice_test_validate',
-        data
-      ).then(response => {
-        switch (response.data.status) {
-          case 'done':
-            this.practice_test.isOver = true
-            break
-          case 'right':
-            this.practice_test.info = response.data.question
-            break
-          case 'wrong':
-            this.practice_test.info = response.data.question
-            alert('Ошибка!')
-            break
-          case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
-            break
-        }
-      })
-    },
-    getAddTest () {
-      axios.post(
-        '/restapi/hierarchies/add_test',
-        { session_id: this.session_id }
-      ).then(response => {
-        this.add_test.info = response.data
-        this.add_test.isLoaded = true
-      })
-    },
-    checkAddAnswer () {
-      var data = {
-        question_id: this.add_test.info._id,
-        answer: this.add_test.shape,
-        session_id: this.session_id
+    })
+  },
+  labIntermediate (value, step) {
+    var data = {
+      session_id: this.session_id,
+      id: this.info._id,
+      value: value,
+      step: step
+    }
+    axios.post(
+      '/restapi/hierarchies/lab_validate',
+      data
+    ).then(response => {
+      switch (response.data.status) {
+        case 'right':
+          this.step++
+          break
+        case 'wrong':
+          alert('Ошибка\n' + response.data.body)
+          break
+        case 'over':
+          this.$q.dialog({
+            title: 'Вы допустили слишком много ошибок',
+            message: 'Попробуйте еще раз позже',
+            ok: 'Продолжить'
+          }).then(() => {
+            this.finishLab(0)
+          })
+          break
       }
-      axios.post(
-        '/restapi/hierarchies/add_test_validate',
-        data
-      ).then(response => {
-        switch (response.data.status) {
-          case 'done':
-            this.add_test.isOver = true
-            this.mark = response.data.mark
-            break
-          case 'right':
-            this.add_test.info = response.data.question
-            break
-          case 'wrong':
-            this.add_test.info = response.data.question
-            alert('Ошибка!')
-            break
-          case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
-            break
-        }
-      })
-    },
-    labIntermediate (value, step) {
-      var data = {
-        session_id: this.session_id,
-        id: this.info._id,
-        value: value,
-        step: step
-      }
-      axios.post(
-        '/restapi/hierarchies/lab_validate',
-        data
-      ).then(response => {
-        switch (response.data.status) {
-          case 'right':
-            this.step++
-            break
-          case 'wrong':
-            alert('Ошибка\n' + response.data.body)
-            break
-          case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
-            break
-        }
-      })
-    },
-    labpage () {
-      this.$q.dialog({
-        title: 'Ваша оценка ' + this.mark,
-        ok: 'Продолжить'
-      }).then(() => {
-        this.finishLab(this.mark)
-      })
-    },
-    compare: function (arr1, arr2) {
-      if (!arr1 || !arr2) {
-        return false
-      }
-      if (arr1.length !== arr2.length) {
-        return false
-      }
-      for (let i = 0, l = arr1.length; i < l; i++) {
-        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
-          if (!arr1[i].compare(arr2[i])) {
-            return false
-          }
-        } else if (arr1[i] !== arr2[i]) {
+    })
+  },
+  labpage () {
+    this.$q.dialog({
+      title: 'Ваша оценка ' + this.mark,
+      ok: 'Продолжить'
+    }).then(() => {
+      this.finishLab(this.mark)
+    })
+  },
+  compare: function (arr1, arr2) {
+    if (!arr1 || !arr2) {
+      return false
+    }
+    if (arr1.length !== arr2.length) {
+      return false
+    }
+    for (let i = 0, l = arr1.length; i < l; i++) {
+      if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
+        if (!arr1[i].compare(arr2[i])) {
           return false
         }
+      } else if (arr1[i] !== arr2[i]) {
+        return false
       }
-      return true
-    },
-    finishLab (mark) {
-      this.work.work.stage = 'resolve'
-      this.work.work.score = mark
-      this.$store.dispatch('data/updateHierarchieswork', {
-        wid: this.work.wid,
-        work: this.work.work
-      })
-      this.$router.push('/works')
     }
+    return true
+  },
+  finishLab (mark) {
+    this.work.work.stage = 'resolve'
+    this.work.work.score = mark
+    this.$store.dispatch('data/updateHierarchieswork', {
+      wid: this.work.wid,
+      work: this.work.work
+    })
+    this.$router.push('/works')
   }
 }
 </script>
