@@ -25,11 +25,6 @@
                     <q-item-side icon="spellcheck" />
                     <q-item-main :label="$t('Improve')" />
                   </q-item>
-                  <q-item v-if="isStudentSession()" v-close-overlay @click.native="$refs.resolve.opened = true">
-                    <hierarchiesworkflow-action action="resolve" ref="resolve" :title="$t('Resolve Task')" :callback="addNewStage" :work="work"/>
-                    <q-item-side icon="done_all" />
-                    <q-item-main :label="$t('Resolve')" />
-                  </q-item>
                   <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.close.opened = true">
                     <hierarchiesworkflow-action action="close" ref="close" :title="$t('Estimate Task')" :callback="addNewStage" :penalty="work.penalty"/>
                     <q-item-side icon="star_border" />
@@ -106,9 +101,6 @@ export default {
     isDeletableStage (ind, author) {
       return ind === 0 && !this.archived && author === this.user.id
     },
-    isStudentSession () {
-      return this.user.role === 'student' && this.user.id === this.work.student
-    },
     isTeacherSession () {
       return this.user.role === 'teacher' && this.user.id === this.course.teacher
     },
@@ -149,7 +141,7 @@ export default {
     let data = {
       user_id: this.work.student
     }
-    if (this.work.stage === 'resolve') {
+    if (this.work.stage === 'resolve' && this.work.lab === 'layeredhierarchies') {
       axios.post(
         'restapi/hierarchies/get_theme',
         data

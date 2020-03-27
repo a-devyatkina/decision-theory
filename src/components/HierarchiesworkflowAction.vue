@@ -29,19 +29,8 @@ export default {
   },
   methods: {
     apply () {
-      if (
-        (this.action === 'close' && !this.penalty)) {
-        this.$q.notify({
-          message: 'Please, fill the gaps',
-          timeout: 3000,
-          color: 'red',
-          textColor: 'black',
-          position: 'bottom',
-          actions: [{
-            icon: 'close'
-          }]
-        })
-        return
+      if (this.action === 'close' && !this.penalty) {
+        this.penalty = 0
       }
       this.opened = false
       this.callback(
