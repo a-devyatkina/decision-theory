@@ -8,7 +8,7 @@
       </div>
       <q-input v-if="action==='close'" :stack-label="$t('Штраф')" type="number" v-model="penalty" />
       <div class="row q-mt-lg">
-        <router-link v-if="action==='resolve' && (work.stage==='assign' || work.stage==='resolve')" :to="work.lab">
+        <router-link v-if="action==='assign' && (work.stage==='assign' || work.stage==='resolve')" :to="work.lab">
             <q-btn color="secondary" @click="apply" :label="$t('Resolve')" class="col q-ma-sm"/>
         </router-link>
         <q-btn v-else-if="action==='resolve'" slot="footer" color="secondary" :label="$t('Resolve')" class="col q-ma-sm" :disable="true"/>
