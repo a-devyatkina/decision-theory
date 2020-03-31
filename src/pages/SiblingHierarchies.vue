@@ -68,7 +68,7 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -99,7 +99,7 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -137,7 +137,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(passport_data[0], 'target_matrix')" color="secondary" label="Continue" class="q-ml-sm" />
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -176,7 +176,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(passport_data[1], 'criterion_matrix1')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -215,7 +215,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(passport_data[2], 'criterion_matrix2')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -253,7 +253,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(passport_data[3], 'criterion_matrix3')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 6" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -292,7 +292,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(passport_data[4], 'criterion_matrix4')" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 7" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -463,7 +463,7 @@
         </form>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" label="Continue" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -491,7 +491,7 @@
       </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
+          <!--<q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>-->
           <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="labpage()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -597,7 +597,7 @@ export default {
   methods: {
     getVar () {
       axios.post(
-        'restapi/hierarchies/lab1a',
+        'restapi/hierarchies/siblinghierarchies',
         {user_id: this.userId}
       ).then(response => {
         this.info = response.data.data
@@ -623,13 +623,13 @@ export default {
       })
     },
     checkIntroAnswer () {
-      var data = {
+      let data = {
         question_id: this.intro_test.info._id,
         answer: this.intro_test.shape,
         session_id: this.session_id
       }
       axios.post(
-        '/restapi/hierarchies/intro_test_validate',
+        '/restapi/hierarchies/validate_intro_test',
         data
       ).then(response => {
         switch (response.data.status) {
@@ -665,7 +665,7 @@ export default {
       })
     },
     checkPracticeAnswer () {
-      var data = {
+      let data = {
         question_id: this.practice_test.info._id,
         answer: this.practice_test.shape,
         session_id: this.session_id
@@ -674,6 +674,7 @@ export default {
         '/restapi/hierarchies/practice_test_validate',
         data
       ).then(response => {
+        // console.log(response.data)
         switch (response.data.status) {
           case 'done':
             this.practice_test.isOver = true
@@ -707,7 +708,7 @@ export default {
       })
     },
     checkAddAnswer () {
-      var data = {
+      let data = {
         question_id: this.add_test.info._id,
         answer: this.add_test.shape,
         session_id: this.session_id
@@ -741,7 +742,7 @@ export default {
       })
     },
     labIntermediate (value, step) {
-      var data = {
+      let data = {
         session_id: this.session_id,
         id: this.info._id,
         value: value,

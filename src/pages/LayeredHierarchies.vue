@@ -57,7 +57,7 @@ export default {
   mounted () {
     if (this.work.work.stage === 'assign') {
       axios.get(
-        'restapi/hierarchies/lab1b'
+        'restapi/hierarchies/layeredhierarchies'
       ).then(response => {
         for (let i = 0; i < response.data.length; i++) {
           let theme = {

@@ -31,7 +31,7 @@ export default {
   },
   mounted () {
     axios.get(
-      'restapi/hierarchies/lab1b'
+      'restapi/hierarchies/layeredhierarchies'
     ).then(response => {
       for (var i = 0; i < response.data.length; i++) {
         var theme = {

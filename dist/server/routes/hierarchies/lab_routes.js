@@ -1,423 +1,342 @@
 const math = require('mathjs')
 
 module.exports = function(app, db, ObjectID) {
-    app.post('/restapi/hierarchies/lab1a', (req, res) => {
-        db.collection('lab').find().toArray((err, result) => {
-            if (err) {
-                res.end()
-                throw err
-            }
-            var index = Math.floor(Math.random() * result.length)
-
-            var session = {
-                user_id: req.body.user_id,
-                timestamp: Date.now(),
-                variant: result[index].var,
-                intro: {
-                    questions: [],
-                    points: 5,
-                    checked: false,
-                },
-                practice: {
-                    questions: [],
-                    points: 15,
-                    checked: false
-                },
-                target_matrix: {
-                    checked: false,
-                    points: 10
-                },
-                criterion_matrix1: {
-                    checked: false,
-                    points: 10
-                },
-                criterion_matrix2: {
-                    checked: false,
-                    points: 10
-                },
-                criterion_matrix3: {
-                    checked: false,
-                    points: 10
-                },
-                criterion_matrix4: {
-                    checked: false,
-                    points: 10
-                },
-                hierarchical_synthesis: {
-                    checked: false,
-                    points: 20
-                },
-                add_test: {
-                    question: null,
-                    points: 10
-                },
-                logs: []
-            }
-            db.collection('session').insertOne(session, () => {
-                var response = {
-                    data: result[index],
-                    session_id: session._id
-                }
-                res.send(response)
-            })
-        })
+    app.post('/restapi/hierarchies/siblinghierarchies', async (req, res) => {
+        let variants = await db.collection('variants').find().toArray()
+        let index = Math.floor(Math.random() * variants.length)
+        let session = {
+            user_id: req.body.user_id,
+            timestamp: Date.now(),
+            variant: variants[index].var,
+            intro: {
+                questions: [],
+                points: 5,
+                done: false
+            },
+            practice: {
+                questions: [],
+                points: 15,
+                done: false
+            },
+            target_matrix: {
+                points: 10,
+                done: false
+            },
+            criterion_matrix1: {
+                points: 10,
+                done: false
+            },
+            criterion_matrix2: {
+                points: 10,
+                done: false
+            },
+            criterion_matrix3: {
+                points: 10,
+                done: false
+            },
+            criterion_matrix4: {
+                points: 10,
+                done: false
+            },
+            hierarchical_synthesis: {
+                points: 20,
+                done: false
+            },
+            add_test: {
+                question: null,
+                answers: [],
+                points: 10,
+                done: false
+            },
+            status: 'in progress'
+        }
+        await db.collection('sessions').insertOne(session)
+        let response = {
+            data: variants[index],
+            session_id: session._id
+        }
+        res.send(response)
     })
 
-    app.post('/restapi/hierarchies/get_session', (req, res) => {
-        db.collection('session').findOne({'_id':ObjectID(req.body.id)}, (err, result) => {
-            if (err) {
-                res.end()
-                throw err
-            }
-            var session = result
-            db.collection('lab').findOne({'var':result.variant}, (err, result) => {
-                if (err) {
-                    res.end()
-                    throw err
-                }
-                var response
-                response.info = result
-                res.send(result)
-                if (!session.intro.checked) {
-                    response.intro.isOver = false
-                    response.intro.isLoaded = (!session.intro.questions.length === 0)
-                    response.practice.isOver = response.practice.isLoaded = false
-                    response.add.isOver = response.add.isLoaded = false
-                    response.target = response.criterion1 = response.criterion2 = response.criterion3 = response.criterion4 = false
-                    response.synthesis = false
-                }
-                else if (!session.practice.checked) {
-                    response.intro.isOver = response.intro.isLoaded = true
-                    response.practice.isOver = false
-                    response.practice.isLoaded = (!session.practice.questions.length === 0)
-                    response.add.isOver = response.add.isLoaded = false
-                    response.target = response.criterion1 = response.criterion2 = response.criterion3 = response.criterion4 = false
-                    response.synthesis = false
-                }
-            })
-        })
-    })
-
-    app.post('/restapi/hierarchies/lab_validate', (req, res) => {
-        db.collection('lab').findOne({"_id": ObjectID(req.body.id)}, (err, result) => {
-            if (err) {
-                res.end()
-                throw err
-            }
-
-            var lab = result
-            db.collection('session').findOne({'_id': ObjectID(req.body.session_id)}, (err, result) => {
-                if (err) {
-                    res.end()
-                    throw err
-                }
-
-                var session = result
-                if (req.body.step != null) {
-                    var matrix, updateWrong, updateRight, target
-                    switch (req.body.step) {
-                        case 'target_matrix':
-                            matrix = lab.data[0].value
-                            updateWrong = {
-                                $inc: {
-                                    'target_matrix.points': -2
-                                }
-                            }
-                            updateRight = {
-                                $set: {
-                                    'target_matrix.checked': true
-                                }
-                            }
-                            target = session.target_matrix
-                            break
-                        case 'criterion_matrix1':
-                            matrix = lab.data[1].value
-                            updateWrong = {
-                                $inc: {
-                                    'criterion_matrix1.points': -2
-                                }
-                            }
-                            updateRight = {
-                                $set: {
-                                    'criterion_matrix1.checked': true
-                                }
-                            }
-                            target = session.criterion_matrix1
-                            break
-                        case 'criterion_matrix2':
-                            matrix = lab.data[2].value
-                            updateWrong = {
-                                $inc: {
-                                    'criterion_matrix2.points': -2
-                                }
-                            }
-                            updateRight = {
-                                $set: {
-                                    'criterion_matrix2.checked': true
-                                }
-                            }
-                            target = session.criterion_matrix2
-                            break
-                        case 'criterion_matrix3':
-                            matrix = lab.data[3].value
-                            updateWrong = {
-                                $inc: {
-                                    'criterion_matrix3.points': -2
-                                }
-                            }
-                            updateRight = {
-                                $set: {
-                                    'criterion_matrix3.checked': true
-                                }
-                            }
-                            target = session.criterion_matrix3
-                            break
-                        case 'criterion_matrix4':
-                            matrix = lab.data[4].value
-                            updateWrong = {
-                                $inc: {
-                                    'criterion_matrix4.points': -2
-                                }
-                            }
-                            updateRight = {
-                                $set: {
-                                    'criterion_matrix4.checked': true
-                                }
-                            }
-                            target = session.criterion_matrix4
-                            break
-                        }
-
-                    var calculations = calculateMatrix(matrix)
-                    var response = {
-                        status: 'right',
-                        body: new Set(),
-                        errors: []
-                    }
-                    var filter = {
-                        '_id': ObjectID(req.body.session_id)
-                    }
-                    for (i = 0; i < 4; i++) {
-                        for (j = 0; j < calculations[i].length; j++) {
-                            var upper = Math.round(calculations[i][j]*100+1)/100
-                            var lower = Math.round(calculations[i][j]*100-1)/100
-                            var tmp = req.body.value[i][j]
-                            if (lower > tmp || tmp > upper || !tmp) {
-                                response.status = 'wrong'
-                                response.errors.push(i)
-                                index = i
-                            }
-                        }
-                    }
-                    for (i = 4; i < 7; i++) {
-                        var upper = Math.round(calculations[i]*100+1)/100
-                        var lower = Math.round(calculations[i]*100-1)/100
-                        var tmp = req.body.value[i][0]
-                        if (lower > tmp || tmp > upper || !tmp) {
-                            response.status = 'wrong'
-                            response.errors.push(i)
-                        }
-                    }
-
-                    for (i = 0; i < response.errors.length; i++) {
-                        switch (response.errors[i]) {
-                            case 0:
-                                response.body.add('Вектор приоритетов')
-                                break
-                            case 1:
-                                response.body.add('Веса критериев')
-                                break
-                            case 2:
-                                response.body.add('(M*w)')
-                                break
-                            case 3:
-                                response.body.add('Вектор лямбда')
-                                break
-                            case 4:
-                                response.body.add('Среднее значение лямбда')
-                                break
-                            case 5:
-                                response.body.add('Индекс согласованности')
-                                break
-                            case 6:
-                                response.body.add('Отношение согласованности')
-                                break
-                        }
-                    }
-                    delete response.errors
-                    response.body = Array.from(response.body).join(', ')
-
-                    if (response.status === 'wrong') {
-                        if (target.points - 2 === 0) {
-                            response = {
-                                status: 'over'
-                            }
-                        }
-                        db.collection('session').updateOne(filter, updateWrong, (err, result) => {
-                            if (err) {
-                                res.end()
-                                throw err
-                            }
-                        })
-                    }
-                    else {
-                        db.collection('session').updateOne(filter, updateRight, (err, result) => {
-                            if (err) {
-                                res.end()
-                                throw err
-                            }
-                        })
-                    }
-                    res.send(response)
-
-                } else {
-                    var matrix = []
-                    var tmp
-                    for (index = 1; index < 5; index++) {
-                        tmp = calculateMatrix(lab.data[index].value)
-                        matrix.push(tmp[1])
-                    }
-                    matrix = math.transpose(matrix)
-                    var criterion = calculateMatrix(lab.data[0].value)[1]
-                    var priority = math.multiply(matrix, criterion)
-
-                    var filter = {
-                        '_id': ObjectID(req.body.session_id)
-                    }
-                    var updateRight = {
+    app.post('/restapi/hierarchies/lab_validate', async (req, res) => {
+        let lab = await db.collection('variants').findOne({"_id": ObjectID(req.body.id)})
+        let session = await db.collection('sessions').findOne({'_id': ObjectID(req.body.session_id)})
+        if (req.body.step != null) {
+            let matrix, updateWrong, updateRight, target
+            switch (req.body.step) {
+                case 'target_matrix':
+                    matrix = lab.data[0].value
+                    updateWrong = {
                         $inc: {
-                            'hierarchical_synthesis.points': -4
+                            'target_matrix.points': -2
                         }
                     }
-                    var updateWrong = {
+                    updateRight = {
                         $set: {
-                            'hierarchical_synthesis.checked': true
+                            'target_matrix.checked': true
                         }
                     }
-                    var response = {
-                        status: 'right',
-                        body: new Set()
-                    }
-
-                    var request = req.body.value.matrix
-                    for (i = 0; i < 3; i++) {
-                        var row = matrix[i]
-                        for (j = 0; j < 4; j++) {
-                            var upper = Math.round(row[j]*100+1)/100
-                            var lower = Math.round(row[j]*100-1)/100
-                            var tmp = request[i][j]
-                            console.log(lower, tmp, upper)
-                            if (lower > tmp || tmp > upper || !tmp) {
-                                response.status = 'wrong'
-                                response.body.add('Матрица')
-                            }
+                    target = session.target_matrix
+                    break
+                case 'criterion_matrix1':
+                    matrix = lab.data[1].value
+                    updateWrong = {
+                        $inc: {
+                            'criterion_matrix1.points': -2
                         }
                     }
-
-                    request = req.body.value.vector
-                    for (i = 0; i < criterion.length; i++) {
-                        var upper = Math.round(criterion[i]*100+1)/100
-                        var lower = Math.round(criterion[i]*100-1)/100
-                        var tmp = request[i]
-                        console.log(lower, tmp, upper)
-                        if (lower > tmp || tmp > upper || !tmp) {
-                            response.status = 'wrong'
-                            response.body.add('Вектор')
+                    updateRight = {
+                        $set: {
+                            'criterion_matrix1.checked': true
                         }
                     }
-
-                    var index
-                    var max = Number.NEGATIVE_INFINITY
-                    for (i = 0; i < priority.length; i++) {
-                        if (max < priority[i]) {
-                            max = priority[i]
-                            index = i
+                    target = session.criterion_matrix1
+                    break
+                case 'criterion_matrix2':
+                    matrix = lab.data[2].value
+                    updateWrong = {
+                        $inc: {
+                            'criterion_matrix2.points': -2
                         }
                     }
-
-                    console.log(index)
-                    request = req.body.value.alternative
-                    if (index + 1 != request) {
-                        response.status = 'wrong'
-                        response.body.add('Альтернатива')
-                    }
-
-                    response.body = Array.from(response.body).join(', ')
-
-                    if (response.status === 'wrong') {
-                        if (session.hierarchical_synthesis.points-4 === 0) {
-                            response = {
-                                status: 'over'
-                            }
+                    updateRight = {
+                        $set: {
+                            'criterion_matrix2.checked': true
                         }
-                        db.collection('session').updateOne(filter, updateRight, (err, result) => {
-                            if (err) {
-                                res.end()
-                                throw err
-                            }
-                        })
-                    } else {
-                        db.collection('session').updateOne(filter, updateWrong, (err, result) => {
-                            if (err) {
-                                res.end()
-                                throw err
-                            }
-                        })
                     }
-                    res.send(response)
+                    target = session.criterion_matrix2
+                    break
+                case 'criterion_matrix3':
+                    matrix = lab.data[3].value
+                    updateWrong = {
+                        $inc: {
+                            'criterion_matrix3.points': -2
+                        }
+                    }
+                    updateRight = {
+                        $set: {
+                            'criterion_matrix3.checked': true
+                        }
+                    }
+                    target = session.criterion_matrix3
+                    break
+                case 'criterion_matrix4':
+                    matrix = lab.data[4].value
+                    updateWrong = {
+                        $inc: {
+                            'criterion_matrix4.points': -2
+                        }
+                    }
+                    updateRight = {
+                        $set: {
+                            'criterion_matrix4.checked': true
+                        }
+                    }
+                    target = session.criterion_matrix4
+                    break
                 }
-            })
-        })
+
+            var calculations = calculateMatrix(matrix)
+            var response = {
+                status: 'right',
+                body: new Set(),
+                errors: []
+            }
+            var filter = {
+                '_id': ObjectID(req.body.session_id)
+            }
+            for (i = 0; i < 4; i++) {
+                for (j = 0; j < calculations[i].length; j++) {
+                    var upper = Math.round(calculations[i][j]*100+1)/100
+                    var lower = Math.round(calculations[i][j]*100-1)/100
+                    var tmp = req.body.value[i][j]
+                    if (lower > tmp || tmp > upper || !tmp) {
+                        response.status = 'wrong'
+                        response.errors.push(i)
+                        index = i
+                    }
+                }
+            }
+            for (i = 4; i < 7; i++) {
+                var upper = Math.round(calculations[i]*100+1)/100
+                var lower = Math.round(calculations[i]*100-1)/100
+                var tmp = req.body.value[i][0]
+                if (lower > tmp || tmp > upper || !tmp) {
+                    response.status = 'wrong'
+                    response.errors.push(i)
+                }
+            }
+
+            for (i = 0; i < response.errors.length; i++) {
+                switch (response.errors[i]) {
+                    case 0:
+                        response.body.add('Вектор приоритетов')
+                        break
+                    case 1:
+                        response.body.add('Веса критериев')
+                        break
+                    case 2:
+                        response.body.add('(M*w)')
+                        break
+                    case 3:
+                        response.body.add('Вектор лямбда')
+                        break
+                    case 4:
+                        response.body.add('Среднее значение лямбда')
+                        break
+                    case 5:
+                        response.body.add('Индекс согласованности')
+                        break
+                    case 6:
+                        response.body.add('Отношение согласованности')
+                        break
+                }
+            }
+            delete response.errors
+            response.body = Array.from(response.body).join(', ')
+
+            if (response.status === 'wrong') {
+                if (target.points - 2 === 0) {
+                    response = {
+                        status: 'over'
+                    }
+                }
+                db.collection('sessions').updateOne(filter, updateWrong, (err, result) => {
+                    if (err) {
+                        res.end()
+                        throw err
+                    }
+                })
+            }
+            else {
+                db.collection('sessions').updateOne(filter, updateRight, (err, result) => {
+                    if (err) {
+                        res.end()
+                        throw err
+                    }
+                })
+            }
+            res.send(response)
+
+        } else {
+            var matrix = []
+            var tmp
+            for (index = 1; index < 5; index++) {
+                tmp = calculateMatrix(lab.data[index].value)
+                matrix.push(tmp[1])
+            }
+            matrix = math.transpose(matrix)
+            var criterion = calculateMatrix(lab.data[0].value)[1]
+            var priority = math.multiply(matrix, criterion)
+
+            var filter = {
+                '_id': ObjectID(req.body.session_id)
+            }
+            var updateRight = {
+                $inc: {
+                    'hierarchical_synthesis.points': -4
+                }
+            }
+            var updateWrong = {
+                $set: {
+                    'hierarchical_synthesis.checked': true
+                }
+            }
+            var response = {
+                status: 'right',
+                body: new Set()
+            }
+
+            var request = req.body.value.matrix
+            for (i = 0; i < 3; i++) {
+                var row = matrix[i]
+                for (j = 0; j < 4; j++) {
+                    var upper = Math.round(row[j]*100+1)/100
+                    var lower = Math.round(row[j]*100-1)/100
+                    var tmp = request[i][j]
+                    console.log(lower, tmp, upper)
+                    if (lower > tmp || tmp > upper || !tmp) {
+                        response.status = 'wrong'
+                        response.body.add('Матрица')
+                    }
+                }
+            }
+
+            request = req.body.value.vector
+            for (i = 0; i < criterion.length; i++) {
+                var upper = Math.round(criterion[i]*100+1)/100
+                var lower = Math.round(criterion[i]*100-1)/100
+                var tmp = request[i]
+                console.log(lower, tmp, upper)
+                if (lower > tmp || tmp > upper || !tmp) {
+                    response.status = 'wrong'
+                    response.body.add('Вектор')
+                }
+            }
+
+            var index
+            var max = Number.NEGATIVE_INFINITY
+            for (i = 0; i < priority.length; i++) {
+                if (max < priority[i]) {
+                    max = priority[i]
+                    index = i
+                }
+            }
+
+            console.log(index)
+            request = req.body.value.alternative
+            if (index + 1 != request) {
+                response.status = 'wrong'
+                response.body.add('Альтернатива')
+            }
+
+            response.body = Array.from(response.body).join(', ')
+
+            if (response.status === 'wrong') {
+                if (session.hierarchical_synthesis.points-4 === 0) {
+                    response = {
+                        status: 'over'
+                    }
+                }
+                db.collection('sessions').updateOne(filter, updateRight, (err, result) => {
+                    if (err) {
+                        res.end()
+                        throw err
+                    }
+                })
+            } else {
+                db.collection('sessions').updateOne(filter, updateWrong, (err, result) => {
+                    if (err) {
+                        res.end()
+                        throw err
+                    }
+                })
+            }
+            res.send(response)
+        }
     })
 
-    app.get('/restapi/hierarchies/lab1b', (req, res) => {
-        var query = {
-            owner: null
-        }
-        var projection = {
-            owner: 0
-        }
-        db.collection('themes').find(query).project(projection).toArray((err, result) => {
-            if (err) {
-                res.end
-                throw err
-            }
-            res.send(result)
-        })
+    app.get('/restapi/hierarchies/layeredhierarchies', async (req, res) => {
+        let themes = await db.collection('themes').find({owner: null}).project({owner: 0}).toArray()
+        res.send(themes)
     })
 
-    app.post('/restapi/hierarchies/get_theme', (req, res) => {
-        var filter = {
-            'owner': req.body.user_id
-        }
-        db.collection('themes').findOne(filter, (err, result) => {
-            if (err) {
-                res.end()
-                throw err
-            }
-            var body = {
-                theme: result.name
-            }
-            res.send(body)
-        })
+    app.get('/restapi/hierarchies/get_theme', async (req, res) => {
+        let theme = await db.collection('themes').findOne({owner: req.body.user_id})
+        res.send(theme.name)
     })
 
-    app.post('/restapi/hierarchies/choose_theme', (req, res) => {
-        var filter = {
+    app.post('/restapi/hierarchies/choose_theme', async (req, res) => {
+        let filter = {
             '_id': ObjectID(req.body.theme)
         }
-        var update = {
+        let update = {
             $set: {
                 'owner': req.body.user_id
             }
         }
-        db.collection('themes').updateOne(filter, update, (err, result) => {
-            if (err) {
-                res.end()
-                throw err
-            }
-            res.send('ok')
-        })
+        await db.collection('themes').updateOne(filter, update)
+        res.send('ok')
     })
 }
 

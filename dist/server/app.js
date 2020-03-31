@@ -14,7 +14,7 @@ const dbName = 'labs'
 let db
 const app = express();
 
-MongoClient.connect(mongoUrl, (err, client) => {
+MongoClient.connect(mongoUrl, {useUnifiedTopology: true}, (err, client) => {
     if (err) throw err
     db = client.db(dbName)
     app.use(fileupload({
