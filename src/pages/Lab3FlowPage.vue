@@ -26,7 +26,7 @@
                     <q-item-main :label="$t('Improve')" />
                   </q-item>
                   <q-item v-if="isStudentSession()" v-close-overlay @click.native="$refs.resolve.opened = true">
-                    <work3flow-action action="resolve" ref="resolve" :title="$t('Resolve Task')" :callback="addNewStage" :work="work"/>
+                    <work3flow-action action="assign" ref="resolve" :title="$t('Resolve Task')" :callback="addNewStage" :work="work"/>
                     <q-item-side icon="done_all" />
                     <q-item-main :label="$t('Resolve')" />
                   </q-item>
@@ -35,11 +35,11 @@
                     <q-item-side icon="star_border" />
                     <q-item-main :label="$t('Estimate')" />
                   </q-item>
-                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.remove.opened = true">
+                  <!-- <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.remove.opened = true">
                     <work3flow-action action="remove" ref="remove" :title="$t('Recreate Task')" :callback="addNewStage"/>
                     <q-item-side icon="autorenew" />
                     <q-item-main :label="$t('Recreate')" />
-                  </q-item>
+                  </q-item> -->
                 </q-list>
               </q-popover>
             </q-btn>
@@ -173,9 +173,9 @@ export default {
     },
     updateWork (stage, penalty) {
       this.work.stage = stage
-      if (stage === 'remove') {
+      if (stage === 'unassign') {
         this.work.step = 0
-        this.work.stage = 'unassign'
+        // this.work.stage = 'unassign'
         this.work.condition = ''
         this.work.score = 0
         this.work.attempt = 0
