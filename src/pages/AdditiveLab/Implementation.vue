@@ -22,7 +22,7 @@
       <q-step
         :name='1'
         icon='assignment'
-        title='Теория'
+        title='Вопрос'
         :done='correctStep > step - 1'
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
@@ -42,7 +42,7 @@
 
       <q-step
         :name='10'
-        title='Теория'
+        title='Вопрос'
         :done='correctStep > step - 1'
         icon='assignment'
       >
@@ -51,7 +51,7 @@
 
       <q-step
         :name='11'
-        title='Нечеткие'
+        title='Нечеткие оценки'
         icon='assignment'
       >
         <r-functions :altsEvals='altsEvals' :step='step' :correctStep='correctStep' :condition='condition' @answer='getFunctions' @back='back' @error="err"></r-functions>
@@ -59,7 +59,7 @@
 
       <q-step
         :name='12'
-        title='Теория'
+        title='Вопрос'
         :done='correctStep > step - 1'
         icon='assignment'
       >
@@ -77,7 +77,7 @@
 
       <q-step
         :name='14'
-        title='Теория'
+        title='Вопрос'
         :done='correctStep > step - 1'
         icon='assignment'
       >
@@ -95,7 +95,7 @@
 
       <q-step
         :name='16'
-        title='Теория'
+        title='Защита'
         icon='assignment'
         :done='correctStep > step - 1'
       >
@@ -104,7 +104,11 @@
       <q-step
         :name='17'
         title='Итог'
-
+        icon='assignment'
+        :done='correctStep > step - 1'
+      >
+        <results :error='error' :penalties='penalties' :limits='limits'/>
+      </q-step>
     </q-stepper>
     <div class="lab-info">
       <div class="mark">
@@ -133,7 +137,8 @@ export default {
       condition: {},
       score: 100,
       question: [],
-      work3: {}
+      work3: {},
+      limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
       // limits: [ 8, 13, 13, 13, 13, 13, 13, 13, 13, 10, 5, 19 ]
       // limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
       // user: {}
@@ -243,7 +248,6 @@ export default {
       this.error.splice(this.step, 1, this.error[this.step] + 1)
 
       /*  this.limits[taskNum] -= penalty
-
       if (this.limits[this.step] < 0) {
         this.limits[this.step] = 0
       }
@@ -294,7 +298,7 @@ export default {
       handler: function (newError, oldError) {
         console.log('ERROR WATCHER')
         console.log(newError)
-        let limits = [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
+        let limits = [this.limits...]
         for (let i = 1; i < this.error.length; i++) {
           let limitsIndex // index in limits for tasks
           switch (i) {
