@@ -298,7 +298,7 @@ export default {
       handler: function (newError, oldError) {
         console.log('ERROR WATCHER')
         console.log(newError)
-        let limits = [this.limits...]
+        let limits = [...this.limits]
         for (let i = 1; i < this.error.length; i++) {
           let limitsIndex // index in limits for tasks
           switch (i) {
