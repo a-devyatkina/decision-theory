@@ -23,68 +23,27 @@
         :name='1'
         icon='assignment'
         title='Теория'
-        :done='correctStep > 2'
+        :done='correctStep > step - 1'
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
       </q-step>
-      <q-step v-for="(item, index) in condition.criterion" v-bind:key='index'
-        :name='Number(index + 2)'
-        :title='`Вычисление значений критерия С${index + 1}`'
-        icon='assignment'
-        :done='correctStep > index + 1'
-      >
-        <FirstStep
-        :data = 'item'
-        :alternative = 'condition.alternative'
-        :index = 'index'
-        :answers = 'funcAnswers[index]'
-        :done='correctStep > 1 + index'
-        @success = 'Answer()'
-        @error="err"
-        />
+
+      <q-step v-for="(item, index) in condition.criterion" v-bind:key='index' :name='Number(index + 2)' :title='`Значения С${index + 1}`' icon='assignment' :done='correctStep > 1 + index'>
+        <FirstStep :data = 'item' :alternative = 'condition.alternative' :index = 'index' :answers = 'funcAnswers[index]' :done='correctStep > 1 + index' @success = 'Answer()' @error="err"/>
         <q-stepper-navigation>
           <q-btn v-if='correctStep > index + 1' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
           <q-btn v-if='correctStep > index + 1' flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
-      <q-step
-        :name='6'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 3'
-      >
-        <alternatives-evaluation :cr='0' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
-      </q-step>
-      <q-step
-        :name='7'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 4'
-      >
-        <alternatives-evaluation :cr='1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
-      </q-step>
-      <q-step
-        :name='8'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 5'
-      >
-        <alternatives-evaluation :cr='2' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
-      </q-step>
 
-      <q-step
-        :name='9'
-        title='Критерий'
-        icon='assignment'
-        :done='correctStep > 6'
-      >
-        <alternatives-evaluation :cr='3' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err"></alternatives-evaluation>
+      <q-step v-for="index in 10" v-bind:key="index" :name='6 + (index - 1)' :title='`Оценка для C${index}`' icon='assignment' :done='correctStep > step - 1'>
+        <alternatives-evaluation :cr='index - 1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err" />
       </q-step>
 
       <q-step
         :name='10'
         title='Теория'
-        :done='correctStep > 7'
+        :done='correctStep > step - 1'
         icon='assignment'
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back' @error="err"></theoretical-choice>
@@ -101,7 +60,7 @@
       <q-step
         :name='12'
         title='Теория'
-        :done='correctStep > 9'
+        :done='correctStep > step - 1'
         icon='assignment'
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back' @error="err"></theoretical-choice>
@@ -111,7 +70,7 @@
         :name='13'
         title='Площади'
         icon='assignment'
-        :done='correctStep > 10'
+        :done='correctStep > step - 1'
       >
         <squares :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getSquares' @back='back' @error="err"></squares>
       </q-step>
@@ -119,7 +78,7 @@
       <q-step
         :name='14'
         title='Теория'
-        :done='correctStep > 11'
+        :done='correctStep > step - 1'
         icon='assignment'
       >
         <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back' @error="err"></theoretical-choice>
@@ -129,7 +88,7 @@
         :name='15'
         title='Ответ'
         icon='assignment'
-        :done='correctStep > 12'
+        :done='correctStep > step - 1'
       >
         <coords-and-answer :squares='squares' :r_functions='r_functions' :step='step' :correctStep='correctStep' @answer='getAnswer' @back='back' @finish='finish' @error="err"></coords-and-answer>
       </q-step>
@@ -138,10 +97,14 @@
         :name='16'
         title='Теория'
         icon='assignment'
-        :done='correctStep > 13'
+        :done='correctStep > step - 1'
       >
         <theoretical-input :question='question[4]' @back='back' @finish="finish"></theoretical-input>
       </q-step>
+      <q-step
+        :name='17'
+        title='Итог'
+
     </q-stepper>
     <div class="lab-info">
       <div class="mark">
@@ -198,10 +161,6 @@ export default {
   methods: {
     back () {
       this.step--
-    },
-    test () {
-      this.step++
-      // this.correctStep++
     },
     Answer () {
       this.correctStep++
@@ -299,7 +258,7 @@ export default {
       console.log(this.error) */
     },
     finish () {
-      this.work3.work.stage = 'done'
+      this.work3.work.stage = 'resolve'
       console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
       this.$store.dispatch('data/updateWork3', {

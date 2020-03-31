@@ -11,7 +11,8 @@ export function checkLab (labName) {
       this.condition = work3.work.condition
       this.condition.weight = [0.25, 0.25, 0.25, 0.25]
       this.question = work3.work.question
-      this.score = work3.work.score
+      // this.score = work3.work.score
+
       if (work3.work.error !== '') {
         this.error = work3.work.error
       }
