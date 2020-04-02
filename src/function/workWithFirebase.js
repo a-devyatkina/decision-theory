@@ -3,16 +3,17 @@ import * as firebase from 'firebase'
 
 export function checkLab (labName) {
   let user = this.$store.getters['data/getUser']()
-  let work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
+  let cid = this.$router.currentRoute.query.cid
+  let work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab', cid)
+
+  this.maxScore = this.$store.getters['data/getCourse'](cid).groups[user.group].lab3[work3.work.lab].maxScore
 
   if (work3) {
-    if (work3.work.step !== 0) {
+    if (work3.work.stage !== 'improve' && work3.work.condition !== '') {
       this.correctStep = work3.work.step
       this.condition = work3.work.condition
-      this.condition.weight = [0.25, 0.25, 0.25, 0.25]
       this.question = work3.work.question
-      // this.score = work3.work.score
-
+      this.work3 = work3
       if (work3.work.error !== '') {
         this.error = work3.work.error
       }
@@ -25,9 +26,7 @@ export function checkLab (labName) {
   firebase.database().ref('lab3/variants/1').once('value', snapshot => {
     let variant = snapshot.val()
     this.condition = generate(variant, variant['dict1'], variant['dict2'])
-    if (labName === 'additiveLab') {
-      this.condition['tables'] = this.generateVariant()
-    }
+
     firebase.database().ref('lab3/questions/' + labName).once('value').then((snapshot) => {
       let questions = snapshot.val()
 
@@ -40,7 +39,14 @@ export function checkLab (labName) {
       if (user.role === 'student') {
         work3.work.condition = this.condition
         work3.work.question = this.question
+        work3.work.condition.weight = [0.25, 0.25, 0.25, 0.25]
+        work3.work.step = 0
         this.correctStep = work3.work.step
+        work3.work.stage = 'opened'
+        work3.work.error = ''
+        work3.work.penalty = 0
+        work3.work.score = 0
+        this.work3 = work3
         this.$store.dispatch('data/updateWork3', {
           wid: work3.wid,
           work: work3.work
