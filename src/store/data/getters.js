@@ -210,9 +210,9 @@ export const getStudentWorks3 = (state) => (sid) => {
   return works
 }
 
-export const getStudentWork3 = (state) => (sid, lid) => {
+export const getStudentWork3 = (state) => (sid, lid, cid) => {
   for (let wid in state.work3) {
-    if (state.work3[wid].student === sid && state.work3[wid].lab === lid) {
+    if (state.work3[wid].student === sid && state.work3[wid].lab === lid && state.work3[wid].course === cid) {
       return { wid: wid, work: state.work3[wid] }
     }
   }

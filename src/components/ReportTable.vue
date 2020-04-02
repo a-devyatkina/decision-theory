@@ -19,7 +19,7 @@
         </router-link>
       </q-td>
       <q-td v-for="work in props.row.work3" :key="work.lid" :props="props">
-        <router-link :to="`work3flow?wid=${work.wid}&cid=${cid}`">
+        <router-link :to="`work3flow?wid=${work.wid}`">
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
@@ -164,7 +164,7 @@ export default {
           }
         }
         for (let lid in this.plan.lab3) {
-          let data = this.$store.getters['data/getStudentWork3'](sid, lid)
+          let data = this.$store.getters['data/getStudentWork3'](sid, lid, this.cid)
           console.log(data)
           if (data) {
             row.score += data.work.score

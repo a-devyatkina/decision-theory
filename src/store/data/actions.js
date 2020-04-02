@@ -569,9 +569,9 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
       for (let lid in lab3) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
-            let work = getters['getStudentWork3'](sid, lid)
+            let work = getters['getStudentWork3'](sid, lid, cid)
             if (!work) {
-              await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 0, 'unassign', '', 0, 0, '', '', 0, '')
+              await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 0, 'assign', '', 0, 0, '', '', 0, '')
             }
           }
         }

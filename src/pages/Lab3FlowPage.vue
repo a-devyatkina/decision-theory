@@ -26,7 +26,7 @@
                     <q-item-main :label="$t('Improve')" />
                   </q-item>
                   <q-item v-if="isStudentSession()" v-close-overlay @click.native="$refs.resolve.opened = true">
-                    <work3flow-action action="assign" ref="resolve" :title="$t('Resolve Task')" :callback="addNewStage" :work="work"/>
+                    <work3flow-action action="opened" ref="resolve" :title="$t('Resolve Task')" :callback="addNewStage" :work="work"/>
                     <q-item-side icon="done_all" />
                     <q-item-main :label="$t('Resolve')" />
                   </q-item>
@@ -91,9 +91,6 @@ export default {
     wid () {
       return this.$router.currentRoute.query.wid
     },
-    cid () {
-      return this.$router.currentRoute.query.cid
-    },
     lab () {
       return this.$store.getters['data/getLab3'](this.work.lab)
     },
@@ -111,6 +108,9 @@ export default {
     },
     user () {
       return this.$store.getters['data/getUser']()
+    },
+    cid () {
+      return this.work.course
     }
     /* history () {
       return this.$store.getters['data/getHistory'](this.wid)
@@ -187,6 +187,9 @@ export default {
       }
       if (stage === 'close') {
         this.work.penalty = penalty
+      }
+      if (stage === 'improve') {
+        this.work.attempt += 1
       }
       console.log(this.work)
       this.$store.dispatch('data/updateWork3', {
