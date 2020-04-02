@@ -3,6 +3,36 @@ function randomInteger (min, max) {
   let rand = min + Math.random() * (max + 1 - min)
   return Math.floor(rand)
 }
+function generateVariant () {
+  let linguistic = []
+  let first = Math.random() * (0.2 - 0.1) + 0.1
+  // first = Math.round(first * 100) / 100
+  first = Number(first.toFixed(2))
+
+  let cur = 0
+  for (let i = 0; i < 4; i++) {
+    linguistic.push(first.toFixed(2))
+    // first += 0.2
+    cur = Math.random() * (0.25 - 0.15) + 0.15
+    // first += Math.round(cur * 100) / 100
+    first += Number(cur.toFixed(2))
+  }
+
+  let importance = []
+  first = Math.random() * (0.2 - 0.1) + 0.1
+  // first = Math.round(first * 100) / 100
+
+  for (let i = 0; i < 3; i++) {
+    importance.push(first.toFixed(2))
+    cur = Math.random() * (0.3 - 0.2) + 0.2
+    // first += Math.round(cur * 100) / 100
+    first += Number(cur.toFixed(2))
+  }
+  return {
+    importance,
+    linguistic
+  }
+}
 export function generate (variant, dict1, dict2) {
   let alt = [0, 0, 0]
   let sup = [0, 0, 0]
@@ -102,5 +132,6 @@ export function generate (variant, dict1, dict2) {
       }
     }
   }
+  newVariant['tables'] = generateVariant()
   return newVariant
 }
