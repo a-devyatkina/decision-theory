@@ -36,7 +36,7 @@
         </q-stepper-navigation>
       </q-step>
 
-      <q-step v-for="index in 10" v-bind:key="index" :name='6 + (index - 1)' :title='`Оценка для C${index}`' icon='assignment' :done='correctStep > step - 1'>
+      <q-step v-for="index in 4" v-bind:key="index" :name='6 + (index - 1)' :title='`Оценка для C${index}`' icon='assignment' :done='correctStep > step - 1'>
         <alternatives-evaluation :cr='index - 1' :step='step' :correctStep='correctStep' :condition='condition' :funcAnswers='funcAnswers' @answer='getEvals' @back='back' @error="err" />
       </q-step>
 
@@ -112,12 +112,16 @@
     </q-stepper>
     <div class="lab-info">
       <div class="mark">
-        Количество баллов: {{ score }}. Прогресс
+        Количество баллов: {{ realScore }}. Попытка №{{ work3.work.attempt + 1 }}. Штрафной балл {{ maxScore *10 * work3.work.attempt / 100 }} Прогресс
       </div>
-      <div class="step">
-        {{step}}/16
+       <div class="step">
+          {{step}}/16
       </div>
     </div>
+    <q-dialog v-model="alert"  prevent-close @ok='handlerOk'>
+      <span slot="title">Неудача</span>
+      <span slot="message">К сожалению, вы набрали меньше 60% процентов от максиамльного количества баллов.</span>
+    </q-dialog>
   </div>
 </template>
 
@@ -138,10 +142,12 @@ export default {
       score: 100,
       question: [],
       work3: {},
-      limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
+      limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ],
+      alert: false,
       // limits: [ 8, 13, 13, 13, 13, 13, 13, 13, 13, 10, 5, 19 ]
       // limits: [ 8, 15, 15, 8, 12, 8, 6, 8, 20 ]
       // user: {}
+      maxScore: 1000
     }
   },
   computed: {
@@ -161,9 +167,16 @@ export default {
       console.log('answerArr')
       console.log(answerArr)
       return answerArr
+    },
+    realScore: function () {
+      console.log(this.maxScore * this.score / 100)
+      return this.maxScore * (this.score - 10 * this.work3.work.attempt) / 100
     }
   },
   methods: {
+    handlerOk () {
+      this.$router.push('/works')
+    },
     back () {
       this.step--
     },
@@ -265,6 +278,8 @@ export default {
       this.work3.work.stage = 'resolve'
       console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
+      this.work3.work.score = this.realScore
+      this.work3.work.attempt += 1
       this.$store.dispatch('data/updateWork3', {
         wid: this.work3.wid,
         work: this.work3.work
@@ -273,8 +288,8 @@ export default {
     }
   },
   created () {
-    let user = this.$store.getters['data/getUser']()
-    this.work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
+    // let user = this.$store.getters['data/getUser']()
+    // this.work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
     checkLab.call(this, 'additiveLab')
   },
   watch: {
@@ -343,8 +358,13 @@ export default {
         this.score = arrSum(limits)
         console.log(this.score)
         console.log(limits)
-        this.work3.work.score = this.score
+        // this.work3.work.score = this.score
         this.work3.work.error = this.error
+        if (this.score - this.work3.work.attempt * 10 < 60) {
+          this.alert = true
+          this.work3.work.stage = 'improve'
+          this.work3.work.attempt += 1
+        }
         this.$store.dispatch('data/updateWork3', {
           wid: this.work3.wid,
           work: this.work3.work
