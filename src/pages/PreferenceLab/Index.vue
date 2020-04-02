@@ -35,8 +35,8 @@
         @error = 'errorMethod'
       />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > index - 2 || teacherMode' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > index - 2 ' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > index - 2 ' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step  v-for="(item, index) in condition.criterion" v-bind:key='index'
@@ -56,8 +56,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > index + 1 || teacherMode' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > index + 1 || teacherMode' flat @click='step = 1 + index' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > index + 1 ' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > index + 1 ' flat @click='step = 1 + index' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step  v-for="(item, index) in condition.criterion" v-bind:key='index'
@@ -77,8 +77,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 5 + index || teacherMode' @click='() => { done2 = true; step = 7 + index }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 5 + index || teacherMode' flat @click='step = 5 + index' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 5 + index ' @click='() => { done2 = true; step = 7 + index }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 5 + index ' flat @click='step = 5 + index' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -97,8 +97,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 9 || teacherMode' @click='() => { done2 = true; step = 11 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 9 || teacherMode' flat @click='step = 9' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 9 ' @click='() => { done2 = true; step = 11 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 9 ' flat @click='step = 9' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -117,8 +117,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 10 || teacherMode' @click='() => { done2 = true; step = 12 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 10 || teacherMode' flat @click='step = 10' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 10 ' @click='() => { done2 = true; step = 12 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 10 ' flat @click='step = 10' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -138,8 +138,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 11 || teacherMode' @click='() => { done2 = true; step = 13 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 11 || teacherMode' flat @click='step = 11' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 11 ' @click='() => { done2 = true; step = 13 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 11 ' flat @click='step = 11' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step v-for="index in 2" v-bind:key='index'
@@ -156,8 +156,8 @@
         @error = 'errorMethod'
       />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 13 + index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 13 + index - 2 || teacherMode' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 13 + index - 2 ' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 13 + index - 2 ' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -176,8 +176,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 14 || teacherMode' @click='() => { done2 = true; step = 16 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 14 || teacherMode' flat @click='step = 14' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 14 ' @click='() => { done2 = true; step = 16 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 14 ' flat @click='step = 14' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -196,8 +196,8 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 15 || teacherMode' @click='() => { done2 = true; step = 17 }' color='secondary' label='Продолжить' />
-          <q-btn v-if='doneStep > 15 || teacherMode' flat @click='step = 15' color='secondary' label='Назад' class='q-ml-sm' />
+          <q-btn v-if='doneStep > 15 ' @click='() => { done2 = true; step = 17 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='doneStep > 15 ' flat @click='step = 15' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
       <q-step
@@ -214,7 +214,7 @@
         @error = 'errorMethod'
         />
         <q-stepper-navigation>
-          <q-btn v-if='doneStep > 15 || teacherMode' @click='() => { done2 = true; step = 15 }' color='secondary' label='Назад' />
+          <q-btn v-if='doneStep > 15 ' @click='() => { done2 = true; step = 15 }' color='secondary' label='Назад' />
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
