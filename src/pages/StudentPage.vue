@@ -164,7 +164,12 @@ export default {
       if (lab.isSteplab) {
         this.$router.push(`/steplab?lab=${lab.task}&user=${this.user.id}`)
       } else if (lab.isHierarchieslab) {
-        if ((lab.lid === 'siblinghierarchies' && lab.stage !== 'assigned' && lab.stage !== 'improve') || (lab.lid === 'layeredhierarchies' && lab.stage === 'assigned')) {
+        if ((lab.lid === 'siblinghierarchies' &&
+             lab.stage !== 'assigned' &&
+             lab.stage !== 'improve' &&
+             lab.stage !== 'opened') ||
+            (lab.lid === 'layeredhierarchies' &&
+             lab.stage === 'assigned')) {
           this.$q.dialog({
             title: 'Лабораторная работа недоступна',
             message: 'Обратитесь к переподавателю',
