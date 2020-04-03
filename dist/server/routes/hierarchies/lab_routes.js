@@ -2,12 +2,19 @@ const math = require('mathjs')
 
 module.exports = function(app, db, ObjectID) {
     app.post('/restapi/hierarchies/siblinghierarchies', async (req, res) => {
-        let variants = await db.collection('variants').find().toArray()
-        let index = Math.floor(Math.random() * variants.length)
+        let fixed_variant = await db.collection('fixed_variants').findOne({user:req.body.user_id})
+        let variant
+        if (fixed_variant) {
+            variant = await db.collection('variants').findOne({var:fixed_variant.var})
+        } else {
+            let variants = await db.collection('variants').find().toArray()
+            let index = Math.floor(Math.random() * variants.length)
+            variant = variants[index]
+        }
         let session = {
             user_id: req.body.user_id,
             timestamp: Date.now(),
-            variant: variants[index].var,
+            variant: variant,
             intro: {
                 questions: [],
                 points: 5,
@@ -20,26 +27,32 @@ module.exports = function(app, db, ObjectID) {
             },
             target_matrix: {
                 points: 10,
+                answers: [],
                 done: false
             },
             criterion_matrix1: {
                 points: 10,
+                answers: [],
                 done: false
             },
             criterion_matrix2: {
                 points: 10,
+                answers: [],
                 done: false
             },
             criterion_matrix3: {
                 points: 10,
+                answers: [],
                 done: false
             },
             criterion_matrix4: {
                 points: 10,
+                answers: [],
                 done: false
             },
             hierarchical_synthesis: {
                 points: 20,
+                answers: [],
                 done: false
             },
             add_test: {
@@ -52,7 +65,7 @@ module.exports = function(app, db, ObjectID) {
         }
         await db.collection('sessions').insertOne(session)
         let response = {
-            data: variants[index],
+            data: variant,
             session_id: session._id
         }
         res.send(response)
@@ -69,11 +82,17 @@ module.exports = function(app, db, ObjectID) {
                     updateWrong = {
                         $inc: {
                             'target_matrix.points': -2
+                        },
+                        $push: {
+                            'target_matrix.answers': req.body.value
                         }
                     }
                     updateRight = {
                         $set: {
-                            'target_matrix.checked': true
+                            'target_matrix.done': true
+                        },
+                        $push: {
+                            'target_matrix.answers': req.body.value
                         }
                     }
                     target = session.target_matrix
@@ -83,11 +102,17 @@ module.exports = function(app, db, ObjectID) {
                     updateWrong = {
                         $inc: {
                             'criterion_matrix1.points': -2
+                        },
+                        $push: {
+                            'criterion_matrix1.answers': req.body.value
                         }
                     }
                     updateRight = {
                         $set: {
-                            'criterion_matrix1.checked': true
+                            'criterion_matrix1.done': true
+                        },
+                        $push: {
+                            'criterion_matrix1.answers': req.body.value
                         }
                     }
                     target = session.criterion_matrix1
@@ -97,11 +122,17 @@ module.exports = function(app, db, ObjectID) {
                     updateWrong = {
                         $inc: {
                             'criterion_matrix2.points': -2
+                        },
+                        $push: {
+                            'criterion_matrix2.answers': req.body.value
                         }
                     }
                     updateRight = {
                         $set: {
-                            'criterion_matrix2.checked': true
+                            'criterion_matrix2.done': true
+                        },
+                        $push: {
+                            'criterion_matrix2.answers': req.body.value
                         }
                     }
                     target = session.criterion_matrix2
@@ -111,11 +142,17 @@ module.exports = function(app, db, ObjectID) {
                     updateWrong = {
                         $inc: {
                             'criterion_matrix3.points': -2
+                        },
+                        $push: {
+                            'criterion_matrix3.answers': req.body.value
                         }
                     }
                     updateRight = {
                         $set: {
-                            'criterion_matrix3.checked': true
+                            'criterion_matrix3.done': true
+                        },
+                        $push: {
+                            'criterion_matrix3.answers': req.body.value
                         }
                     }
                     target = session.criterion_matrix3
@@ -125,31 +162,38 @@ module.exports = function(app, db, ObjectID) {
                     updateWrong = {
                         $inc: {
                             'criterion_matrix4.points': -2
+                        },
+                        $push: {
+                            'criterion_matrix4.answers': req.body.value
                         }
                     }
                     updateRight = {
                         $set: {
-                            'criterion_matrix4.checked': true
+                            'criterion_matrix4.done': true
+                        },
+                        $push: {
+                            'criterion_matrix4.answers': req.body.value
                         }
                     }
                     target = session.criterion_matrix4
                     break
                 }
 
-            var calculations = calculateMatrix(matrix)
-            var response = {
+            let calculations = calculateMatrix(matrix)
+            let response = {
                 status: 'right',
                 body: new Set(),
                 errors: []
             }
-            var filter = {
+            let filter = {
                 '_id': ObjectID(req.body.session_id)
             }
             for (i = 0; i < 4; i++) {
                 for (j = 0; j < calculations[i].length; j++) {
-                    var upper = Math.round(calculations[i][j]*100+1)/100
-                    var lower = Math.round(calculations[i][j]*100-1)/100
-                    var tmp = req.body.value[i][j]
+                    let upper = Math.round(calculations[i][j]*100+1)/100
+                    let lower = Math.round(calculations[i][j]*100-1)/100
+                    let tmp = req.body.value[i][j]
+                    console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
                         response.status = 'wrong'
                         response.errors.push(i)
@@ -158,9 +202,10 @@ module.exports = function(app, db, ObjectID) {
                 }
             }
             for (i = 4; i < 7; i++) {
-                var upper = Math.round(calculations[i]*100+1)/100
-                var lower = Math.round(calculations[i]*100-1)/100
-                var tmp = req.body.value[i][0]
+                let upper = Math.round(calculations[i]*100+1)/100
+                let lower = Math.round(calculations[i]*100-1)/100
+                let tmp = req.body.value[i][0]
+                console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
                     response.status = 'wrong'
                     response.errors.push(i)
@@ -219,41 +264,47 @@ module.exports = function(app, db, ObjectID) {
             res.send(response)
 
         } else {
-            var matrix = []
-            var tmp
+            let matrix = []
+            let tmp
             for (index = 1; index < 5; index++) {
                 tmp = calculateMatrix(lab.data[index].value)
                 matrix.push(tmp[1])
             }
             matrix = math.transpose(matrix)
-            var criterion = calculateMatrix(lab.data[0].value)[1]
-            var priority = math.multiply(matrix, criterion)
+            let criterion = calculateMatrix(lab.data[0].value)[1]
+            let priority = math.multiply(matrix, criterion)
 
-            var filter = {
+            let filter = {
                 '_id': ObjectID(req.body.session_id)
             }
-            var updateRight = {
+            let updateRight = {
                 $inc: {
                     'hierarchical_synthesis.points': -4
+                },
+                $push: {
+                    'hierarchical_synthesis.answers': req.body.value
                 }
             }
-            var updateWrong = {
+            let updateWrong = {
                 $set: {
-                    'hierarchical_synthesis.checked': true
+                    'hierarchical_synthesis.done': true
+                },
+                $push: {
+                    'hierarchical_synthesis.answers': req.body.value
                 }
             }
-            var response = {
+            let response = {
                 status: 'right',
                 body: new Set()
             }
 
-            var request = req.body.value.matrix
+            let request = req.body.value.matrix
             for (i = 0; i < 3; i++) {
-                var row = matrix[i]
+                let row = matrix[i]
                 for (j = 0; j < 4; j++) {
-                    var upper = Math.round(row[j]*100+1)/100
-                    var lower = Math.round(row[j]*100-1)/100
-                    var tmp = request[i][j]
+                    let upper = Math.round(row[j]*100+1)/100
+                    let lower = Math.round(row[j]*100-1)/100
+                    let tmp = request[i][j]
                     console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
                         response.status = 'wrong'
@@ -262,20 +313,20 @@ module.exports = function(app, db, ObjectID) {
                 }
             }
 
-            request = req.body.value.vector
-            for (i = 0; i < criterion.length; i++) {
-                var upper = Math.round(criterion[i]*100+1)/100
-                var lower = Math.round(criterion[i]*100-1)/100
-                var tmp = request[i]
-                console.log(lower, tmp, upper)
-                if (lower > tmp || tmp > upper || !tmp) {
-                    response.status = 'wrong'
-                    response.body.add('Вектор')
+                    request = req.body.value.vector
+                    for (i = 0; i < criterion.length; i++) {
+                        let upper = Math.round(criterion[i]*100+1)/100
+                        let lower = Math.round(criterion[i]*100-1)/100
+                        let tmp = request[i]
+                        console.log(lower, tmp, upper)
+                        if (lower > tmp || tmp > upper || !tmp) {
+                            response.status = 'wrong'
+                            response.body.add('Вектор')
                 }
             }
 
-            var index
-            var max = Number.NEGATIVE_INFINITY
+            let index
+            let max = Number.NEGATIVE_INFINITY
             for (i = 0; i < priority.length; i++) {
                 if (max < priority[i]) {
                     max = priority[i]
@@ -316,6 +367,75 @@ module.exports = function(app, db, ObjectID) {
         }
     })
 
+    app.post('/restapi/hierarchies/get_session', async (req, res) => {
+        let session = await db.collection('sessions').findOne({_id:ObjectID(req.body.session_id)})
+        let response = {
+            data: session.variant,
+            intro_done: session.intro.done,
+            practice_done: session.practice.done,
+            target_matrix: session.target_matrix.done,
+            criterion_matrix1: session.criterion_matrix1.done,
+            criterion_matrix2: session.criterion_matrix2.done,
+            criterion_matrix3: session.criterion_matrix3.done,
+            criterion_matrix4: session.criterion_matrix4.done,
+            hierarchical_synthesis: session.hierarchical_synthesis.done,
+            add_test_done: session.add_test.done,
+        }
+        if (!session.intro.done) {
+            let questions = session.intro.questions
+            if (questions.length) {
+                let id = questions[questions.length - 1]._id
+                let question = await db.collection('intro_test').findOne({_id:ObjectID(id)},{correct:0})
+                response.intro_started = true
+                response.question = question
+            } else {
+                response.intro_started = false
+            }
+        } else if (!session.practice.done) {
+            let practice_questions = session.practice.questions
+            response.intro_started = true
+            if (practice_questions.length) {
+                let id = practice_questions[practice_questions.length - 1]._id
+                let type = practice_questions[practice_questions.length - 1].type
+                let questions = await db.collection('practice_test').findOne({type: type}, {correct: 0})
+                let question
+                for (i in questions) {
+                    if (questions[i]._id === id) {
+                        question = questions[i]
+                        delete question.correct
+                        break
+                    }
+                }
+                response.practice_started = true
+                response.question = question
+            } else {
+                response.practice_started = false
+            }
+        } else {
+            response.intro_started = true
+            response.practice_started = true
+            if (session.target_matrix.done &&
+                session.criterion_matrix1.done &&
+                session.criterion_matrix2.done &&
+                session.criterion_matrix3.done &&
+                session.criterion_matrix4.done &&
+                session.hierarchierarchical_synthesis &&
+                !session.add_test.done) {
+                response.intro_started = true
+                response.practice_started = true
+                if (session.add_test.question) {
+                    let question = await db.collection('add_test').findOne({_id:session.add_test.question})
+                    delete question.correct
+                    response.add_test_started = true
+                    response.question = question
+                } else {
+                    response.add_test_started = false
+                }
+            }
+        }
+        res.send(response)
+    })
+
     app.get('/restapi/hierarchies/layeredhierarchies', async (req, res) => {
         let themes = await db.collection('themes').find({owner: null}).project({owner: 0}).toArray()
         res.send(themes)
@@ -354,10 +474,10 @@ function calculateMatrix (matrix) {
         10: 1.49
     }
 
-    var priority = []
-    var norm = 0;
+    let priority = []
+    let norm = 0;
     for (i = 0; i < matrix.length; i++) {
-        var row = matrix[i]
+        let row = matrix[i]
         priority.push(1);
         for (j = 0; j < row.length; j++) {
             priority[i] *= row[j]
@@ -366,26 +486,26 @@ function calculateMatrix (matrix) {
         norm += priority[i]
     }
 
-    var weight = []
+    let weight = []
     for (i = 0; i < priority.length; i++) {
         weight.push(priority[i]/norm)
     }
 
-    var mweight = math.multiply(matrix, weight)
-    var lambda = []
-    var max_lambda = 0
+    let mweight = math.multiply(matrix, weight)
+    let lambda = []
+    let max_lambda = 0
     for (i = 0; i < mweight.length; i++) {
         lambda.push(mweight[i]/weight[i])
         max_lambda += mweight[i]/weight[i]
     }
     max_lambda /= mweight.length
 
-    var c_index = (max_lambda-mweight.length)/(mweight.length-1)
-    var c_relation = (c_index/c_random[mweight.length])
+    let c_index = (max_lambda-mweight.length)/(mweight.length-1)
+    let c_relation = (c_index/c_random[mweight.length])
 
     if (c_relation > 0.1) {
-        var max = 0
-        var index = 0
+        let max = 0
+        let index = 0
         for (i = 0; i < priority.length; i++) {
             if (max < priority[i]) {
                 max = priority[i]
@@ -393,7 +513,7 @@ function calculateMatrix (matrix) {
             }
         }
 
-        var new_matrix = matrix
+        let new_matrix = matrix
         for (i = 0; i < weight.length; i++) {
             new_matrix[index][i] = weight[index]/weight[i]
             new_matrix[i][index] = 1/new_matrix[index][i]

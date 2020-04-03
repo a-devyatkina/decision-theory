@@ -34,7 +34,7 @@
             </router-link>
           </q-td>
           <q-td key="score" :props="props">
-            {{ props.row.score }}
+            <q-btn :label="props.row.score" @click="refuse(props.row)"/>
           </q-td>
         </q-tr>
       </q-table>
@@ -164,7 +164,7 @@ export default {
       if (lab.isSteplab) {
         this.$router.push(`/steplab?lab=${lab.task}&user=${this.user.id}`)
       } else if (lab.isHierarchieslab) {
-        if ((lab.lid === 'siblinghierarchies' && lab.stage !== 'assign' && lab.stage !== 'improve') || (lab.lid === 'layeredhierarchies' && lab.stage === 'unassign')) {
+        if ((lab.lid === 'siblinghierarchies' && lab.stage !== 'assigned' && lab.stage !== 'improve') || (lab.lid === 'layeredhierarchies' && lab.stage === 'assigned')) {
           this.$q.dialog({
             title: 'Лабораторная работа недоступна',
             message: 'Обратитесь к переподавателю',
@@ -175,6 +175,22 @@ export default {
         }
       } else {
         this.$router.push(`/workflow?wid=${lab.task}`)
+      }
+    },
+    async refuse (row) {
+      if (row.stage === 'close') {
+        await this.$q.dialog({
+          title: 'Отказ от оценки',
+          message: 'Вы уверены, что хотите отказаться от оценки и переделать работу?',
+          ok: 'Да',
+          cancel: 'Нет'
+        })
+        let work = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, row.lid)
+        work.work.stage = 'declined'
+        this.$store.dispatch('data/updateHierarchieswork', {
+          wid: work.wid,
+          work: work.work
+        })
       }
     }
   }

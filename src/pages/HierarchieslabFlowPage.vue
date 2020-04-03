@@ -10,25 +10,15 @@
             <q-btn icon="library_books" round color="secondary">
               <q-popover v-if="!archived">
                 <q-list link>
-                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.assign.opened = true">
-                    <hierarchiesworkflow-action action="assign" ref="assign" :title="$t('Assign Task')" :callback="addNewStage" />
-                    <q-item-side icon="list_alt" />
-                    <q-item-main :label="$t('Assign')" />
-                  </q-item>
-                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.unassign.opened = true">
-                    <hierarchiesworkflow-action action="unassign" ref="unassign" :title="$t('Unassign Task')" :callback="addNewStage" />
-                    <q-item-side icon="block" />
-                    <q-item-main :label="$t('Unassign')" />
+                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.close.opened = true">
+                    <hierarchiesworkflow-action action="close" ref="close" :title="$t('Estimate Task')" :callback="addNewStage" :penalty="work.penalty"/>
+                    <q-item-side icon="star_border" />
+                    <q-item-main :label="$t('Estimate')" />
                   </q-item>
                   <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.improve.opened = true">
                     <hierarchiesworkflow-action action="improve" ref="improve" :title="$t('Improve Task')" :callback="addNewStage" />
                     <q-item-side icon="spellcheck" />
                     <q-item-main :label="$t('Improve')" />
-                  </q-item>
-                  <q-item v-if="isTeacherSession()" v-close-overlay @click.native="$refs.close.opened = true">
-                    <hierarchiesworkflow-action action="close" ref="close" :title="$t('Estimate Task')" :callback="addNewStage" :penalty="work.penalty"/>
-                    <q-item-side icon="star_border" />
-                    <q-item-main :label="$t('Estimate')" />
                   </q-item>
                 </q-list>
               </q-popover>

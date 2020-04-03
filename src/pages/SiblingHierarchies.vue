@@ -6,7 +6,7 @@
     <div v-else>
     <h3>
       Вариант {{info.var}}
-    <q-btn label="Инструкция" color="primary">
+    <q-btn label="Инструкция" color="secondary">
       <q-tooltip>
         Some text as content of Tooltip
       </q-tooltip>
@@ -64,11 +64,11 @@
           </div>
         </div>
         <div v-else>
-          <h3>Тест успешно пройден!</h3>
+          <h3>Этап успешно пройден!</h3>
         </div>
 
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>-->
+          <q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -95,11 +95,11 @@
           </div>
         </div>
         <div v-else>
-          <h3>Тест успешно пройден!</h3>
+          <h3>Этап успешно пройден!</h3>
         </div>
 
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>-->
+          <q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -111,10 +111,9 @@
               icon="assignment"
               :done="step>4"
       >
-
-        <form @submit.prevent="someAction()">
+        <div v-if="!target_matrix_done">
           <div class="lab">
-            <div class="intro_test" v-for="(lab, index) in info.input.target_matrix" :key="lab.id">
+            <div class="matrix" v-for="(lab, index) in info.input.target_matrix" :key="lab.id">
               <div>
                 <q-item id="question">
                   {{lab.field}}
@@ -123,25 +122,27 @@
                 <div class="q-pa-md q-gutter-sm">
                   <div class="vector">
                     <input v-for="(answer, aId) in info.input.target_matrix[index].answer" :key="answer"
-                           id="passport_data"
-                           v-model="passport_data[0][index][aId]"
+                           id="matrices"
+                           v-model="matrices[0][index][aId]"
                            data-vv-as="вектор приоритетов"
-                           name="passport_data[]"
+                           name="matrices[]"
                            v-on:input="changed(index)"
                     >
                   </div>
                 </div>
               </div>
             </div>
+              <q-btn @click="labIntermediate(matrices[0], 'target_matrix')" color="secondary" :disabled="target_matrix_done" label="Проверить"/>
           </div>
-        </form>
-
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(passport_data[0], 'target_matrix')" color="secondary" label="Continue" class="q-ml-sm" />
+          <q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 5" color="secondary" label="Continue" :disabled="!target_matrix_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
-
       </q-step>
 
       <q-step
@@ -150,10 +151,9 @@
         icon="assignment"
         :done="step>5"
       >
-
-        <form @submit.prevent="someAction()">
+        <div v-if="!criterion_matrix1_done">
           <div class="lab">
-            <div class="intro_test" v-for="(lab, index) in info.input.criterion_matrix1" :key="lab.id">
+            <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix1" :key="lab.id">
               <div>
                 <q-item id="question">
                   {{lab.field}}
@@ -162,25 +162,27 @@
                 <div class="q-pa-md q-gutter-sm">
                   <div class="vector">
                     <input v-for="(answer, aId) in info.input.criterion_matrix1[index].answer" :key="answer"
-                           id="passport_data"
-                           v-model="passport_data[1][index][aId]"
+                           id="matrices"
+                           v-model="matrices[1][index][aId]"
                            data-vv-as="вектор приоритетов"
-                           name="passport_data[]"
+                           name="matrices[]"
                            v-on:input="changed(index)"
                     >
                   </div>
                 </div>
               </div>
             </div>
+            <q-btn @click="labIntermediate(matrices[1], 'criterion_matrix1')" color="secondary" :disabled="criterion_matrix1_done" label="Проверить"/>
           </div>
-        </form>
-
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(passport_data[1], 'criterion_matrix1')" color="secondary" label="Continue" class="q-ml-sm"/>
+          <q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 6" color="secondary" label="Continue" :disabled="!criterion_matrix1_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
-
       </q-step>
 
       <q-step
@@ -189,10 +191,9 @@
         icon="assignment"
         :done="step>6"
       >
-
-        <form @submit.prevent="someAction()">
+        <div v-if="!criterion_matrix2_done">
           <div class="lab">
-            <div class="intro_test" v-for="(lab, index) in info.input.criterion_matrix2" :key="lab.id">
+            <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix2" :key="lab.id">
               <div>
                 <q-item id="question">
                   {{lab.field}}
@@ -201,22 +202,25 @@
                 <div class="q-pa-md q-gutter-sm">
                   <div class="vector">
                     <input v-for="(answer, aId) in info.input.criterion_matrix2[index].answer" :key="answer"
-                           id="passport_data"
-                           v-model="passport_data[2][index][aId]"
+                           id="matrices"
+                           v-model="matrices[2][index][aId]"
                            data-vv-as="вектор приоритетов"
-                           name="passport_data[]"
+                           name="matrices[]"
                            v-on:input="changed(index)"
                     >
                   </div>
                 </div>
               </div>
             </div>
+            <q-btn @click="labIntermediate(matrices[2], 'criterion_matrix2')" color="secondary" :disabled="criterion_matrix2_done" label="Проверить"/>
           </div>
-        </form>
-
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(passport_data[2], 'criterion_matrix2')" color="secondary" label="Continue" class="q-ml-sm"/>
+          <q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 7" color="secondary" label="Continue" :disabled="!criterion_matrix2_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -227,10 +231,9 @@
         icon="assignment"
         :done="step>7"
       >
-
-        <form @submit.prevent="someAction()">
+        <div v-if="!criterion_matrix3_done">
           <div class="lab">
-            <div class="intro_test" v-for="(lab, index) in info.input.criterion_matrix3" :key="lab.id">
+            <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix3" :key="lab.id">
               <div>
                 <q-item id="question">
                   {{lab.field}}
@@ -239,25 +242,27 @@
                 <div class="q-pa-md q-gutter-sm">
                   <div class="vector">
                     <input v-for="(answer, aId) in info.input.criterion_matrix3[index].answer" :key="answer"
-                           id="passport_data"
-                           v-model="passport_data[3][index][aId]"
+                           id="matrices"
+                           v-model="matrices[3][index][aId]"
                            data-vv-as="вектор приоритетов"
-                           name="passport_data[]"
+                           name="matrices[]"
                            v-on:input="changed(index)"
                     >
                   </div>
                 </div>
               </div>
             </div>
+            <q-btn @click="labIntermediate(matrices[3], 'criterion_matrix3')" color="secondary" :disabled="criterion_matrix3_done" label="Проверить"/>
           </div>
-        </form>
-
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(passport_data[3], 'criterion_matrix3')" color="secondary" label="Continue" class="q-ml-sm"/>
-          <q-btn flat @click="step = 6" color="secondary" label="Back" class="q-ml-sm" />
+          <q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 8" color="secondary" label="Continue" :disabled="!criterion_matrix3_done" class="q-ml-sm"/>
+          <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
-
       </q-step>
 
       <q-step
@@ -266,10 +271,9 @@
         icon="assignment"
         :done="step>8"
       >
-
-        <form @submit.prevent="someAction()">
+        <div v-if="!criterion_matrix4_done">
           <div class="lab">
-            <div class="intro_test" v-for="(lab, index) in info.input.criterion_matrix4" :key="lab.id">
+            <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix4" :key="lab.id">
               <div>
                 <q-item id="question">
                   {{lab.field}}
@@ -278,22 +282,25 @@
                 <div class="q-pa-md q-gutter-sm">
                   <div class="vector">
                     <input v-for="(answer, aId) in info.input.criterion_matrix4[index].answer" :key="answer"
-                           id="passport_data"
-                           v-model="passport_data[4][index][aId]"
+                           id="matrices"
+                           v-model="matrices[4][index][aId]"
                            data-vv-as="вектор приоритетов"
-                           name="passport_data[]"
+                           name="matrices[]"
                            v-on:input="changed(index)"
                     >
                   </div>
                 </div>
               </div>
             </div>
+            <q-btn @click="labIntermediate(matrices[4], 'criterion_matrix4')" color="secondary" :disabled="criterion_matrix4_done" label="Проверить"/>
           </div>
-        </form>
-
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(passport_data[4], 'criterion_matrix4')" color="secondary" label="Continue" class="q-ml-sm"/>
+          <q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 9" color="secondary" label="Continue" :disabled="!criterion_matrix4_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 7" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -304,9 +311,9 @@
         icon="assignment"
         :done="step>9"
       >
-        <form @submit.prevent="someAction()">
+        <div v-if="!hierarchical_syntech.done">
           <div class="field">
-            <label for="passport_data">
+            <label for="matrices">
               Итоговая матрица
             </label>
             <div class="matrix">
@@ -411,7 +418,7 @@
             </div>
           </div>
           <div class="field">
-            <label for="passport_data">
+            <label for="matrices">
               Вектор глобальных приоритетов
             </label>
             <input
@@ -448,7 +455,7 @@
             >
           </div>
           <div class="field">
-            <label for="passport_data">
+            <label for="matrices">
               Выбранная альтернатива
             </label>
             <input
@@ -460,11 +467,14 @@
                     name="alternative"
             >
           </div>
-        </form>
-
+          <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" :disabled="hierarchical_syntech.done" label="Проверить"/>
+        </div>
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>-->
-          <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" label="Continue" class="q-ml-sm"/>
+          <q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_syntech.done" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -476,22 +486,23 @@
               icon="assignment"
               :done="step > 10"
       >
-
-      <div v-if="!add_test.isLoaded">
-          <q-btn @click="getAddTest()" color="secondary" label="Начать тест"/>
-        </div>
-      <div v-else-if="!add_test.isOver">
-        <q-item id="question">{{add_test.info.question}}<br></q-item>
-        <div class="q-pa-md q-gutter-sm">
-          <div id="answerid" v-for="(answer) in add_test.info.answers" :key="answer" class="answer">
-            <q-radio v-model="add_test.shape" :val="answer" dense> {{answer}} </q-radio>
+        <div v-if="!add_test.isLoaded">
+            <q-btn @click="getAddTest()" color="secondary" label="Начать тест"/>
           </div>
-          <q-btn @click="checkAddAnswer(index)" color="secondary" :disabled="!isTestFormValid(add_test.shape)" label="Проверить"/>
+        <div v-else-if="!add_test.isOver">
+          <q-item id="question">{{add_test.info.question}}<br></q-item>
+          <div class="q-pa-md q-gutter-sm">
+            <div id="answerid" v-for="(answer) in add_test.info.answers" :key="answer" class="answer">
+              <q-radio v-model="add_test.shape" :val="answer" dense> {{answer}} </q-radio>
+            </div>
+            <q-btn @click="checkAddAnswer(index)" color="secondary" :disabled="!isTestFormValid(add_test.shape)" label="Проверить"/>
+          </div>
         </div>
-      </div>
-
+        <div v-else>
+          <h3>Этап успешно пройден!</h3>
+        </div>
         <q-stepper-navigation>
-          <!--<q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>-->
+          <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="labpage()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -550,17 +561,23 @@ export default {
         isLoaded: false,
         isOver: false
       },
-      passport_data: [
+      matrices: [
         [{}, {}, {}, {}, {}, {}, {}],
         [{}, {}, {}, {}, {}, {}, {}],
         [{}, {}, {}, {}, {}, {}, {}],
         [{}, {}, {}, {}, {}, {}, {}],
         [{}, {}, {}, {}, {}, {}, {}]
       ],
+      target_matrix_done: false,
+      criterion_matrix1_done: false,
+      criterion_matrix2_done: false,
+      criterion_matrix3_done: false,
+      criterion_matrix4_done: false,
       hierarchical_syntech: {
         matrix: [[], [], []],
         vector: [],
-        alternative: null
+        alternative: null,
+        done: false
       },
       columns: [
         {
@@ -595,20 +612,52 @@ export default {
     }
   },
   methods: {
-    getVar () {
-      axios.post(
-        'restapi/hierarchies/siblinghierarchies',
-        {user_id: this.userId}
-      ).then(response => {
-        this.info = response.data.data
-        this.session_id = response.data.session_id
-        this.step++
-        this.work.work.session = this.session_id
-        this.$store.dispatch('data/updateHierarchieswork', {
-          wid: this.work.wid,
-          work: this.work.work
+    getVar: function () {
+      if (this.work.work.session !== '') {
+        axios.post(
+          'restapi/hierarchies/get_session',
+          {session_id: this.work.work.session}
+        ).then(response => {
+          console.log(response.data)
+          this.info = response.data.data
+          this.intro_test.isLoaded = response.data.intro_started
+          this.intro_test.isOver = response.data.intro_done
+          this.practice_test.isLoaded = response.data.practice_started
+          this.practice_test.isOver = response.data.practice_done
+          this.add_test.isLoaded = response.data.add_test_started
+          this.add_test.isOver = response.data.add_test_done
+          this.target_matrix_done = response.data.target_matrix
+          this.criterion_matrix1_done = response.data.criterion_matrix1
+          this.criterion_matrix2_done = response.data.criterion_matrix2
+          this.criterion_matrix3_done = response.data.criterion_matrix3
+          this.criterion_matrix4_done = response.data.criterion_matrix4
+          this.hierarchical_syntech.done = response.data.hierarchical_synthesis
+          if (this.intro_test.isLoaded && !this.intro_test.isOver) {
+            this.intro_test.info = response.data.question
+          } else if (this.practice_test.isLoaded && !this.practice_test.isOver) {
+            this.practice_test.info = response.data.question
+          } else if (this.add_test.isLoaded && !this.add_test.isOver) {
+            this.add_test.info = response.data.question
+          }
+          this.step++
+          this.session_id = this.work.work.session
         })
-      })
+      } else {
+        axios.post(
+          'restapi/hierarchies/siblinghierarchies',
+          {user_id: this.userId}
+        ).then(response => {
+          this.info = response.data.data
+          this.session_id = response.data.session_id
+          this.step++
+          this.work.work.stage = 'opened'
+          this.work.work.session = this.session_id
+          this.$store.dispatch('data/updateHierarchieswork', {
+            wid: this.work.wid,
+            work: this.work.work
+          })
+        })
+      }
     },
     isTestFormValid (shape) {
       return shape !== ''
@@ -641,7 +690,10 @@ export default {
             break
           case 'wrong':
             this.intro_test.info = response.data.question
-            alert('Ошибка!')
+            this.$q.dialog({
+              title: 'Ошибка!',
+              ok: 'Продолжить'
+            })
             break
           case 'over':
             this.$q.dialog({
@@ -674,7 +726,6 @@ export default {
         '/restapi/hierarchies/practice_test_validate',
         data
       ).then(response => {
-        // console.log(response.data)
         switch (response.data.status) {
           case 'done':
             this.practice_test.isOver = true
@@ -684,7 +735,10 @@ export default {
             break
           case 'wrong':
             this.practice_test.info = response.data.question
-            alert('Ошибка!')
+            this.$q.dialog({
+              title: 'Ошибка!',
+              ok: 'Продолжить'
+            })
             break
           case 'over':
             this.$q.dialog({
@@ -727,7 +781,10 @@ export default {
             break
           case 'wrong':
             this.add_test.info = response.data.question
-            alert('Ошибка!')
+            this.$q.dialog({
+              title: 'Ошибка!',
+              ok: 'Продолжить'
+            })
             break
           case 'over':
             this.$q.dialog({
@@ -748,16 +805,88 @@ export default {
         value: value,
         step: step
       }
+      if (!step) {
+        for (let i = 0; i < 3; i++) {
+          let row = value.matrix[i]
+          for (let j = 0; j < 4; j++) {
+            if (row[j].indexOf(',') > -1) {
+              this.$q.dialog({
+                title: 'Ошибка!',
+                message: 'Используйте точки вместо запятых в десятичных дробях. Балл за эту ошибку не снизится',
+                ok: 'Продолжить'
+              })
+              return
+            }
+          }
+        }
+        for (let i = 0; i < value.alternative.length; i++) {
+          if (value.alternative[i].indexOf(',') > -1) {
+            this.$q.dialog({
+              title: 'Ошибка!',
+              message: 'Используйте точки вместо запятых в десятичных дробях. Балл за эту ошибку не снизится',
+              ok: 'Продолжить'
+            })
+            return
+          }
+        }
+      } else {
+        for (let i = 0; i < 4; i++) {
+          for (let j = 0; j < value[i].length; j++) {
+            if (value[i][j].indexOf(',') > -1) {
+              this.$q.dialog({
+                title: 'Ошибка!',
+                message: 'Используйте точки вместо запятых в десятичных дробях. Балл за эту ошибку не снизится',
+                ok: 'Продолжить'
+              })
+              return
+            }
+          }
+        }
+        for (let i = 4; i < 7; i++) {
+          if (value[i].indexOf(',') > -1) {
+            this.$q.dialog({
+              title: 'Ошибка!',
+              message: 'Используйте точки вместо запятых в десятичных дробях. Балл за эту ошибку не снизится',
+              ok: 'Продолжить'
+            })
+            return
+          }
+        }
+      }
       axios.post(
         '/restapi/hierarchies/lab_validate',
         data
       ).then(response => {
         switch (response.data.status) {
           case 'right':
+            switch (step) {
+              case 'target_matrix':
+                this.target_matrix_done = true
+                break
+              case 'criterion_matrix1':
+                this.criterin_matrix1_done = true
+                break
+              case 'criterion_matrix2':
+                this.criterin_matrix2_done = true
+                break
+              case 'criterion_matrix3':
+                this.criterion_matrix3_done = true
+                break
+              case 'criterion_matrix4':
+                this.criterion_matrix4_done = true
+                break
+              case null:
+                this.hierarchical_syntech.done = true
+                break
+            }
             this.step++
             break
           case 'wrong':
-            alert('Ошибка\n' + response.data.body)
+            this.$q.dialog({
+              title: 'Ошибка!',
+              message: response.data.body,
+              ok: 'Продолжить'
+            })
             break
           case 'over':
             this.$q.dialog({
