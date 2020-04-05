@@ -126,7 +126,6 @@
                            v-model="matrices[0][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
-                           v-on:input="changed(index)"
                     >
                   </div>
                 </div>
@@ -166,7 +165,6 @@
                            v-model="matrices[1][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
-                           v-on:input="changed(index)"
                     >
                   </div>
                 </div>
@@ -206,7 +204,6 @@
                            v-model="matrices[2][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
-                           v-on:input="changed(index)"
                     >
                   </div>
                 </div>
@@ -246,7 +243,6 @@
                            v-model="matrices[3][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
-                           v-on:input="changed(index)"
                     >
                   </div>
                 </div>
@@ -286,7 +282,6 @@
                            v-model="matrices[4][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
-                           v-on:input="changed(index)"
                     >
                   </div>
                 </div>
@@ -809,6 +804,7 @@ export default {
         for (let i = 0; i < 3; i++) {
           let row = value.matrix[i]
           for (let j = 0; j < 4; j++) {
+            console.log(row[j])
             if (row[j].indexOf(',') > -1) {
               this.$q.dialog({
                 title: 'Ошибка!',
@@ -820,6 +816,7 @@ export default {
           }
         }
         for (let i = 0; i < value.alternative.length; i++) {
+          console.log(value.alternative)
           if (value.alternative[i].indexOf(',') > -1) {
             this.$q.dialog({
               title: 'Ошибка!',
@@ -831,7 +828,7 @@ export default {
         }
       } else {
         for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < value[i].length; j++) {
+          for (let j in value[i]) {
             if (value[i][j].indexOf(',') > -1) {
               this.$q.dialog({
                 title: 'Ошибка!',
@@ -843,7 +840,9 @@ export default {
           }
         }
         for (let i = 4; i < 7; i++) {
-          if (value[i].indexOf(',') > -1) {
+          console.log(value[i][0])
+          console.log(typeof (value[i][0]))
+          if (value[i][0].indexOf(',') > -1) {
             this.$q.dialog({
               title: 'Ошибка!',
               message: 'Используйте точки вместо запятых в десятичных дробях. Балл за эту ошибку не снизится',
