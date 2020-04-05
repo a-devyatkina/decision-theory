@@ -570,9 +570,9 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
           if (state.students[sid].group === gid) {
             let work = getters['getStudentHierarchieswork'](sid, lid)
             if (!work) {
-              await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, '')
+              await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
             } else if (plan.hierarchieslab === undefined || plan.hierarchieslab[lid] === undefined) {
-              await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, '')
+              await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
             }
           }
         }
@@ -721,14 +721,14 @@ export function unlistenHierarchieslab ({ commit }) {
   model.hierarchieslab.unlisten()
 }
 
-export async function createHierarchieslab ({ commit }, { name, description, teacher }) {
-  let lid = await model.hierarchieslab.create(name, description, teacher)
-  commit('updateHierarchieslab', { lid: lid, lab: { name, description, teacher } })
+export async function createHierarchieslab ({ commit }, { name, description, maxscore, teacher }) {
+  let lid = await model.hierarchieslab.create(name, description, maxscore, teacher)
+  commit('updateHierarchieslab', { lid: lid, lab: { name, description, maxscore, teacher } })
 }
 
-export async function updateHierarchieslab ({ commit }, { lid, name, description, teacher }) {
-  await model.hierarchieslab.update(lid, name, description, teacher)
-  commit('updateHierarchieslab', { lid: lid, lab: { name, description, teacher } })
+export async function updateHierarchieslab ({ commit }, { lid, name, description, maxscore, teacher }) {
+  await model.hierarchieslab.update(lid, name, description, maxscore, teacher)
+  commit('updateHierarchieslab', { lid: lid, lab: { name, description, maxscore, teacher } })
 }
 
 export async function removeHierarchieslab ({ state, commit }, { lid }) {
@@ -742,8 +742,8 @@ export async function removeHierarchieslab ({ state, commit }, { lid }) {
   if (archive) {
     let lab = state.hierarchieslab[lid]
     if (lab) {
-      await model.hierarchieslab.update(lid, lab.name, lab.description, lab.teacher)
-      commit('updateHierarchieslab', { lid: lid, lab: { name: lab.name, description: lab.description, teacher: lab.teacher } })
+      await model.hierarchieslab.update(lid, lab.name, lab.description, lab.maxscore, lab.teacher)
+      commit('updateHierarchieslab', { lid: lid, lab: { name: lab.name, description: lab.description, maxscore: lab.maxscore, teacher: lab.teacher } })
     }
     return
   }
@@ -766,5 +766,5 @@ export async function unlistenHierarchiesworks ({ commit }) {
 }
 
 export async function updateHierarchieswork ({ commit }, { wid, work }) {
-  await model.hierarchieswork.update(wid, work.student, work.course, work.teacher, work.lab, work.stage, work.score, work.penalty, work.session)
+  await model.hierarchieswork.update(wid, work.student, work.course, work.teacher, work.lab, work.stage, work.score, work.tries, work.penalty)
 }

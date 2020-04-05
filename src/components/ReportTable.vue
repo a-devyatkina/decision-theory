@@ -164,8 +164,10 @@ export default {
         }
         for (let lid in this.plan.hierarchieslab) {
           let data = this.$store.getters['data/getStudentHierarchieswork'](sid, lid)
+          let maxscore = this.$store.getters['data/getHierarchieslab'](lid).maxscore
+          console.log(maxscore)
           if (data) {
-            row.score += data.work.score - data.work.penalty
+            row.score += Math.floor((data.work.score * maxscore) / 100) - data.work.penalty
             row.hierarchieswork.push({ lid: lid, stage: data.work.stage, wid: data.wid })
           } else {
             row.hierarchieswork.push({ lid: lid, stage: '', wid: '' })

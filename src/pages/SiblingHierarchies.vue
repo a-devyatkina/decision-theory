@@ -840,8 +840,6 @@ export default {
           }
         }
         for (let i = 4; i < 7; i++) {
-          console.log(value[i][0])
-          console.log(typeof (value[i][0]))
           if (value[i][0].indexOf(',') > -1) {
             this.$q.dialog({
               title: 'Ошибка!',

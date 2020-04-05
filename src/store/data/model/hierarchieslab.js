@@ -20,6 +20,7 @@ export default (function () {
           lab: {
             name: val.name,
             description: val.description,
+            maxscore: val.maxscore,
             teacher: val.teacher
           }
         })
@@ -34,6 +35,7 @@ export default (function () {
           lab: {
             name: val.name,
             description: val.description,
+            maxscore: val.maxscore,
             teacher: val.teacher
           }
         })
@@ -60,25 +62,28 @@ export default (function () {
         labs[child.key] = {
           name: val.name,
           description: val.description,
+          maxscore: val.maxscore,
           teacher: val.teacher
         }
       })
       return labs
     }
 
-    async create (name, description, teacher) {
+    async create (name, description, maxscore, teacher) {
       let snapshot = await ref().push({
         name: name,
         description: description,
+        maxscore: maxscore,
         teacher: teacher
       })
       return snapshot.key
     }
 
-    async update (lid, name, description, teacher) {
+    async update (lid, name, description, maxscore, teacher) {
       await ref().child(lid).set({
         name: name,
         description: description,
+        maxscore: maxscore,
         teacher: teacher
       })
     }

@@ -146,7 +146,7 @@ export default {
                 name: lab ? lab.name : '',
                 description: lab ? lab.description : '',
                 stage: data.work.stage,
-                score: data.work.score,
+                score: Math.floor((data.work.score * lab.maxscore) / 100) - data.work.penalty,
                 isHierarchieslab: true
               })
             }

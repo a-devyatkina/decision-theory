@@ -25,8 +25,8 @@ export default (function () {
             lab: val.lab,
             stage: val.stage,
             score: val.score,
-            penalty: val.penalty,
-            session: val.session
+            tries: val.tries,
+            penalty: val.penalty
           }
         })
       }, error => {
@@ -44,8 +44,8 @@ export default (function () {
             lab: val.lab,
             stage: val.stage,
             score: val.score,
-            penalty: val.penalty,
-            session: val.session
+            tries: val.tries,
+            penalty: val.penalty
           }
         })
       }, error => {
@@ -63,7 +63,7 @@ export default (function () {
       ref().off()
     }
 
-    async create (student, course, teacher, lab, stage, score, penalty, session) {
+    async create (student, course, teacher, lab, stage, score, tries, penalty) {
       let snapshot = await ref().push({
         student: student,
         course: course,
@@ -71,13 +71,13 @@ export default (function () {
         lab: lab,
         stage: stage,
         score: score,
-        penalty: penalty,
-        session: session
+        tries: tries,
+        penalty: penalty
       })
       return snapshot.key
     }
 
-    async update (wid, student, course, teacher, lab, stage, score, penalty, session) {
+    async update (wid, student, course, teacher, lab, stage, score, tries, penalty) {
       await ref().child(wid).set({
         student: student,
         course: course,
@@ -85,8 +85,8 @@ export default (function () {
         lab: lab,
         stage: stage,
         score: score,
-        penalty: penalty,
-        session: session
+        tries: tries,
+        penalty: penalty
       })
     }
 
