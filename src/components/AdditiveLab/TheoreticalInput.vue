@@ -9,7 +9,7 @@
                 <q-input type="textarea" autogrow outlined v-model="question.answer" label="Ответ" color="secondary"/>
             </div>
         </div>
-        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @click="$emit('finish')" label="Завершить"/>
+        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @click="$emit('answer')" label="Ответить"/>
         <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @back="$emit('back')" label="Назад"/>
     </div>
 </template>
