@@ -31,8 +31,8 @@
       <q-step v-for="(item, index) in condition.criterion" v-bind:key='index' :name='Number(index + 2)' :title='`Значения С${index + 1}`' icon='assignment' :done='correctStep > 1 + index'>
         <FirstStep :data = 'item' :alternative = 'condition.alternative' :index = 'index' :answers = 'funcAnswers[index]' :done='correctStep > 1 + index' @success = 'Answer()' @error="err"/>
         <q-stepper-navigation>
-          <q-btn v-if='correctStep > index + 1' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Continue' />
-          <q-btn v-if='correctStep > index + 1' flat @click='step = 1' color='secondary' label='Back' class='q-ml-sm' />
+          <q-btn v-if='correctStep > index + 1' @click='() => { done2 = true; step = 3 + index }' color='secondary' label='Продолжить' />
+          <q-btn v-if='correctStep > index + 1' flat @click='step = 1' color='secondary' label='Назад' class='q-ml-sm' />
         </q-stepper-navigation>
       </q-step>
 
@@ -99,7 +99,7 @@
         icon='assignment'
         :done='correctStep > step - 1'
       >
-        <theoretical-input :question='question[4]' @back='back' @finish="finish"></theoretical-input>
+        <theoretical-input :question='question[4]' @back='back' @answer='step++'></theoretical-input>
       </q-step>
       <q-step
         :name='17'
@@ -107,7 +107,7 @@
         icon='assignment'
         :done='correctStep > step - 1'
       >
-        <results :error='error' :penalties='penalties' :limits='limits'/>
+        <results :attempt='work3.work.attempt' :error='error' :penalties='penalties' :limits='limits' @finish="finish" @remake='remake'/>
       </q-step>
     </q-stepper>
     <div class="lab-info">
@@ -279,6 +279,15 @@ export default {
       console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
       this.work3.work.score = this.realScore
+      // this.work3.work.attempt += 1
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
+      this.$router.push('/works')
+    },
+    remake () {
+      this.work3.work.stage = 'improve'
       this.work3.work.attempt += 1
       this.$store.dispatch('data/updateWork3', {
         wid: this.work3.wid,
