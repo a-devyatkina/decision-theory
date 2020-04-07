@@ -69,9 +69,9 @@ export default {
       inputMatrix: [
         {
           name: `Альтернативы`,
-          a1: 0,
-          a2: 0,
-          a3: 0
+          a1: '',
+          a2: '',
+          a3: ''
         }
       ],
       answer: [

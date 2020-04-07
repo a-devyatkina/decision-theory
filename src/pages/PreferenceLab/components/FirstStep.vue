@@ -145,13 +145,14 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
   .content {
     display: flex;
     justify-content: center;
   }
   .img {
     height: auto;
+    align-self: center;
   }
   input {
     margin: 5px;
