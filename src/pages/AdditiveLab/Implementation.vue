@@ -157,9 +157,9 @@ export default {
         const arr = []
         for (let j = 0; j < this.condition.alternative.length; j++) {
           if (i === 3 || i === 4) {
-            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i][1])).toFixed(2)))
+            arr.push(Math.round(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i][1])) * 100) / 100)
           } else {
-            arr.push(Number(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i])).toFixed(2)))
+            arr.push(Math.round(eval(this.condition.criterion[i - 1].functioncompute.replace(/x/g, this.condition.alternative[j][i])) * 100) / 100)
           }
         }
         answerArr.push(arr)
