@@ -118,11 +118,16 @@ export default {
     answer () {
       let correct = []
 
-      let linguistic = this.tables.linguistic
-      linguistic.unshift(0)
+      let linguistic = [...this.condition.tables.linguistic]
+      /* linguistic.unshift(0)
+      linguistic.push(1) */
+      // linguistic.unshift(0)
+      linguistic.push(1)
       linguistic.push(1)
 
-      let importance = this.tables.importance
+      let importance = [...this.condition.tables.importance]
+      /* importance.push(1) */
+      importance.push(1)
       importance.push(1)
 
       for (let alt = 0; alt < 3; alt++) {
@@ -136,10 +141,10 @@ export default {
           for (let i = 0; i < this.altsEvals.length; i++) {
             console.log('this.altsEvals = ', this.altsEvals)
             let lingVal = this.tables.linguisticValues.indexOf(this.altsEvals[i]['a' + (alt + 1)])
-            let first = linguistic[lingVal + index]
+            let first = parseFloat(linguistic[lingVal + index])
 
             let impVal = this.tables.importanceValues.indexOf(this.altsEvals[i]['importance'])
-            let second = importance[impVal + index]
+            let second = parseFloat(importance[impVal + index])
 
             sum += first + second
             console.log(`A${alt + 1}`, item, `step = ${i + 1}`, first, second, sum)

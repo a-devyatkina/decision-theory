@@ -107,12 +107,21 @@ export default {
     answer () {
       let correct = []
 
-      let linguistic = this.tables.linguistic
-      linguistic.unshift(0)
+      let linguistic = [...this.condition.tables.linguistic]
+      /* linguistic.unshift(0)
+      linguistic.push(1) */
+      // linguistic.unshift(0)
+      linguistic.push(1)
       linguistic.push(1)
 
-      let importance = this.tables.importance
+      let importance = [...this.condition.tables.importance]
+      /* importance.push(1) */
       importance.push(1)
+      importance.push(1)
+
+      console.log('importance type')
+      console.log(typeof importance[1])
+      console.log(importance[1])
 
       // correct[this.cr] = {
       correct[0] = {
@@ -125,7 +134,9 @@ export default {
         // correct[this.cr]['a' + (alt + 1)] = this.tables.linguisticValues[0]
         correct[0]['a' + (alt + 1)] = this.tables.linguisticValues[0]
         for (let i = 1; i < linguistic.length - 1; i++) {
+          // value = Number(this.membership(this.funcAnswers[this.cr][alt], parseFloat(linguistic[i - 1]), parseFloat(linguistic[i]), parseFloat(linguistic[i + 1])).toFixed(2))
           value = this.membership(this.funcAnswers[this.cr][alt], linguistic[i - 1], linguistic[i], linguistic[i + 1]).toFixed(2)
+
           console.log(`cr = ${this.cr + 1}`, `alt = ${alt + 1}`, `step = ${i}`, value, max, value > max)
           if (value > max) {
             max = value
@@ -139,7 +150,8 @@ export default {
       let value = 0
       correct[0]['importance'] = this.tables.importanceValues[0]
       for (let i = 1; i < importance.length - 1; i++) {
-        value = this.membership(this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
+        // value = Number(this.membership(parseFloat(this.condition.weight[this.cr]), parseFloat(importance[i - 1]), parseFloat(importance[i]), parseFloat(importance[i + 1])).toFixed(2))
+        value = this.membership(this.condition.weight[this.cr], importance[i - 1], importance[i], importance[i + 1]).toFixed(2)
         console.log(value > max, `value = ${value}`, `max = ${max}`, this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
         if (value > max) {
           max = value
