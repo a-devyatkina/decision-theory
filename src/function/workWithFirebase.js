@@ -4,7 +4,7 @@ import * as firebase from 'firebase'
 export function checkLab (labName) {
   let user = this.$store.getters['data/getUser']()
   let cid = this.$router.currentRoute.query.cid
-  let work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab', cid)
+  let work3 = this.$store.getters['data/getStudentWork3'](user.id, labName, cid)
 
   this.maxScore = this.$store.getters['data/getCourse'](cid).groups[user.group].lab3[work3.work.lab].maxScore
 
@@ -27,7 +27,7 @@ export function checkLab (labName) {
     let variant = snapshot.val()
     this.condition = generate(variant, variant['dict1'], variant['dict2'])
 
-    firebase.database().ref('lab3/questions/' + labName).once('value').then((snapshot) => {
+    firebase.database().ref('lab3/questions/' + 'additiveLab').once('value').then((snapshot) => {
       let questions = snapshot.val()
 
       this.question.push(questions.initial[Math.floor(Math.random() * questions.initial.length)])
