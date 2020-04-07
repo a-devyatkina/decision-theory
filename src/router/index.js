@@ -24,6 +24,7 @@ import Squares from 'components/AdditiveLab/Squares.vue'
 import CoordsAndAnswer from 'components/AdditiveLab/CoordsAndAnswer.vue'
 import importanceTable from 'components/AdditiveLab/importanceTable'
 import linguisticTable from 'components/AdditiveLab/linguisticTable'
+import Results from 'components/AdditiveLab/Results'
 
 import FirstStep from '../pages/PreferenceLab/components/FirstStep.vue'
 import SecondStep from '../pages/PreferenceLab/components/SecondStep.vue'
@@ -35,12 +36,14 @@ import InputTable from '../pages/PreferenceLab/components/InputTable.vue'
 import QuestionInput from '../pages/PreferenceLab/components/QuestionInput.vue'
 import ConditionPref from '../pages/PreferenceLab/components/Condition'
 import QuestionPref from '../pages/PreferenceLab/components/Question.vue'
+import Report from '../pages/PreferenceLab/components/Report.vue'
 
 import AlternativeLogics from '../pages/LogicsLab/Alternative.vue'
 import ButtonNext from '../pages/LogicsLab/ButtonNext.vue'
 import ConditionLogics from '../pages/LogicsLab/Condition.vue'
 import FunctionLogics from '../pages/LogicsLab/Function.vue'
-import QuestionLigics from '../pages/LogicsLab/Question.vue'
+import QuestionLogics from '../pages/LogicsLab/Question.vue'
+import Assessment from '../pages/LogicsLab/Assessment.vue'
 
 import Lab3Table from '../components/Lab3Table.vue'
 import Work3flowAction from '../components/Work3flowAction.vue'
@@ -71,6 +74,7 @@ Vue.component('alternatives-evaluation', AlternativesEvaluation)
 Vue.component('r-functions', RFunctions)
 Vue.component('squares', Squares)
 Vue.component('coords-and-answer', CoordsAndAnswer)
+Vue.component('results', Results)
 
 Vue.component('FirstStep', FirstStep)
 Vue.component('SecondStep', SecondStep)
@@ -82,6 +86,7 @@ Vue.component('InputTable', InputTable)
 Vue.component('QuestionInput', QuestionInput)
 Vue.component('ConditionPref', ConditionPref)
 Vue.component('QuestionPref', QuestionPref)
+Vue.component('Report', Report)
 
 Vue.component('lab3-table', Lab3Table)
 Vue.component('work3flow-action', Work3flowAction)
@@ -90,7 +95,8 @@ Vue.component('alternative-logics', AlternativeLogics)
 Vue.component('button-next', ButtonNext)
 Vue.component('condition-logics', ConditionLogics)
 Vue.component('function-logics', FunctionLogics)
-Vue.component('question-logics', QuestionLigics)
+Vue.component('question-logics', QuestionLogics)
+Vue.component('assessment', Assessment)
 
 export const bus = new Vue()
 /*

@@ -11,11 +11,11 @@
         title='Условие'
         icon='assignment'
         :header-nav='true'
-        :done='total_step > 0'
+        :done='correctStep > 0'
       >
         <condition-logics
           :condition='condition'
-          :total_step='total_step'
+          :total_step='correctStep'
           :current_step='current_step'
         />
       </q-step>
@@ -25,12 +25,12 @@
         :title='`Вопрос ${index + 1}`'
         :name='index + 1'
         icon='assignment'
-        :header-nav='total_step > index'
-        :done='total_step > index + 1'
+        :header-nav='correctStep > index'
+        :done='correctStep > index + 1'
       >
         <question-logics
           :question='item'
-          :total_step='total_step'
+          :total_step='correctStep'
           :current_step='current_step'
           :user_answer='user_answer[index]'
           @error='question_error($event, index)'
@@ -38,225 +38,317 @@
         />
       </q-step>
 
-      <q-step v-for='index of range(4)'
+      <q-step v-for='index of range(this.condition.criterion.length)'
         :key='index'
         :title='`Критерий ${index + 1}`'
         :name='index+3'
         icon='assignment'
-        :header-nav='total_step > index + 2'
-        :done='total_step > index + 3'
+        :header-nav='correctStep > index + 2'
+        :done='correctStep > index + 3'
       >
         <function-logics
-          :total_step='total_step'
+          :total_step='correctStep'
           :current_step='current_step'
           :criterion='condition.criterion[index]'
           :alternative='condition.alternative'
-          :internal_step='user_criterion[index]'
+          :array='first_value[index]'
           @criterion='criterion(index)'
+          @error='marking(5,1)'
         />
       </q-step>
-      <q-step v-for='index of range(3)'
+
+      <q-step v-for='(item, index) of question.slice(2,4)'
+        :key='index + 2'
+        :title='`Вопрос ${index + 3}`'
+        :name='index + 7'
+        icon='assignment'
+        :header-nav='correctStep > index + 6'
+        :done='correctStep > index + 7'
+      >
+        <question-logics
+          :question='item'
+          :total_step='correctStep'
+          :current_step='current_step'
+          :user_answer='user_answer[index + 2]'
+          @error='question_error($event, index + 2)'
+          @right='question_right($event, index + 2)'
+        />
+      </q-step>
+
+      <q-step v-for='index of range(this.condition.alternative.length)'
         :key='index'
         :title='`Альтернатива ${index + 1}`'
-        :name='index+7'
+        :name='index + 9'
         icon='assignment'
-        :header-nav='total_step > index + 6'
-        :done='total_step > index + 7'
+        :header-nav='correctStep > index + 8'
+        :done='correctStep > index + 9'
       >
       <alternative-logics
-        :number='index'
-        :condition='condition'
+        :total_step='correctStep'
+        :current_step='current_step'
+        :array1='second_value[index]'
+        :array2='third_value[index]'
+        :array3='fourth_value[index]'
+        :array4='fifth_value[index]'
+        :alternative='condition.alternative[index]'
+        :criterion='condition.criterion'
+        :rules='condition.rules.text'
+        @error='marking($event[0], $event[1])'
       />
       </q-step>
+
+      <q-step
+        :name='12'
+        title='Ответ'
+        icon='assignment'
+        :header-nav='correctStep > 11'
+        :done='correctStep > 12'
+      >
+        <assessment
+          :total_step='correctStep'
+          :current_step='current_step'
+          :alternative='condition.alternative'
+          :array1='fifth_value'
+          :array2='sixth_value'
+          :attempt='work3.work.attempt'
+          @error='marking($event[0], $event[1])'
+          @finish='finish'
+          @remake='remake'
+        />
+      </q-step>
     </q-stepper>
+     <q-dialog v-model="alert"  prevent-close @ok='handlerOk'>
+      <span slot="title">Неудача</span>
+      <span slot="message">К сожалению, вы набрали меньше 60% процентов от максиамльного количества баллов.</span>
+    </q-dialog>
+    <div class="lab-info">
+      <div class="mark">
+        Количество баллов: {{ realScore }}. Попытка №{{ work3.work.attempt + 1 }}. Штрафной балл {{ maxScore *10 * work3.work.attempt / 100 }} Прогресс
+      </div>
+       <div class="step">
+          {{current_step}}/16
+      </div>
+    </div>
+    <q-dialog v-model="alert"  prevent-close @ok='handlerOk'>
+      <span slot="title">Неудача</span>
+      <span slot="message">К сожалению, вы набрали меньше 60% процентов от максиамльного количества баллов.</span>
+    </q-dialog>
   </div>
 </template>
 
 <script>
-// import { bus } from '../../router/index.js'
+/* eslint no-eval: 0 */
+import { bus } from '../../router/index.js'
 import { checkLab } from '../../function/workWithFirebase'
+
 export default {
   name: 'main_page',
   data () {
     return {
-      total_step: 0,
+      correctStep: 0,
       current_step: 0,
-      mark: [8, 8, 12, 12, 12, 12],
-      user_answer: [0, 0, 0, 0, 0],
-      user_criterion: [0, 0, 1, 1],
-      user_alternative: [0, 0, 0],
-      condition: {
-        goal: 'Выбрать город, наиболее пригодный для жизни, по значениям заданных критериев и их функциям принадлежности',
-        criterion: [
-          {
-            title: 'С1 Население',
-            description: 'С1 Население – количество человек (в млн), проживающих в данном городе',
-            path: '../statics/image/1.1.png',
-            function: '../statics/image/1.11.png',
-            count: 3,
-            graphic: '',
-            koef: [-0.02, 0.286, 0],
-            functioncompute: '-0.02*x**2+0.286*x'
-          },
-          {
-            title: 'С2 Средняя з/п',
-            description: 'С2 Средняя з/п – показатель средней заработной платы (в тысячах рублей) по профессии нашего клиента',
-            path: '../statics/image/1.2.png',
-            function: '../statics/image/1.12.png',
-            count: 3,
-            graphic: '',
-            koef: [0.125, 2],
-            functioncompute: 'Math.log(x+1)/(8*Math.log(2))'
-          },
-          {
-            title: 'С3 Количество свободных вакансий',
-            description: 'С3 Количество свободных вакансий – показатель относительного количества свободных вакансий по профессии нашего клиента',
-            path: '../statics/image/1.3.png',
-            function: '../statics/image/1.13.png',
-            count: 0,
-            graphic: '',
-            koef: [],
-            functioncompute: 'x**2/16'
-          },
-          {
-            title: 'С4 Уровень загрязнения',
-            description: 'С4 Уровень загрязнения – показатель содержания вредных примесей в атмосфере, почве и воде',
-            path: '../statics/image/1.4.png',
-            function: '../statics/image/1.14.png',
-            count: 0,
-            graphic: '',
-            koef: [],
-            functioncompute: '1-x/4'
-          }
-        ],
-        alternative: [
-          {
-            description: 'А1 Москва',
-            1: 13,
-            2: 120,
-            3: ['низкое', 1],
-            4: ['средний', 2]
-          },
-          {
-            description: 'А2 Питер',
-            1: 4,
-            2: 52,
-            3: ['среднее', 2],
-            4: ['высокий', 3]
-          },
-          {
-            description: 'А3 Краснодар',
-            1: 0.9,
-            2: 40,
-            3: ['среднее', 2],
-            4: ['средний', 2]
-          }
-        ],
-        weight: [0.17, 0.25, 0.5, 0.08],
-        rules: {
-          text: ['Если и С3 = подходящее, и (или С1 = неподходящее, или С2 = неподходящее), то Y = удовлетворительный', 'Если и С2 = неподходящее, и С3 = неподходящее, то Y = неудовлетворительный', 'Если и С1 = подходящее, и С3 = подходящее, и С4 = подходящее, то Y = безупречный'],
-          formula: ['Math.min(m[2],Math.max(1-m[0],1-m[1]))', 'Math.min(1-m[1],1-m[2])', 'Math.min(m[0],m[2],m[3])']
-        }
-      },
-      question: [
-        {
-          block: 1,
-          number: 9,
-          question: 'Что является достоинством применения нечетких моделей?',
-          answer: [
-            'большая прозрачность',
-            'нечеткие высказывания',
-            'непрозрачность',
-            'зеркальность'
-          ],
-          right: 0
-        },
-        {
-          block: 1,
-          number: 9,
-          question: 'Что является достоинством применения нечетких моделей?',
-          answer: [
-            'большая прозрачность',
-            'нечеткие высказывания',
-            'непрозрачность',
-            'зеркальность'
-          ],
-          right: 0
-        },
-        {
-          block: 1,
-          number: 9,
-          question: 'Что является достоинством применения нечетких моделей?',
-          answer: [
-            'большая прозрачность',
-            'нечеткие высказывания',
-            'непрозрачность',
-            'зеркальность'
-          ],
-          right: 0
-        },
-        {
-          block: 1,
-          number: 9,
-          question: 'Что является достоинством применения нечетких моделей?',
-          answer: [
-            'большая прозрачность',
-            'нечеткие высказывания',
-            'непрозрачность',
-            'зеркальность'
-          ],
-          right: 0
-        }
-      ]
+      mark: [8, 8, 8, 8, 8, 12, 12, 12, 12, 12],
+      user_answer: [0, 0, 0, 0],
+      condition: {},
+      question: []
     }
   },
-  created () {
-    // bus.$on('next_step', () => {
-    //   this.total_step += 1
-    //   this.current_step += 1
-    // })
-    let user = this.$store.getters['data/getUser']()
-    this.work3 = this.$store.getters['data/getStudentWork3'](user.id, 'additiveLab')
-    checkLab.call(this, 'additiveLab')
+  computed: {
+    realScore: function () {
+      const score = this.mark.reduce((acc, val) => acc + val, 0)
+      return this.maxScore * (score - 10 * this.work3.work.attempt) / 100
+    },
+    first_value () {
+      const matrix = []
+      for (let i = 0; i < this.condition.criterion.length; i++) {
+        matrix.push([])
+      }
+      for (let i = 0; i < this.condition.criterion.length; i++) {
+        for (let j = 0; j < this.condition.alternative.length; j++) {
+          matrix[i].push(+eval(this.condition.criterion[i].functioncompute.replace(/x/g, typeof this.condition.alternative[j][i + 1] === 'number' ? this.condition.alternative[j][i + 1] : this.condition.alternative[j][i + 1][1])).toFixed(3))
+        }
+      }
+      return matrix
+    },
+    second_value () {
+      const matrix = []
+      for (let i = 0; i < this.condition.alternative.length; i++) {
+        matrix.push([])
+      }
+      for (let i = 0; i < this.condition.criterion.length; i++) {
+        for (let j = 0; j < this.condition.alternative.length; j++) {
+          matrix[j][i] = this.first_value[i][j]
+        }
+      }
+      return matrix
+    },
+    third_value () {
+      const matrix = []
+      for (let i = 0; i < this.condition.alternative.length; i++) {
+        matrix.push([])
+        for (let j = 0; j < this.condition.rules.formula.length; j++) {
+          matrix[i].push(+eval(this.condition.rules.formula[j].replace(/q/g, 'this.second_value[' + i.toString() + ']')).toFixed(3))
+        }
+      }
+      return matrix
+    },
+    fourth_value () {
+      const matrix = []
+      let kk
+      for (let i = 0; i < this.condition.alternative.length; i++) {
+        matrix.push([])
+        for (const [index, j] of this.third_value[i].entries()) {
+          for (let k = 0; k <= 1; k += 0.1) {
+            kk = +k.toFixed(3)
+            matrix[i].push(+Math.min(1, 1 - j + (index === 0 ? kk : index === 1 ? (1 - kk) : kk === 1 ? 1 : 0)).toFixed(3))
+          }
+        }
+      }
+      return matrix
+    },
+    fifth_value () {
+      const matrix = []
+      for (let i = 0; i < this.fourth_value.length; i++) {
+        matrix.push([])
+        for (const j of this.range(11)) {
+          matrix[i].push(Math.min(this.fourth_value[i][j], this.fourth_value[i][j + 11], this.fourth_value[i][j + 22]))
+        }
+      }
+      return matrix
+    },
+    sixth_value () {
+      let sortArray
+      const Y = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+      const array = this.fifth_value.map(item => {
+        let mark = 0
+        const copyArray = Object.assign([], item)
+        sortArray = copyArray.sort().filter((value, index) => copyArray.indexOf(value) === index)
+        for (let i = 0; i < sortArray.length; i++) {
+          let sum = 0
+          let k = 0
+          for (let j = 0; j < item.length; j++) {
+            if (sortArray[i] <= item[j]) {
+              sum += Y[j]
+              k += 1
+            }
+          }
+          mark += sum / k * (i === 0 ? sortArray[0] : sortArray[i] - sortArray[i - 1])
+        }
+        mark = mark / sortArray[sortArray.length - 1]
+        return +mark.toFixed(3)
+      })
+      return array
+    }
   },
-  watch: {
-    correctStep: {
-      handler: function (newStep) {
-        // firebase.database().ref('lab3/current/' + this.uid).update({step: newStep})
-        console.log('correctStep watcher')
-        this.work3.work.step = newStep
-        console.log(newStep)
-        console.log(this.work3)
+  async created () {
+    bus.$on('next_step', () => {
+      if (this.correctStep === this.current_step) {
+        this.correctStep += 1
+        this.work3.work.step = this.correctStep
         this.$store.dispatch('data/updateWork3', {
           wid: this.work3.wid,
           work: this.work3.work
         })
       }
+      this.current_step += 1
+    })
+    await checkLab.call(this, 'logicsLab')
+    for (let i = 0; i < this.condition.criterion.length; i++) {
+      if (!this.condition.criterion[i].koef) {
+        this.condition.criterion[i].koef = []
+      }
+    }
+    if (this.work3.work.error !== '') {
+      this.mark = this.work3.work.error
     }
   },
   methods: {
+    handlerOk () {
+      this.$router.push('/works')
+    },
     range (n) {
       return [...Array(n).keys()]
     },
-    marking (k) {
-      this.mark[this.total_step - 1] -= k
+    marking (n, k) {
+      this.mark.splice(n, 1, this.mark[n] ? this.mark[n] - k : 0)
+      this.work3.work.error = this.mark
+      const score = this.mark.reduce((acc, val) => acc + val)
+      if (score - this.work3.work.attempt * 10 < 60) {
+        this.alert = true
+        this.work3.work.stage = 'improve'
+        this.work3.work.attempt += 1
+      }
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
     },
     question_error (array, index) {
       this.user_answer[index] = array
-      this.marking(8)
+      this.marking(index, 8)
     },
     question_right (array, index) {
       this.user_answer[index] = array
     },
-    criterion (index) {
-      this.user_criterion[index]++
+    finish () {
+      this.work3.work.stage = 'resolve'
+      console.log(this.question[4])
+      this.work3.work.finalquestion = {...this.question[4]}
+      this.work3.work.score = this.realScore
+      // this.work3.work.attempt += 1
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
+      this.$router.push('/works')
+    },
+    remake () {
+      this.work3.work.stage = 'improve'
+      this.work3.work.attempt += 1
+      this.$store.dispatch('data/updateWork3', {
+        wid: this.work3.wid,
+        work: this.work3.work
+      })
+      this.$router.push('/works')
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
   * {
     font-size: 20px;
+  }
+
+  .clr {
+    clear: both;
+  }
+
+  .input {
+    display: inline-block;
+    margin: 30px 100px 40px 0;
+  }
+
+  .table {
+    display: inline-table;
+    margin-bottom: 30px;
+  }
+  .lab-info{
+    display: flex;
+    align-items: center;
+  }
+  .mark{
+    color: #26a69a;
+    font-size: 20px;
+    margin: 5px;
+  }
+  .step{
+    border: 1px solid #26a69a;
+    border-radius: 50%;
+    margin: 5px;
+    padding: 5px;
+    color: #26a69a;
+    height: 45px;
+    padding-top: 10px;
   }
 </style>

@@ -36,7 +36,8 @@
         separator='cell'
         hide-bottom
       >
-          <q-tr slot="body" slot-scope="props" :props="props">
+        <template v-slot:body="props">
+          <q-tr :props="props">
             <q-td key="name" :props="props">{{ props.row.name }}</q-td>
             <q-td key="first_value" :props="props">{{ props.row.first_value }}</q-td>
             <q-td key="second_value" :props="props">
@@ -46,6 +47,7 @@
               </q-popup-edit>
             </q-td>
           </q-tr>
+        </template>
       </q-table>
       <div class="clr"></div>
       <q-btn @click='second_check()' color='secondary' label='Проверить'/>

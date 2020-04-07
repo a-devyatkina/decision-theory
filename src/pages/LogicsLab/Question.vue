@@ -13,7 +13,7 @@
         {{ item }}
       </p>
       <p v-if='error' style='color: red'>Неверно</p>
-      <button-next :total_step='total_step' :current_step='current_step' label='Продолжить'/>
+      <button-next label='Продолжить'/>
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .block__checkbox {
     width: 100%;
   }
