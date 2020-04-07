@@ -148,6 +148,17 @@ export default {
           __index: alt
         }
       }
+      console.log('correct array')
+      console.log(correct)
+      for (let i = 1; i < 3; i++) {
+        let alt = parseInt(coords[i].name.substring(coords[i].name.length - 1)) - 1
+        let prevAlt = parseInt(coords[i - 1].name.substring(coords[i - 1].name.length - 1)) - 1
+        if (coords[i].coord === coords[i - 1].coord) {
+          correct[alt].rating = correct[prevAlt].rating
+        } else {
+          correct[alt].rating = correct[prevAlt].rating + 1
+        }
+      }
       return correct
     },
     answerAltNum () {
@@ -179,7 +190,9 @@ export default {
         }
       })
 
-      if (this.altNum !== this.answerAltNum) {
+      // if (this.altNum !== this.answerAltNum) {
+      if (this.answerCoords[this.altNum - 1].coord !== this.answerCoords[this.answerAltNum - 1].coord) {
+        this.$emit('error', 3)
         this.$refs.input.$el.style = 'background-color: #FF0000; max-width: 100px'
       }
 
