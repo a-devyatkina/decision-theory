@@ -26,8 +26,10 @@ export function checkLab (labName) {
   firebase.database().ref('lab3/variants/1').once('value', snapshot => {
     let variant = snapshot.val()
     this.condition = generate(variant, variant['dict1'], variant['dict2'])
-
-    firebase.database().ref('lab3/questions/' + 'additiveLab').once('value').then((snapshot) => {
+    if (labName === 'logicsLab') {
+      labName = 'preferenceLab'
+    }
+    firebase.database().ref('lab3/questions/' + labName).once('value').then((snapshot) => {
       let questions = snapshot.val()
 
       this.question.push(questions.initial[Math.floor(Math.random() * questions.initial.length)])
