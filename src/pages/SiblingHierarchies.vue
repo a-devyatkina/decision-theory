@@ -64,7 +64,7 @@
           </div>
         </div>
         <div v-else>
-          <h3>Этап успешно пройден!</h3>
+          <h4>Этап успешно пройден!</h4>
         </div>
 
         <q-stepper-navigation>
@@ -81,7 +81,6 @@
               icon="assignment"
               :done="step > 3"
       >
-
         <div v-if="!practice_test.isLoaded">
           <q-btn @click="getPracticeTest()" color="secondary" label="Начать тест"/>
         </div>
@@ -95,7 +94,7 @@
           </div>
         </div>
         <div v-else>
-          <h3>Этап успешно пройден!</h3>
+          <h4>Этап успешно пройден!</h4>
         </div>
 
         <q-stepper-navigation>
@@ -111,31 +110,27 @@
               icon="assignment"
               :done="step>4"
       >
-        <div v-if="!target_matrix_done">
-          <div class="lab">
-            <div class="matrix" v-for="(lab, index) in info.input.target_matrix" :key="lab.id">
-              <div>
-                <q-item id="question">
-                  {{lab.field}}
-                  {{info.input.target_matrix[index].name}}
-                </q-item>
-                <div class="q-pa-md q-gutter-sm">
-                  <div class="vector">
-                    <input v-for="(answer, aId) in info.input.target_matrix[index].answer" :key="answer"
-                           id="matrices"
-                           v-model="matrices[0][index][aId]"
-                           data-vv-as="вектор приоритетов"
-                           name="matrices[]"
-                    >
-                  </div>
+        <div class="lab">
+          <div class="matrix" v-for="(lab, index) in info.input.target_matrix" :key="lab.id">
+            <div>
+              <q-item id="question">
+                {{lab.field}}
+                {{info.input.target_matrix[index].name}}
+              </q-item>
+              <div class="q-pa-md q-gutter-sm">
+                <div class="vector">
+                  <input v-for="(answer, aId) in info.input.target_matrix[index].answer" :key="answer"
+                         id="matrices"
+                         v-model="matrices[0][index][aId]"
+                         data-vv-as="вектор приоритетов"
+                         name="matrices[]"
+                         :disabled="target_matrix_done"
+                  >
                 </div>
               </div>
             </div>
-              <q-btn @click="labIntermediate(matrices[0], 'target_matrix')" color="secondary" :disabled="target_matrix_done" label="Проверить"/>
           </div>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
+          <q-btn @click="labIntermediate(matrices[0], 'target_matrix')" color="secondary" :disabled="target_matrix_done" label="Проверить"/>
         </div>
         <q-stepper-navigation>
           <q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>
@@ -150,7 +145,6 @@
         icon="assignment"
         :done="step>5"
       >
-        <div v-if="!criterion_matrix1_done">
           <div class="lab">
             <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix1" :key="lab.id">
               <div>
@@ -165,6 +159,7 @@
                            v-model="matrices[1][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
+                           :disabled="criterion_matrix1_done"
                     >
                   </div>
                 </div>
@@ -172,10 +167,6 @@
             </div>
             <q-btn @click="labIntermediate(matrices[1], 'criterion_matrix1')" color="secondary" :disabled="criterion_matrix1_done" label="Проверить"/>
           </div>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
-        </div>
         <q-stepper-navigation>
           <q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 6" color="secondary" label="Continue" :disabled="!criterion_matrix1_done" class="q-ml-sm"/>
@@ -189,7 +180,6 @@
         icon="assignment"
         :done="step>6"
       >
-        <div v-if="!criterion_matrix2_done">
           <div class="lab">
             <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix2" :key="lab.id">
               <div>
@@ -204,6 +194,7 @@
                            v-model="matrices[2][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
+                           :disabled="criterion_matrix2_done"
                     >
                   </div>
                 </div>
@@ -211,10 +202,6 @@
             </div>
             <q-btn @click="labIntermediate(matrices[2], 'criterion_matrix2')" color="secondary" :disabled="criterion_matrix2_done" label="Проверить"/>
           </div>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
-        </div>
         <q-stepper-navigation>
           <q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 7" color="secondary" label="Continue" :disabled="!criterion_matrix2_done" class="q-ml-sm"/>
@@ -228,7 +215,6 @@
         icon="assignment"
         :done="step>7"
       >
-        <div v-if="!criterion_matrix3_done">
           <div class="lab">
             <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix3" :key="lab.id">
               <div>
@@ -243,6 +229,7 @@
                            v-model="matrices[3][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
+                           :disabled="criterion_matrix3_done"
                     >
                   </div>
                 </div>
@@ -250,10 +237,6 @@
             </div>
             <q-btn @click="labIntermediate(matrices[3], 'criterion_matrix3')" color="secondary" :disabled="criterion_matrix3_done" label="Проверить"/>
           </div>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
-        </div>
         <q-stepper-navigation>
           <q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 8" color="secondary" label="Continue" :disabled="!criterion_matrix3_done" class="q-ml-sm"/>
@@ -267,7 +250,6 @@
         icon="assignment"
         :done="step>8"
       >
-        <div v-if="!criterion_matrix4_done">
           <div class="lab">
             <div class="matrix" v-for="(lab, index) in info.input.criterion_matrix4" :key="lab.id">
               <div>
@@ -282,6 +264,7 @@
                            v-model="matrices[4][index][aId]"
                            data-vv-as="вектор приоритетов"
                            name="matrices[]"
+                           :disabled="criterion_matrix4_done"
                     >
                   </div>
                 </div>
@@ -289,10 +272,6 @@
             </div>
             <q-btn @click="labIntermediate(matrices[4], 'criterion_matrix4')" color="secondary" :disabled="criterion_matrix4_done" label="Проверить"/>
           </div>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
-        </div>
         <q-stepper-navigation>
           <q-btn @click="step = 9" color="secondary" label="Skip" class="q-ml-sm"/>
           <q-btn @click="step = 9" color="secondary" label="Continue" :disabled="!criterion_matrix4_done" class="q-ml-sm"/>
@@ -306,7 +285,6 @@
         icon="assignment"
         :done="step>9"
       >
-        <div v-if="!hierarchical_syntech.done">
           <div class="field">
             <label for="matrices">
               Итоговая матрица
@@ -315,100 +293,112 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][0]"
+                    v-model="hierarchical_synthesis.matrix[0][0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][1]"
+                    v-model="hierarchical_synthesis.matrix[0][1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][2]"
+                    v-model="hierarchical_synthesis.matrix[0][2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][3]"
+                    v-model="hierarchical_synthesis.matrix[0][3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-            >
-            <br>
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][0]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][1]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][2]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][3]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <br>
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][0]"
+                    v-model="hierarchical_synthesis.matrix[1][0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][1]"
+                    v-model="hierarchical_synthesis.matrix[1][1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][2]"
+                    v-model="hierarchical_synthesis.matrix[1][2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][3]"
+                    v-model="hierarchical_synthesis.matrix[1][3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
+                    :disabled="hierarchical_synthesis.done"
+            >
+            <br>
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][0]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+                    :disabled="hierarchical_synthesis.done"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][1]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+                    :disabled="hierarchical_synthesis.done"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][2]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+                    :disabled="hierarchical_synthesis.done"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][3]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+                    :disabled="hierarchical_synthesis.done"
             >
             </div>
           </div>
@@ -419,34 +409,38 @@
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[0]"
+                    v-model="hierarchical_synthesis.vector[0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[1]"
+                    v-model="hierarchical_synthesis.vector[1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[2]"
+                    v-model="hierarchical_synthesis.vector[2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
+                    :disabled="hierarchical_synthesis.done"
             >
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[3]"
+                    v-model="hierarchical_synthesis.vector[3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
+                    :disabled="hierarchical_synthesis.done"
             >
           </div>
           <div class="field">
@@ -456,20 +450,17 @@
             <input
                     id="5"
                     type="alternative"
-                    v-model="hierarchical_syntech.alternative"
+                    v-model="hierarchical_synthesis.alternative"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="alternative"
+                    :disabled="hierarchical_synthesis.done"
             >
           </div>
-          <q-btn @click="labIntermediate(hierarchical_syntech)" color="secondary" :disabled="hierarchical_syntech.done" label="Проверить"/>
-        </div>
-        <div v-else>
-          <h3>Этап успешно пройден!</h3>
-        </div>
+          <q-btn @click="labIntermediate(hierarchical_synthesis)" color="secondary" :disabled="hierarchical_synthesis.done" label="Проверить"/>
         <q-stepper-navigation>
           <q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>
-          <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_syntech.done" class="q-ml-sm"/>
+          <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_synthesis.done" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -494,11 +485,11 @@
           </div>
         </div>
         <div v-else>
-          <h3>Этап успешно пройден!</h3>
+          <h4>Этап успешно пройден!</h4>
         </div>
         <q-stepper-navigation>
           <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
-          <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="labpage()"/>
+          <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="finishLab()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -568,7 +559,7 @@ export default {
       criterion_matrix2_done: false,
       criterion_matrix3_done: false,
       criterion_matrix4_done: false,
-      hierarchical_syntech: {
+      hierarchical_synthesis: {
         matrix: [[], [], []],
         vector: [],
         alternative: null,
@@ -608,12 +599,11 @@ export default {
   },
   methods: {
     getVar: function () {
-      if (this.work.work.session !== '') {
+      if (this.work.work.stage === 'opened') {
         axios.post(
           'restapi/hierarchies/get_session',
-          {session_id: this.work.work.session}
+          {user_id: this.userId}
         ).then(response => {
-          console.log(response.data)
           this.info = response.data.data
           this.intro_test.isLoaded = response.data.intro_started
           this.intro_test.isOver = response.data.intro_done
@@ -621,12 +611,27 @@ export default {
           this.practice_test.isOver = response.data.practice_done
           this.add_test.isLoaded = response.data.add_test_started
           this.add_test.isOver = response.data.add_test_done
-          this.target_matrix_done = response.data.target_matrix
-          this.criterion_matrix1_done = response.data.criterion_matrix1
-          this.criterion_matrix2_done = response.data.criterion_matrix2
-          this.criterion_matrix3_done = response.data.criterion_matrix3
-          this.criterion_matrix4_done = response.data.criterion_matrix4
-          this.hierarchical_syntech.done = response.data.hierarchical_synthesis
+          this.target_matrix_done = response.data.target_matrix_done
+          if (response.data.target_matrix) {
+            this.matrices[0] = response.data.target_matrix
+          }
+          this.criterion_matrix1_done = response.data.criterion_matrix1_done
+          if (response.data.criterion_matrix1) {
+            this.matrices[1] = response.data.criterion_matrix1
+          }
+          this.criterion_matrix2_done = response.data.criterion_matrix2_done
+          if (response.data.criterion_matrix2) {
+            this.matrices[2] = response.data.criterion_matrix2
+          }
+          this.criterion_matrix3_done = response.data.criterion_matrix3_done
+          if (response.data.criterion_matrix3) {
+            this.matrices[3] = response.data.criterion_matrix3
+          }
+          this.criterion_matrix4_done = response.data.criterion_matrix4_done
+          if (response.data.criterion_matrix4) {
+            this.matrices[4] = response.data.criterion_matrix4
+          }
+          this.hierarchical_synthesis = response.data.hierarchical_synthesis
           if (this.intro_test.isLoaded && !this.intro_test.isOver) {
             this.intro_test.info = response.data.question
           } else if (this.practice_test.isLoaded && !this.practice_test.isOver) {
@@ -634,8 +639,8 @@ export default {
           } else if (this.add_test.isLoaded && !this.add_test.isOver) {
             this.add_test.info = response.data.question
           }
+          this.session_id = response.data.session_id
           this.step++
-          this.session_id = this.work.work.session
         })
       } else {
         axios.post(
@@ -643,14 +648,14 @@ export default {
           {user_id: this.userId}
         ).then(response => {
           this.info = response.data.data
-          this.session_id = response.data.session_id
-          this.step++
           this.work.work.stage = 'opened'
           this.work.work.session = this.session_id
           this.$store.dispatch('data/updateHierarchieswork', {
             wid: this.work.wid,
             work: this.work.work
           })
+          this.session_id = response.data.session_id
+          this.step++
         })
       }
     },
@@ -691,13 +696,7 @@ export default {
             })
             break
           case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
+            this.finishLab()
             break
         }
       })
@@ -736,13 +735,7 @@ export default {
             })
             break
           case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
+            this.finishLab()
             break
         }
       })
@@ -782,13 +775,7 @@ export default {
             })
             break
           case 'over':
-            this.$q.dialog({
-              title: 'Вы допустили слишком много ошибок',
-              message: 'Попробуйте еще раз позже',
-              ok: 'Продолжить'
-            }).then(() => {
-              this.finishLab(0)
-            })
+            this.finishLab()
             break
         }
       })
@@ -804,7 +791,6 @@ export default {
         for (let i = 0; i < 3; i++) {
           let row = value.matrix[i]
           for (let j = 0; j < 4; j++) {
-            console.log(row[j])
             if (row[j].indexOf(',') > -1) {
               this.$q.dialog({
                 title: 'Ошибка!',
@@ -816,7 +802,6 @@ export default {
           }
         }
         for (let i = 0; i < value.alternative.length; i++) {
-          console.log(value.alternative)
           if (value.alternative[i].indexOf(',') > -1) {
             this.$q.dialog({
               title: 'Ошибка!',
@@ -861,10 +846,10 @@ export default {
                 this.target_matrix_done = true
                 break
               case 'criterion_matrix1':
-                this.criterin_matrix1_done = true
+                this.criterion_matrix1_done = true
                 break
               case 'criterion_matrix2':
-                this.criterin_matrix2_done = true
+                this.criterion_matrix2_done = true
                 break
               case 'criterion_matrix3':
                 this.criterion_matrix3_done = true
@@ -872,8 +857,8 @@ export default {
               case 'criterion_matrix4':
                 this.criterion_matrix4_done = true
                 break
-              case null:
-                this.hierarchical_syntech.done = true
+              default:
+                this.hierarchical_synthesis.done = true
                 break
             }
             this.step++
@@ -891,18 +876,10 @@ export default {
               message: 'Попробуйте еще раз позже',
               ok: 'Продолжить'
             }).then(() => {
-              this.finishLab(0)
+              this.finishLab()
             })
             break
         }
-      })
-    },
-    labpage () {
-      this.$q.dialog({
-        title: 'Ваша оценка ' + this.mark,
-        ok: 'Продолжить'
-      }).then(() => {
-        this.finishLab(this.mark)
       })
     },
     compare: function (arr1, arr2) {
@@ -923,14 +900,42 @@ export default {
       }
       return true
     },
-    finishLab (mark) {
-      this.work.work.stage = 'resolve'
-      this.work.work.score = mark
+    finishLab () {
+      let dialog
+      if (this.mark) {
+        dialog = {
+          title: 'Вы успешно выполнили задание',
+          message: 'Ваша оценка: ' + this.mark + '. ',
+          ok: 'Продолжить'
+        }
+      } else {
+        dialog = {
+          title: 'Вы допустили слишком много ошибок',
+          message: '',
+          ok: 'Продолжить'
+        }
+      }
+      if (this.work.work.tries < 3) {
+        dialog.message += 'Вы можете попробовать повысить свою оценку, при этом максимальный былл будет снижен на 10%'
+        dialog.cancel = 'Попробовать снова'
+      }
+      let route
+      this.$q.dialog({
+        dialog
+      }).then(() => {
+        route = '/works'
+        this.work.work.stage = 'close'
+      }).catch(() => {
+        route = '/siblinghierarchies'
+        this.work.work.stage = 'improve'
+      })
+      this.work.work.tries += 1
+      this.work.work.score = this.mark
       this.$store.dispatch('data/updateHierarchieswork', {
         wid: this.work.wid,
         work: this.work.work
       })
-      this.$router.push('/works')
+      this.$router.push(route)
     }
   }
 }

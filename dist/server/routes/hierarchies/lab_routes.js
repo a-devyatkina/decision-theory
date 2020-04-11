@@ -60,8 +60,7 @@ module.exports = function(app, db, ObjectID) {
                 answers: [],
                 points: 10,
                 done: false
-            },
-            status: 'in progress'
+            }
         }
         await db.collection('sessions').insertOne(session)
         let response = {
@@ -266,7 +265,7 @@ module.exports = function(app, db, ObjectID) {
         } else {
             let matrix = []
             let tmp
-            for (index = 1; index < 5; index++) {
+            for (let index = 1; index < 5; index++) {
                 tmp = calculateMatrix(lab.data[index].value)
                 matrix.push(tmp[1])
             }
@@ -334,7 +333,6 @@ module.exports = function(app, db, ObjectID) {
                 }
             }
 
-            console.log(index)
             request = req.body.value.alternative
             if (index + 1 != request) {
                 response.status = 'wrong'
@@ -368,18 +366,52 @@ module.exports = function(app, db, ObjectID) {
     })
 
     app.post('/restapi/hierarchies/get_session', async (req, res) => {
-        let session = await db.collection('sessions').findOne({_id:ObjectID(req.body.session_id)})
+        let sessions = await db.collection('sessions').find({user_id: req.body.user_id}).toArray()
+        let session = sessions[sessions.length - 1]
         let response = {
+            session_id: session._id,
             data: session.variant,
             intro_done: session.intro.done,
             practice_done: session.practice.done,
-            target_matrix: session.target_matrix.done,
-            criterion_matrix1: session.criterion_matrix1.done,
-            criterion_matrix2: session.criterion_matrix2.done,
-            criterion_matrix3: session.criterion_matrix3.done,
-            criterion_matrix4: session.criterion_matrix4.done,
-            hierarchical_synthesis: session.hierarchical_synthesis.done,
+            target_matrix_done: session.target_matrix.done,
+            criterion_matrix1_done: session.criterion_matrix1.done,
+            criterion_matrix2_done: session.criterion_matrix2.done,
+            criterion_matrix3_done: session.criterion_matrix3.done,
+            criterion_matrix4_done: session.criterion_matrix4.done,
+            hierarchical_synthesis: {
+                done: session.hierarchical_synthesis.done,
+                matrix: [[], [], []],
+                vector: [],
+                alternative: null,
+            },
             add_test_done: session.add_test.done,
+        }
+        let answers = session.target_matrix.answers
+        if (answers.length) {
+            response.target_matrix = answers[answers.length - 1]
+        }
+        answers = session.criterion_matrix1.answers
+        if (answers.length) {
+            response.criterion_matrix1 = answers[answers.length - 1]
+        }
+        answers = session.criterion_matrix2.answers
+        if (answers.length) {
+            response.criterion_matrix2 = answers[answers.length - 1]
+        }
+        answers = session.criterion_matrix3.answers
+        if (answers.length) {
+            response.criterion_matrix3 = answers[answers.length - 1]
+        }
+        answers = session.criterion_matrix4.answers
+        if (answers.length) {
+            response.criterion_matrix4 = answers[answers.length - 1]
+        }
+        answers = session.hierarchical_synthesis.answers
+        if (answers.length) {
+            let answer = answers[answers.length - 1]
+            response.hierarchical_synthesis.matrix = answer.matrix
+            response.hierarchical_synthesis.vector = answer.vector
+            response.hierarchical_synthesis.alternative = answer.alternative
         }
         if (!session.intro.done) {
             let questions = session.intro.questions

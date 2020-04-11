@@ -43,7 +43,7 @@
               </q-item>
               <q-item>
                 <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{Math.floor((work.score*lab.maxscore) / 100)-work.penalty}}</q-chip></q-item-side>
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{Math.floor(((work.score-work.tries*10)*lab.maxscore)/100)-work.penalty}}</q-chip></q-item-side>
               </q-item>
             </q-list>
           </q-item-main>
@@ -120,6 +120,10 @@ export default {
       this.work.session = ''
       if (stage === 'close') {
         this.work.penalty = penalty
+      } else if (stage === 'improve') {
+        this.work.tries = 0
+        this.work.score = 0
+        this.work.penalty = 0
       }
       this.$store.dispatch('data/updateHierarchieswork', {
         wid: this.wid,

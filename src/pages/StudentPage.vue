@@ -34,7 +34,16 @@
             </router-link>
           </q-td>
           <q-td key="score" :props="props">
-            <q-btn :label="props.row.score" @click="refuse(props.row)"/>
+            <div v-if="props.row.stage === 'close'">
+              <q-btn :label="props.row.score" @click="refuse(props.row)">
+                <q-tooltip>
+                  Нажав эту кнопку, вы откажетесь от своей оценки.
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              <q-btn :label="props.row.score" @click="refuse(props.row)" disabled="true"/>
+            </div>
           </q-td>
         </q-tr>
       </q-table>
@@ -146,7 +155,7 @@ export default {
                 name: lab ? lab.name : '',
                 description: lab ? lab.description : '',
                 stage: data.work.stage,
-                score: Math.floor((data.work.score * lab.maxscore) / 100) - data.work.penalty,
+                score: Math.floor(((data.work.score - data.work.tries * 10) * lab.maxscore) / 100) - data.work.penalty,
                 isHierarchieslab: true
               })
             }
