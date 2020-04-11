@@ -167,7 +167,6 @@ module.exports = function(app, db, ObjectID) {
                     }
                 }
                 for (i = 0; i < practice.questions.length; i++) {
-                    console.log(practice.questions[i])
                     new_questions = new_questions.filter(obj => {
                         return !(practice.questions[i]._id.equals(obj._id))
                     })
@@ -197,7 +196,6 @@ module.exports = function(app, db, ObjectID) {
             }
 
         }
-        console.log(practice)
         await db.collection('sessions').updateOne(filter, {'$set':{'practice':practice}})
         res.send(response)
     })
@@ -267,7 +265,8 @@ module.exports = function(app, db, ObjectID) {
                     session.add_test.points - 5
 
                 update['$set'] = {
-                    mark: mark
+                    mark: mark,
+                    'add_test.done': true
                 }
                 response = {
                     status: 'over',

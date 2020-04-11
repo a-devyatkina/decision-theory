@@ -385,6 +385,7 @@ module.exports = function(app, db, ObjectID) {
                 alternative: null,
             },
             add_test_done: session.add_test.done,
+            mark: session.mark
         }
         let answers = session.target_matrix.answers
         if (answers.length) {

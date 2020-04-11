@@ -64,7 +64,7 @@
           </div>
         </div>
         <div v-else>
-          <h4>Этап успешно пройден!</h4>
+          <h4>Этап пройден</h4>
         </div>
 
         <q-stepper-navigation>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div v-else>
-          <h4>Этап успешно пройден!</h4>
+          <h4>Этап пройден</h4>
         </div>
 
         <q-stepper-navigation>
@@ -485,7 +485,7 @@
           </div>
         </div>
         <div v-else>
-          <h4>Этап успешно пройден!</h4>
+          <h4>Этап пройден</h4>
         </div>
         <q-stepper-navigation>
           <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
@@ -593,6 +593,9 @@ export default {
     work () {
       return this.$store.getters['data/getStudentHierarchieswork'](this.userId, 'siblinghierarchies')
     },
+    maxscore () {
+      return this.$store.getters['data/getHierarchieslab']('siblinghierarchies').maxscore
+    },
     isFormValid () {
       return Object.keys(this.fields).every(field => this.fields[field].valid)
     }
@@ -612,6 +615,7 @@ export default {
           this.add_test.isLoaded = response.data.add_test_started
           this.add_test.isOver = response.data.add_test_done
           this.target_matrix_done = response.data.target_matrix_done
+          this.mark = response.data.mark
           if (response.data.target_matrix) {
             this.matrices[0] = response.data.target_matrix
           }
@@ -759,13 +763,11 @@ export default {
         '/restapi/hierarchies/add_test_validate',
         data
       ).then(response => {
+        console.log(response.data)
         switch (response.data.status) {
           case 'done':
             this.add_test.isOver = true
             this.mark = response.data.mark
-            break
-          case 'right':
-            this.add_test.info = response.data.question
             break
           case 'wrong':
             this.add_test.info = response.data.question
@@ -775,9 +777,15 @@ export default {
             })
             break
           case 'over':
-            this.finishLab()
+            this.$q.dialog({
+              title: 'Ошибка!',
+              ok: 'Продолжить'
+            })
+            this.add_test.isOver = true
+            this.mark = response.data.mark
             break
         }
+        console.log(this.mark)
       })
     },
     labIntermediate (value, step) {
@@ -900,12 +908,13 @@ export default {
       }
       return true
     },
-    finishLab () {
+    async finishLab () {
       let dialog
       if (this.mark) {
+        let mark = (((this.mark - this.work.work.tries * 10) * this.maxscore) / 100) - this.work.work.penalty
         dialog = {
           title: 'Вы успешно выполнили задание',
-          message: 'Ваша оценка: ' + this.mark + '. ',
+          message: 'Ваша оценка: ' + mark + '. ',
           ok: 'Продолжить'
         }
       } else {
@@ -919,14 +928,11 @@ export default {
         dialog.message += 'Вы можете попробовать повысить свою оценку, при этом максимальный былл будет снижен на 10%'
         dialog.cancel = 'Попробовать снова'
       }
-      let route
-      this.$q.dialog({
+      await this.$q.dialog(
         dialog
-      }).then(() => {
-        route = '/works'
-        this.work.work.stage = 'close'
+      ).then(() => {
+        this.work.work.stage = 'resolve'
       }).catch(() => {
-        route = '/siblinghierarchies'
         this.work.work.stage = 'improve'
       })
       this.work.work.tries += 1
@@ -935,7 +941,7 @@ export default {
         wid: this.work.wid,
         work: this.work.work
       })
-      this.$router.push(route)
+      this.$router.push('/works')
     }
   }
 }
