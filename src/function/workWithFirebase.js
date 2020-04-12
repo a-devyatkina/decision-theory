@@ -1,6 +1,6 @@
 import { generate } from './gen'
 import * as firebase from 'firebase'
-import { variants } from './variants'
+import variants from './variants'
 
 const usersWithVariants = ['-M3laaK6mM7HWas1EMDw']
 
@@ -33,7 +33,7 @@ export function checkLab (labName) {
       this.condition = variants[variantNumber]
     } else {
       this.condition = generate(variant, variant['dict1'], variant['dict2'])
-    } 
+    }
     if (labName === 'logicsLab') {
       labName = 'preferenceLab'
     }
