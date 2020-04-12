@@ -111,11 +111,13 @@ export default {
       /* linguistic.unshift(0)
       linguistic.push(1) */
       // linguistic.unshift(0)
+      if (linguistic.length === 4) {
+        linguistic.unshift(0)
+      }
       linguistic.push(1)
       linguistic.push(1)
 
       let importance = [...this.condition.tables.importance]
-      /* importance.push(1) */
       importance.push(1)
       importance.push(1)
 

@@ -122,6 +122,9 @@ export default {
       /* linguistic.unshift(0)
       linguistic.push(1) */
       // linguistic.unshift(0)
+      if (linguistic.length === 4) {
+        linguistic.unshift(0)
+      }
       linguistic.push(1)
       linguistic.push(1)
 
