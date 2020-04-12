@@ -1,5 +1,8 @@
 import { generate } from './gen'
 import * as firebase from 'firebase'
+import { variants } from './variants'
+
+const usersWithVariants = ['-M3laaK6mM7HWas1EMDw']
 
 export function checkLab (labName) {
   let user = this.$store.getters['data/getUser']()
@@ -25,7 +28,12 @@ export function checkLab (labName) {
 
   firebase.database().ref('lab3/variants/1').once('value', snapshot => {
     let variant = snapshot.val()
-    this.condition = generate(variant, variant['dict1'], variant['dict2'])
+    let variantNumber = usersWithVariants.findIndex(function (e) { return e === user.id })
+    if (variantNumber !== -1) {
+      this.condition = variants[variantNumber]
+    } else {
+      this.condition = generate(variant, variant['dict1'], variant['dict2'])
+    } 
     if (labName === 'logicsLab') {
       labName = 'preferenceLab'
     }
