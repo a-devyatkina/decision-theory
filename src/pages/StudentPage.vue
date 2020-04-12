@@ -34,16 +34,7 @@
             </router-link>
           </q-td>
           <q-td key="score" :props="props">
-            <div v-if="props.row.stage === 'close'">
-              <q-btn :label="props.row.score" @click="refuse(props.row)">
-                <q-tooltip>
-                  Нажав эту кнопку, вы откажетесь от своей оценки.
-                </q-tooltip>
-              </q-btn>
-            </div>
-            <div v-else>
-              <q-btn :label="props.row.score" @click="refuse(props.row)" disabled="true"/>
-            </div>
+            {{ props.row.score }}
           </q-td>
         </q-tr>
       </q-table>
@@ -147,8 +138,8 @@ export default {
           for (let lid in course.hierarchieslab) {
             let data = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, lid)
             if (data) {
-              sessions[cid].score += data.work.score
               let lab = this.$store.getters['data/getHierarchieslab'](lid)
+              sessions[cid].score += Math.floor(((data.work.score - data.work.tries * 10) * lab.maxscore) / 100) - data.work.penalty
               sessions[cid].tasks.push({
                 id: data.wid,
                 lid: lid,
@@ -173,12 +164,11 @@ export default {
       if (lab.isSteplab) {
         this.$router.push(`/steplab?lab=${lab.task}&user=${this.user.id}`)
       } else if (lab.isHierarchieslab) {
-        if ((lab.lid === 'siblinghierarchies' &&
+        if ((lab.lid === 'siblinghierarchies' ||
+             lab.lid === 'layeredhierarchies') &&
              lab.stage !== 'assigned' &&
              lab.stage !== 'improve' &&
-             lab.stage !== 'opened') ||
-            (lab.lid === 'layeredhierarchies' &&
-             lab.stage === 'assigned')) {
+             lab.stage !== 'opened') {
           this.$q.dialog({
             title: 'Лабораторная работа недоступна',
             message: 'Обратитесь к переподавателю',
@@ -189,22 +179,6 @@ export default {
         }
       } else {
         this.$router.push(`/workflow?wid=${lab.task}`)
-      }
-    },
-    async refuse (row) {
-      if (row.stage === 'close') {
-        await this.$q.dialog({
-          title: 'Отказ от оценки',
-          message: 'Вы уверены, что хотите отказаться от оценки и переделать работу?',
-          ok: 'Да',
-          cancel: 'Нет'
-        })
-        let work = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, row.lid)
-        work.work.stage = 'declined'
-        this.$store.dispatch('data/updateHierarchieswork', {
-          wid: work.wid,
-          work: work.work
-        })
       }
     }
   }

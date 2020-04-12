@@ -932,11 +932,12 @@ export default {
         dialog
       ).then(() => {
         this.work.work.stage = 'resolve'
+        this.work.work.score = this.mark
       }).catch(() => {
         this.work.work.stage = 'improve'
+        this.work.work.score = 0
       })
       this.work.work.tries += 1
-      this.work.work.score = this.mark
       this.$store.dispatch('data/updateHierarchieswork', {
         wid: this.work.wid,
         work: this.work.work
