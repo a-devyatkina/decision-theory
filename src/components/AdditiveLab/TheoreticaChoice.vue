@@ -13,7 +13,7 @@
       </div>
     </div>
     <br>
-    <h5 v-if="mistake">Проверьте ответы. У вас ошибка!</h5>
+    <h5 v-if="mistake">Неверно!</h5>
     <br>
     <q-btn class='q-px-lg' color="secondary" label="Продолжить" @click="check"/>
     <q-btn flat class='q-px-lg' color="secondary" label="Назад" style='margin: 25px' @click="$emit('back')"/>
@@ -34,13 +34,13 @@ export default {
     check () {
       if (this.answer === ('val' + this.question.right)) {
         this.mistake = false
-        this.checked = true
-        console.log('in answer')
         this.$emit('answer')
       } else {
         this.mistake = true
         this.$emit('error', 8)
       }
+      this.answer = 'val' + this.question.right
+      this.checked = true
     }
   },
   mounted () {
