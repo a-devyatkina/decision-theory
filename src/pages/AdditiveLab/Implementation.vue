@@ -25,7 +25,7 @@
         title='Вопрос'
         :done='correctStep > step - 1'
       >
-        <theoretical-choice @success='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
+        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
       </q-step>
 
       <q-step v-for="(item, index) in condition.criterion" v-bind:key='index' :name='Number(index + 2)' :title='`Значения С${index + 1}`' icon='assignment' :done='correctStep > 1 + index'>
