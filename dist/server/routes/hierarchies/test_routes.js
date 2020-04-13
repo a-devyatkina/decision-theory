@@ -157,7 +157,13 @@ module.exports = function(app, db, ObjectID) {
             practice.questions[length].errors += 1
             if (practice.points === 0) {
                 response = {status: 'over'}
-            } else if (practice.questions[length].errors === 2) {
+            } else if (practice.questions[length].errors < 2) {
+                delete question.correct
+                response = {
+                    status: 'wrong',
+                    question: question
+                }
+            } else {
                 let practice_questions = await db.collection('practice_test').find().toArray()
                 let new_questions
                 for (i = 0; i < practice_questions.length; i++) {
@@ -171,27 +177,48 @@ module.exports = function(app, db, ObjectID) {
                         return !(practice.questions[i]._id.equals(obj._id))
                     })
                 }
-                let index = Math.floor(Math.random() * new_questions.length)
-                let new_question = new_questions[index]
-                new_question['type'] = question.type
-                delete new_question.correct
-                filter = {'_id': ObjectID(req.body.session_id)}
-                practice.questions.push({
-                    _id: new_question._id,
-                    type: new_question.type,
-                    answers: [],
-                    errors: 0,
-                    answered: false
-                })
-                response = {
-                    status: 'wrong',
-                    question: new_question,
-                }
-            } else {
-                delete question.correct
-                response = {
-                    status: 'wrong',
-                    question: question
+                if (new_questions.length) {
+                    let index = Math.floor(Math.random() * new_questions.length)
+                    let new_question = new_questions[index]
+                    new_question['type'] = question.type
+                    delete new_question.correct
+                    filter = {'_id': ObjectID(req.body.session_id)}
+                    practice.questions.push({
+                        _id: new_question._id,
+                        type: new_question.type,
+                        answers: [],
+                        errors: 0,
+                        answered: false
+                    })
+                    response = {
+                        status: 'wrong',
+                        question: new_question,
+                    }
+                } else {
+                    for (i = 0; i < practice.questions.length; i++) {
+                        practice_questions = practice_questions.filter((obj) => {
+                            return obj.type !== practice.questions[i].type
+                        })
+                    }
+                    if (practice_questions.length) {
+                        let index = Math.floor(Math.random() * practice_questions[0].questions.length)
+                        let new_question = practice_questions[0].questions[index]
+                        new_question['type'] = practice_questions[0].type
+                        practice.questions.push({
+                            _id: new_question._id,
+                            type: new_question.type,
+                            answers: [],
+                            errors: 0
+                        })
+                        response = {
+                            status: 'wrong',
+                            question: new_question,
+                        }
+                    }
+                    else {
+                        practice.done = true
+                        response = {status: 'done'}
+                    }
                 }
             }
 
