@@ -137,16 +137,17 @@ export default {
           }
           for (let lid in course.hierarchieslab) {
             let data = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, lid)
+            let maxscore = course.hierarchieslab[lid].maxScore
             if (data) {
               let lab = this.$store.getters['data/getHierarchieslab'](lid)
-              sessions[cid].score += Math.floor(((data.work.score - data.work.tries * 10) * lab.maxscore) / 100) - data.work.penalty
+              sessions[cid].score += Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty
               sessions[cid].tasks.push({
                 id: data.wid,
                 lid: lid,
                 name: lab ? lab.name : '',
                 description: lab ? lab.description : '',
                 stage: data.work.stage,
-                score: Math.floor(((data.work.score - data.work.tries * 10) * lab.maxscore) / 100) - data.work.penalty,
+                score: Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty,
                 isHierarchieslab: true
               })
             }

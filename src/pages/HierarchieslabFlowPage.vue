@@ -43,7 +43,7 @@
               </q-item>
               <q-item>
                 <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{Math.floor(((work.score-work.tries*10)*lab.maxscore)/100)-work.penalty}}</q-chip></q-item-side>
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{Math.floor(((work.score-work.tries*10)*maxscore)/100)-work.penalty}}</q-chip></q-item-side>
               </q-item>
             </q-list>
           </q-item-main>
@@ -82,6 +82,9 @@ export default {
     },
     user () {
       return this.$store.getters['data/getUser']()
+    },
+    maxscore () {
+      return this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
     }
   },
   methods: {
@@ -132,6 +135,8 @@ export default {
     }
   },
   mounted () {
+    console.log(this.student)
+    console.log(this.course.groups)
     let data = {
       user_id: this.work.student
     }

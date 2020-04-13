@@ -587,14 +587,14 @@ export default {
     }
   },
   computed: {
-    userId () {
-      return this.$store.getters['data/getUser']().id
+    user () {
+      return this.$store.getters['data/getUser']()
     },
     work () {
-      return this.$store.getters['data/getStudentHierarchieswork'](this.userId, 'siblinghierarchies')
+      return this.$store.getters['data/getStudentHierarchieswork'](this.user.id, 'siblinghierarchies')
     },
     maxscore () {
-      return this.$store.getters['data/getHierarchieslab']('siblinghierarchies').maxscore
+      return this.$store.getters['data/getCourse'](this.work.work.course).groups[this.user.group].hierarchieslab.siblinghierarchies.maxScore
     },
     isFormValid () {
       return Object.keys(this.fields).every(field => this.fields[field].valid)
@@ -605,7 +605,7 @@ export default {
       if (this.work.work.stage === 'opened') {
         axios.post(
           'restapi/hierarchies/get_session',
-          {user_id: this.userId}
+          {user_id: this.user.id}
         ).then(response => {
           this.info = response.data.data
           this.intro_test.isLoaded = response.data.intro_started
@@ -649,7 +649,7 @@ export default {
       } else {
         axios.post(
           'restapi/hierarchies/siblinghierarchies',
-          {user_id: this.userId}
+          {user_id: this.user.id}
         ).then(response => {
           this.info = response.data.data
           this.work.work.stage = 'opened'
@@ -763,7 +763,6 @@ export default {
         '/restapi/hierarchies/add_test_validate',
         data
       ).then(response => {
-        console.log(response.data)
         switch (response.data.status) {
           case 'done':
             this.add_test.isOver = true
@@ -785,7 +784,6 @@ export default {
             this.mark = response.data.mark
             break
         }
-        console.log(this.mark)
       })
     },
     labIntermediate (value, step) {
