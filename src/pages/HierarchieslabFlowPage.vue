@@ -43,7 +43,7 @@
               </q-item>
               <q-item>
                 <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{Math.floor(((work.score-work.tries*10)*maxscore)/100)-work.penalty}}</q-chip></q-item-side>
+                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{score}}</q-chip></q-item-side>
               </q-item>
             </q-list>
           </q-item-main>
@@ -83,8 +83,10 @@ export default {
     user () {
       return this.$store.getters['data/getUser']()
     },
-    maxscore () {
-      return this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
+    score () {
+      let maxscore = this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
+      let score = Math.floor(((this.work.score - this.work.tries * 10) * maxscore) / 100) - this.work.penalty
+      return score > 0 ? score : 0
     }
   },
   methods: {

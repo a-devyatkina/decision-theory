@@ -140,14 +140,16 @@ export default {
             let maxscore = course.hierarchieslab[lid].maxScore
             if (data) {
               let lab = this.$store.getters['data/getHierarchieslab'](lid)
-              sessions[cid].score += Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty
+              let score = Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty
+              if (score < 0) score = 0
+              sessions[cid].score += score
               sessions[cid].tasks.push({
                 id: data.wid,
                 lid: lid,
                 name: lab ? lab.name : '',
                 description: lab ? lab.description : '',
                 stage: data.work.stage,
-                score: Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty,
+                score: score,
                 isHierarchieslab: true
               })
             }
