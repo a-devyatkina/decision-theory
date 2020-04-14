@@ -270,8 +270,8 @@ module.exports = function(app, db, ObjectID) {
                 matrix.push(tmp[1])
             }
             matrix = math.transpose(matrix)
-            let criterion = calculateMatrix(lab.data[0].value)[1]
-            let priority = math.multiply(matrix, criterion)
+            let criterion_priority = calculateMatrix(lab.data[0].value)[1]
+            let global_priority = math.multiply(matrix, criterion_priority)
 
             let filter = {
                 '_id': ObjectID(req.body.session_id)
@@ -312,23 +312,35 @@ module.exports = function(app, db, ObjectID) {
                 }
             }
 
-                    request = req.body.value.vector
-                    for (i = 0; i < criterion.length; i++) {
-                        let upper = Math.round(criterion[i]*100+1)/100
-                        let lower = Math.round(criterion[i]*100-1)/100
-                        let tmp = request[i]
-                        console.log(lower, tmp, upper)
-                        if (lower > tmp || tmp > upper || !tmp) {
-                            response.status = 'wrong'
-                            response.body.add('Вектор')
+            request = req.body.value.criterion_priority
+            for (i = 0; i < criterion_priority.length; i++) {
+                let upper = Math.round(criterion_priority[i]*100+1)/100
+                let lower = Math.round(criterion_priority[i]*100-1)/100
+                let tmp = request[i]
+                console.log(lower, tmp, upper)
+                if (lower > tmp || tmp > upper || !tmp) {
+                    response.status = 'wrong'
+                    response.body.add('Вектор приоритетов критериев')
+                }
+            }
+
+            request = req.body.value.global_priority
+            for (i = 0; i < global_priority.length; i++) {
+                let upper = Math.round(global_priority[i]*100+1)/100
+                let lower = Math.round(global_priority[i]*100-1)/100
+                let tmp = request[i]
+                console.log(lower, tmp, upper)
+                if (lower > tmp || tmp > upper || !tmp) {
+                    response.status = 'wrong'
+                    response.body.add('Вектор глобальных приоритетов')
                 }
             }
 
             let index
             let max = Number.NEGATIVE_INFINITY
-            for (i = 0; i < priority.length; i++) {
-                if (max < priority[i]) {
-                    max = priority[i]
+            for (i = 0; i < global_priority.length; i++) {
+                if (max < global_priority[i]) {
+                    max = global_priority[i]
                     index = i
                 }
             }
@@ -340,6 +352,7 @@ module.exports = function(app, db, ObjectID) {
             }
 
             response.body = Array.from(response.body).join(', ')
+            console.log(response)
 
             if (response.status === 'wrong') {
                 if (session.hierarchical_synthesis.points-4 === 0) {
@@ -381,7 +394,8 @@ module.exports = function(app, db, ObjectID) {
             hierarchical_synthesis: {
                 done: session.hierarchical_synthesis.done,
                 matrix: [[], [], []],
-                vector: [],
+                criterion_priority: [],
+                global_priority: [],
                 alternative: null,
             },
             add_test_done: session.add_test.done,
@@ -411,7 +425,8 @@ module.exports = function(app, db, ObjectID) {
         if (answers.length) {
             let answer = answers[answers.length - 1]
             response.hierarchical_synthesis.matrix = answer.matrix
-            response.hierarchical_synthesis.vector = answer.vector
+            response.hierarchical_synthesis.criterion_priority = answer.criterion_priority
+            response.hierarchical_synthesis.global_priority = answer.global_priority
             response.hierarchical_synthesis.alternative = answer.alternative
         }
         if (!session.intro.done) {

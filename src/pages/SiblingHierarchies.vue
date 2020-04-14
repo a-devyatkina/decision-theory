@@ -404,45 +404,77 @@
           </div>
           <div class="field">
             <label for="matrices">
-              Вектор глобальных приоритетов
+              Вектор приоритетов критериев
             </label>
             <input
-                    id="vector"
+                    id="criterion_priority"
                     type="text"
-                    v-model="hierarchical_synthesis.vector[0]"
+                    v-model="hierarchical_synthesis.criterion_priority[0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
-                    name="vector"
+                    name="criterion_priority"
                     :disabled="hierarchical_synthesis.done"
             >
             <input
-                    id="vector"
+                    id="criterion_priority"
                     type="text"
-                    v-model="hierarchical_synthesis.vector[1]"
+                    v-model="hierarchical_synthesis.criterion_priority[1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
-                    name="vector"
+                    name="criterion_priority"
                     :disabled="hierarchical_synthesis.done"
             >
             <input
-                    id="vector"
+                    id="criterion_priority"
                     type="text"
-                    v-model="hierarchical_synthesis.vector[2]"
+                    v-model="hierarchical_synthesis.criterion_priority[2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
-                    name="vector"
+                    name="criterion_priority"
                     :disabled="hierarchical_synthesis.done"
             >
             <input
-                    id="vector"
+                    id="criterion_priority"
                     type="text"
-                    v-model="hierarchical_synthesis.vector[3]"
+                    v-model="hierarchical_synthesis.criterion_priority[3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
-                    name="vector"
+                    name="criterion_priority"
                     :disabled="hierarchical_synthesis.done"
             >
           </div>
+        <div class="field">
+          <label for="matrices">
+            Вектор глобальных приоритетов
+          </label>
+          <input
+                  id="global_priority"
+                  type="text"
+                  v-model="hierarchical_synthesis.global_priority[0]"
+                  v-validate.continues="{ required: true, max: 10 }"
+                  data-vv-as="вектор приоритетов"
+                  name="global_priority"
+                  :disabled="hierarchical_synthesis.done"
+          >
+          <input
+                  id="global_priority"
+                  type="text"
+                  v-model="hierarchical_synthesis.global_priority[1]"
+                  v-validate.continues="{ required: true, max: 10 }"
+                  data-vv-as="вектор приоритетов"
+                  name="global_priority"
+                  :disabled="hierarchical_synthesis.done"
+          >
+          <input
+                  id="global_priority"
+                  type="text"
+                  v-model="hierarchical_synthesis.global_priority[2]"
+                  v-validate.continues="{ required: true, max: 10 }"
+                  data-vv-as="вектор приоритетов"
+                  name="global_priority"
+                  :disabled="hierarchical_synthesis.done"
+          >
+        </div>
           <div class="field">
             <label for="matrices">
               Выбранная альтернатива
@@ -515,9 +547,9 @@
     display: flex;
     flex-direction: row;
   }
-  .skip_btn {
-    display: none;
-  }
+  /*.skip_btn {*/
+    /*display: none;*/
+  /*}*/
   #matrix_table {
     width: 450px;
   }
@@ -564,7 +596,8 @@ export default {
       criterion_matrix4_done: false,
       hierarchical_synthesis: {
         matrix: [[], [], []],
-        vector: [],
+        criterion_priority: [],
+        global_priority: [],
         alternative: null,
         done: false
       },
