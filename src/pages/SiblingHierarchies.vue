@@ -68,7 +68,7 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 3" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 3" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 3" color="secondary" label="Continue" :disabled="!intro_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 1" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -98,7 +98,7 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 4" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 4" color="secondary" label="Continue" :disabled="!practice_test.isOver" class="q-ml-sm"/>
           <q-btn flat @click="step = 2" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -133,7 +133,7 @@
           <q-btn @click="labIntermediate(matrices[0], 'target_matrix')" color="secondary" :disabled="target_matrix_done" label="Проверить"/>
         </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 5" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 5" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 5" color="secondary" label="Continue" :disabled="!target_matrix_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 3" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -168,7 +168,7 @@
             <q-btn @click="labIntermediate(matrices[1], 'criterion_matrix1')" color="secondary" :disabled="criterion_matrix1_done" label="Проверить"/>
           </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 6" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 6" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 6" color="secondary" label="Continue" :disabled="!criterion_matrix1_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 4" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -203,7 +203,7 @@
             <q-btn @click="labIntermediate(matrices[2], 'criterion_matrix2')" color="secondary" :disabled="criterion_matrix2_done" label="Проверить"/>
           </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 7" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 7" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 7" color="secondary" label="Continue" :disabled="!criterion_matrix2_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -238,7 +238,7 @@
             <q-btn @click="labIntermediate(matrices[3], 'criterion_matrix3')" color="secondary" :disabled="criterion_matrix3_done" label="Проверить"/>
           </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 8" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 8" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 8" color="secondary" label="Continue" :disabled="!criterion_matrix3_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 5" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -459,7 +459,7 @@
           </div>
           <q-btn @click="labIntermediate(hierarchical_synthesis)" color="secondary" :disabled="hierarchical_synthesis.done" label="Проверить"/>
         <q-stepper-navigation>
-          <q-btn @click="step = 10" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 10" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_synthesis.done" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -488,7 +488,7 @@
           <h4>Этап пройден</h4>
         </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 11" color="secondary" label="Skip" class="q-ml-sm"/>
+          <q-btn @click="step = 11" color="secondary" label="Skip" class="skip_btn"/>
           <q-btn color="secondary" :disabled="!this.add_test.isOver" label="Finish" @click="finishLab()"/>
           <q-btn flat @click="step = 9" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
@@ -515,7 +515,10 @@
     display: flex;
     flex-direction: row;
   }
-  #matrix_table{
+  .skip_btn {
+    display: none;
+  }
+  #matrix_table {
     width: 450px;
   }
 </style>
@@ -908,8 +911,9 @@ export default {
     },
     async finishLab () {
       let dialog
-      if (this.mark) {
-        let mark = (((this.mark - this.work.work.tries * 10) * this.maxscore) / 100) - this.work.work.penalty
+      let mark = (((this.mark - this.work.work.tries * 10) * this.maxscore) / 100) - this.work.work.penalty
+      if (mark < 0) mark = 0
+      if (mark) {
         dialog = {
           title: 'Вы успешно выполнили задание',
           message: 'Ваша оценка: ' + mark + '. ',
@@ -926,6 +930,7 @@ export default {
         dialog.message += 'Вы можете попробовать повысить свою оценку, при этом максимальный былл будет снижен на 10%'
         dialog.cancel = 'Попробовать снова'
       }
+      dialog.preventClose = true
       await this.$q.dialog(
         dialog
       ).then(() => {
