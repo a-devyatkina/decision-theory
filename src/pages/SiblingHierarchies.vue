@@ -6,12 +6,21 @@
     <div v-else>
     <h3>
       Вариант {{info.var}}
-    <q-btn label="Инструкция" color="secondary">
-      <q-tooltip>
-        Some text as content of Tooltip
-      </q-tooltip>
-    </q-btn>
     </h3>
+    <q-btn @click="showInstruction()" color="secondary" label="Инструкция"/>
+    <q-modal v-model="instruction" minimized ref="modalRef">
+      <div style="padding: 50px">
+        <div class="q-display-1 q-mb-md">Инструкция</div>
+        <p>
+          1. При заполнении данных в качестве разделителя используются "."<br>
+          2. Процент вводить в виде дроби. Например 8%=0,08<br>
+          3. Если в матрице производится корректировка, необходимо вводить значения,полученные после корректировки<br>
+          4. Если что-то пошло не так и вы прервали процесс выполнения работы, продолжить можно будет с того шага, на котором вы остановились<br>
+          5. Просмотреть данные на пройденных шагах можно нажав на название
+        </p>
+        <q-btn color="secondary" v-close-overlay label="Close" />
+      </div>
+    </q-modal>
     <q-stepper
             v-model="step"
             vertical
@@ -560,6 +569,7 @@ const axios = require('axios')
 export default {
   data: () => {
     return {
+      instruction: false,
       session_id: 0,
       step: 0,
       inner_step: 2,
@@ -637,6 +647,9 @@ export default {
     }
   },
   methods: {
+    showInstruction () {
+      this.instruction = true
+    },
     getVar: function () {
       if (this.work.work.stage === 'opened') {
         axios.post(

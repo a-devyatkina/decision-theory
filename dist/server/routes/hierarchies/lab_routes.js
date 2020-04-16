@@ -192,7 +192,7 @@ module.exports = function(app, db, ObjectID) {
                     let upper = Math.round(calculations[i][j]*100+1)/100
                     let lower = Math.round(calculations[i][j]*100-1)/100
                     let tmp = req.body.value[i][j]
-                    console.log(lower, tmp, upper)
+                    // console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
                         response.status = 'wrong'
                         response.errors.push(i)
@@ -204,7 +204,7 @@ module.exports = function(app, db, ObjectID) {
                 let upper = Math.round(calculations[i]*100+1)/100
                 let lower = Math.round(calculations[i]*100-1)/100
                 let tmp = req.body.value[i][0]
-                console.log(lower, tmp, upper)
+                // // console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
                     response.status = 'wrong'
                     response.errors.push(i)
@@ -304,7 +304,7 @@ module.exports = function(app, db, ObjectID) {
                     let upper = Math.round(row[j]*100+1)/100
                     let lower = Math.round(row[j]*100-1)/100
                     let tmp = request[i][j]
-                    console.log(lower, tmp, upper)
+                    // console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
                         response.status = 'wrong'
                         response.body.add('Матрица')
@@ -317,7 +317,7 @@ module.exports = function(app, db, ObjectID) {
                 let upper = Math.round(criterion_priority[i]*100+1)/100
                 let lower = Math.round(criterion_priority[i]*100-1)/100
                 let tmp = request[i]
-                console.log(lower, tmp, upper)
+                // console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
                     response.status = 'wrong'
                     response.body.add('Вектор приоритетов критериев')
@@ -329,7 +329,7 @@ module.exports = function(app, db, ObjectID) {
                 let upper = Math.round(global_priority[i]*100+1)/100
                 let lower = Math.round(global_priority[i]*100-1)/100
                 let tmp = request[i]
-                console.log(lower, tmp, upper)
+                // console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
                     response.status = 'wrong'
                     response.body.add('Вектор глобальных приоритетов')
@@ -352,7 +352,7 @@ module.exports = function(app, db, ObjectID) {
             }
 
             response.body = Array.from(response.body).join(', ')
-            console.log(response)
+            // console.log(response)
 
             if (response.status === 'wrong') {
                 if (session.hierarchical_synthesis.points-4 === 0) {
