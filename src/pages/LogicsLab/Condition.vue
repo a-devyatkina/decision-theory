@@ -10,7 +10,7 @@
       <div class="center">
         <div v-for='index of range(3)' :key='index' class='tables'>
           <q-table
-            :title='condition.alternative[index].description'
+            :tytle='condition.alternative[index].description'
             :columns='columns'
             :data='data(index)'
             separator='cell'
@@ -57,7 +57,7 @@ export default {
     data (n) {
       const array = []
       for (let i = 0; i < 4; i++) {
-        array.push({ name: this.condition.criterion[i].title, value: typeof this.condition.alternative[n][i + 1] === 'number' ? this.condition.alternative[n][i + 1] : this.condition.alternative[n][i + 1][0] })
+        array.push({ name: this.condition.criterion[i].tytle, value: typeof this.condition.alternative[n][i + 1] === 'number' ? this.condition.alternative[n][i + 1] : this.condition.alternative[n][i + 1][0] })
       }
       return array
     }
