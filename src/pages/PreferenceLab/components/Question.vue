@@ -2,6 +2,7 @@
   <div>
     <div class = 'goal'>
       <h5>{{ question.question }}</h5>
+      <img v-if="question.path" :src="question.path" />
         <div v-if='!done'>
           <div v-for="(item, index) in question.answer" v-bind:key='index'>
             <q-checkbox  v-model='arr[index]' :label='item'/>
@@ -11,8 +12,9 @@
           <q-btn class='bu' @click='check()' label='Проверить' color="secondary"/>
         </div>
         <div v-if='done'>
-          <p v-for="(item, index) in question.answer" v-bind:key='index' :style="fontSize[index]">{{ item }}</p>
+          <p v-for="(item, index) in question.answer" v-bind:key='index'>{{ item }}</p>
           <p v-if='err' style="font-size: 16px; color: red">Вы допустили ошибку</p>
+          <p v-else style="font-size: 16px; color: green">Верно</p>
         </div>
     </div>
   </div>
@@ -26,19 +28,6 @@ export default {
       validation: false,
       arr: [false, false, false, false],
       err: false
-    }
-  },
-  computed: {
-    fontSize: function () {
-      const arr = []
-      for (let i = 0; i < this.arr.length; i++) {
-        if (this.question.right === i) {
-          arr.push('font-size: 24px')
-        } else {
-          arr.push('font-size: 20px')
-        }
-      }
-      return arr
     }
   },
   methods: {
