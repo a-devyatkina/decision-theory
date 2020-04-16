@@ -26,13 +26,13 @@
         <q-td key="first_value" :props="props">
           {{ props.row.first_value }}
           <q-popup-edit v-if='step === 0' v-model="props.row.first_value">
-            <q-input @change='first_building()' placeholder='0.000' v-model="props.row.first_value" dense autofocus />
+            <q-input @input='first_building()' placeholder='0.000' v-model="props.row.first_value" dense autofocus />
           </q-popup-edit>
         </q-td>
         <q-td key="second_value" :props="props">
           {{ props.row.second_value }}
           <q-popup-edit v-if='step === 0' v-model="props.row.second_value">
-            <q-input @change='first_building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
+            <q-input @input='first_building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
           </q-popup-edit>
         </q-td>
       </q-tr>
@@ -54,7 +54,7 @@
         :label='`d${index + 1}`'
         placeholder='0.000'
         class='input'
-        @change='valid(user_answer)'
+        @input='valid(user_answer)'
       />
       <q-btn @click='second_check()' color='secondary' label='Проверить'/>
     </div>
@@ -84,7 +84,7 @@
             <q-td v-for='index of range(Y.length - 1)' :key='number_value(index)' :props="props">
               {{ props.row[number_value(index)] }}
               <q-popup-edit v-if='step === 2' v-model="props.row[key]">
-                <q-input @change='second_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
+                <q-input @input='second_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
               </q-popup-edit>
             </q-td>
           </q-tr>
@@ -106,7 +106,7 @@
             <q-td v-for='index of range(Y.length - 1)' :key='number_value(index)' :props="props">
               {{ props.row[number_value(index)] }}
               <q-popup-edit v-if='step === 3' v-model="props.row[key]">
-                <q-input @change='third_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
+                <q-input @input='third_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
               </q-popup-edit>
             </q-td>
           </q-tr>
@@ -125,7 +125,7 @@ export default {
   name: 'alternative',
   data  () {
     return {
-      step: this.total_step > this.current_step ? 4 : 2,
+      step: this.total_step > this.current_step ? 4 : 0,
       user_answer: [],
       error: false,
       validation: false,
@@ -148,8 +148,8 @@ export default {
   },
   props: ['total_step', 'current_step', 'alternative', 'criterion', 'array1', 'array2', 'array3', 'array4', 'rules'],
   created () {
-    this.data1 = this.criterion.map((item, index) => { return { name: item.title, value: this.array1[index] } })
-    this.data2 = this.criterion.map((item, index) => { return { name: item.title, first_value: this.total_step === this.current_step ? '' : this.array1[index], second_value: this.total_step === this.current_step ? '' : +(1 - this.array1[index]).toFixed(3) } })
+    this.data1 = this.criterion.map((item, index) => { return { name: item.tytle, value: this.array1[index] } })
+    this.data2 = this.criterion.map((item, index) => { return { name: item.tytle, first_value: this.total_step === this.current_step ? '' : this.array1[index], second_value: this.total_step === this.current_step ? '' : +(1 - this.array1[index]).toFixed(3) } })
     this.columns3 = this.Y.map((item, index) => { return index ? { name: 'value' + item.toString(), label: 'x = ' + item.toString(), field: row => row['value' + item.toString()], align: 'right' } : { name: 'name', required: true, label: 'Y', field: row => row.name, align: 'left' } })
     this.data3 = this.array2.map((item, index) => {
       const dict = {}
@@ -182,9 +182,9 @@ export default {
       }
     },
     valid (answer) {
-      console.log(answer)
+      // console.log(answer)
       this.error = false
-      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.')) {
+      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.' && elem[0] !== ' ')) {
         this.validation = false
         return false
       } else {

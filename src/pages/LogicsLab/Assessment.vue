@@ -19,7 +19,7 @@
             v-model="user_answer[index]"
             placeholder='0.000'
             class='input'
-            @change='building()'
+            @input='building()'
           />
           <div class="clr"></div>
           <q-input
@@ -28,7 +28,7 @@
             v-model="final_answer"
             placeholder='0'
             class='input'
-            @change='building()'
+            @input='building()'
           />
           <div class="clr"></div>
           <q-btn v-if='step === 0' @click='check()' color='secondary' label='Проверить'/>
@@ -90,7 +90,7 @@ export default {
     },
     valid (answer) {
       this.error = false
-      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.')) {
+      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.' && elem[0] !== ' ')) {
         this.validation = false
         return false
       } else {

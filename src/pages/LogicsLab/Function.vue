@@ -14,7 +14,7 @@
         v-model="user_answer[index]"
         placeholder='0.000'
         :label='item'
-        @change='valid(user_answer)'
+        @input='valid(user_answer)'
       />
       <div class="clr"></div>
       <q-btn @click='first_check()' color='secondary' label='Проверить'/>
@@ -42,7 +42,7 @@
             <q-td key="second_value" :props="props">
               {{ props.row.second_value }}
               <q-popup-edit v-model="props.row.second_value">
-                <q-input @change='building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
+                <q-input @input='building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
               </q-popup-edit>
             </q-td>
           </q-tr>
@@ -109,7 +109,7 @@ export default {
     },
     valid (answer) {
       this.error = false
-      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.')) {
+      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.' && elem[0] !== ' ')) {
         this.validation = false
         return false
       } else {
