@@ -556,9 +556,9 @@
     display: flex;
     flex-direction: row;
   }
-  /*.skip_btn {*/
-    /*display: none;*/
-  /*}*/
+  .skip_btn {
+    display: none;
+  }
   #matrix_table {
     width: 450px;
   }
