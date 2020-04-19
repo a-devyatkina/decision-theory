@@ -32,7 +32,7 @@
           :question='item'
           :done='correctStep > index + 1'
           @error='marking(index, 10)'
-          @success='total_step++'
+          @success='correctStep++'
           :mark='mark[index] === 0'
           :display='true'
         />
@@ -69,7 +69,7 @@
           :question='item'
           :done='correctStep > 7 + index'
           @error='marking(index + 2, 10)'
-          @success='total_step++'
+          @success='correctStep++'
           :mark='mark[index + 2] === 0'
           :display='true'
         />
