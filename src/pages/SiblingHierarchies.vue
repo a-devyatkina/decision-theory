@@ -34,17 +34,7 @@
               :done="step > 1"
       >
         <div class=matrix v-for="(matrix) in info.data" :key="matrix.id">
-          <div class="q-pa-md" id="matrix_table">
-            <q-table
-              :title="matrix.name"
-              :data="matrix.value"
-              :columns="columns"
-              color="primary"
-              row-key="id"
-              hide-header
-              hide-bottom
-            />
-          </div>
+          <matrix-view :matrix="matrix"/>
         </div>
 
         <q-stepper-navigation>
@@ -306,7 +296,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -315,7 +305,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -324,7 +314,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -333,7 +323,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <br>
             <input
@@ -343,7 +333,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -352,7 +342,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -361,7 +351,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -370,7 +360,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <br>
             <input
@@ -380,7 +370,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -389,7 +379,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -398,7 +388,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="matrix"
@@ -407,7 +397,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             </div>
           </div>
@@ -422,7 +412,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="criterion_priority"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="criterion_priority"
@@ -431,7 +421,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="criterion_priority"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="criterion_priority"
@@ -440,7 +430,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="criterion_priority"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
             <input
                     id="criterion_priority"
@@ -449,7 +439,7 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="criterion_priority"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
           </div>
         <div class="field">
@@ -463,7 +453,7 @@
                   v-validate.continues="{ required: true, max: 10 }"
                   data-vv-as="вектор приоритетов"
                   name="global_priority"
-                  :disabled="hierarchical_synthesis.done"
+                  :disabled="hierarchical_synthesis_done"
           >
           <input
                   id="global_priority"
@@ -472,7 +462,7 @@
                   v-validate.continues="{ required: true, max: 10 }"
                   data-vv-as="вектор приоритетов"
                   name="global_priority"
-                  :disabled="hierarchical_synthesis.done"
+                  :disabled="hierarchical_synthesis_done"
           >
           <input
                   id="global_priority"
@@ -481,7 +471,7 @@
                   v-validate.continues="{ required: true, max: 10 }"
                   data-vv-as="вектор приоритетов"
                   name="global_priority"
-                  :disabled="hierarchical_synthesis.done"
+                  :disabled="hierarchical_synthesis_done"
           >
         </div>
           <div class="field">
@@ -495,13 +485,13 @@
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="alternative"
-                    :disabled="hierarchical_synthesis.done"
+                    :disabled="hierarchical_synthesis_done"
             >
           </div>
-          <q-btn @click="labIntermediate(hierarchical_synthesis)" color="secondary" :disabled="hierarchical_synthesis.done" label="Проверить"/>
+          <q-btn @click="labIntermediate(hierarchical_synthesis)" color="secondary" :disabled="hierarchical_synthesis_done" label="Проверить"/>
         <q-stepper-navigation>
           <q-btn @click="step = 10" color="secondary" label="Skip" class="skip_btn"/>
-          <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_synthesis.done" class="q-ml-sm"/>
+          <q-btn @click="step = 10" color="secondary" label="Continue" :disabled="!hierarchical_synthesis_done" class="q-ml-sm"/>
           <q-btn flat @click="step = 8" color="secondary" label="Back" class="q-ml-sm" />
         </q-stepper-navigation>
       </q-step>
@@ -556,9 +546,9 @@
     display: flex;
     flex-direction: row;
   }
-  .skip_btn {
-    display: none;
-  }
+  /*.skip_btn {*/
+    /*display: none;*/
+  /*}*/
   #matrix_table {
     width: 450px;
   }
@@ -593,17 +583,18 @@ export default {
         isOver: false
       },
       matrices: [
-        [{}, {}, {}, {}, {}, {}, {}],
-        [{}, {}, {}, {}, {}, {}, {}],
-        [{}, {}, {}, {}, {}, {}, {}],
-        [{}, {}, {}, {}, {}, {}, {}],
-        [{}, {}, {}, {}, {}, {}, {}]
+        [[], [], [], [], [], [], []],
+        [[], [], [], [], [], [], []],
+        [[], [], [], [], [], [], []],
+        [[], [], [], [], [], [], []],
+        [[], [], [], [], [], [], []]
       ],
       target_matrix_done: false,
       criterion_matrix1_done: false,
       criterion_matrix2_done: false,
       criterion_matrix3_done: false,
       criterion_matrix4_done: false,
+      hierarchical_synthesis_done: false,
       hierarchical_synthesis: {
         matrix: [[], [], []],
         criterion_priority: [],
@@ -913,7 +904,7 @@ export default {
                 this.criterion_matrix4_done = true
                 break
               default:
-                this.hierarchical_synthesis.done = true
+                this.hierarchical_synthesis_done = true
                 break
             }
             this.step++

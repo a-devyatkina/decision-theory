@@ -6,7 +6,7 @@ import TeacherButton from '../components/TeacherButton.vue'
 import GroupTable from '../components/GroupTable.vue'
 import ReportTable from '../components/ReportTable.vue'
 import WorkflowAction from '../components/WorkflowAction.vue'
-import HierarchiesWorkflowAction from '../components/HierarchiesworkflowAction.vue'
+import HierarchiesWorkflowAction from '../components/Hierarchies/HierarchiesworkflowAction.vue'
 import ChangePlanButton from '../components/ChangePlanButton.vue'
 import LabsTable from '../components/LabsTable.vue'
 import SteplabsTable from '../components/SteplabsTable.vue'
@@ -14,6 +14,10 @@ import HierarchiesLabTable from '../components/HierarchiesLabTable.vue'
 import SteplabButton from '../components/SteplabButton.vue'
 import TeachersTable from '../components/TeachersTable.vue'
 import RegistrationsTable from '../components/RegistrationsTable.vue'
+import MatrixView from '../components/Hierarchies/MatrixView.vue'
+import MatrixStepView from '../components/Hierarchies/MatrixStepView.vue'
+import QuestionReport from '../components/Hierarchies/QuestionReport.vue'
+import SiblingHierarchiesReport from '../components/Hierarchies/SiblingHierarchiesReport.vue'
 
 import routes from './routes'
 
@@ -32,6 +36,10 @@ Vue.component('steplab-button', SteplabButton)
 Vue.component('hierarchieslabs-table', HierarchiesLabTable)
 Vue.component('teachers-table', TeachersTable)
 Vue.component('registrations-table', RegistrationsTable)
+Vue.component('matrix-view', MatrixView)
+Vue.component('matrixstep-view', MatrixStepView)
+Vue.component('question-report', QuestionReport)
+Vue.component('siblinghierarchies-report', SiblingHierarchiesReport)
 
 /*
  * If not building with SSR mode, you can

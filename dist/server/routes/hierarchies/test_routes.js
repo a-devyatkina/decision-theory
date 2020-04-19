@@ -304,4 +304,20 @@ module.exports = function(app, db, ObjectID) {
         await db.collection('sessions').updateOne(filter, update)
         res.send(response)
     })
+    app.post('/restapi/hierarchies/get_intro_question', async (req, res) => {
+        let question = await db.collection('intro_test').findOne({'_id':ObjectID(req.body.id)})
+        res.send(question)
+    })
+
+    app.post('/restapi/hierarchies/get_practice_question', async (req, res) => {
+        let type = await db.collection('practice_test').findOne({'type':req.body.type})
+        for (let i = 0; i < type.questions.length; i++) {
+            if (type.questions[i]._id.equals(ObjectID(req.body.id))) res.send(type.questions[i])
+        }
+    })
+
+    app.post('/restapi/hierarchies/get_add_question', async (req, res) => {
+        let question = await db.collection('add_test').findOne({'_id':ObjectID(req.body.id)})
+        res.send(question)
+    })
 }

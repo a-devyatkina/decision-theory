@@ -49,6 +49,9 @@
           </q-item-main>
         </q-item>
       </q-list>
+      <div v-if="work.lab === 'siblinghierarchies'">
+        <siblinghierarchies-report :sid="work.student"/>
+      </div>
     </q-list>
   </q-page>
 </template>
@@ -137,8 +140,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.student)
-    console.log(this.course.groups)
     let data = {
       user_id: this.work.student
     }
@@ -154,7 +155,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
   .unseen {
     visibility: hidden;
   }
