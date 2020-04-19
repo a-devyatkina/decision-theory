@@ -14,14 +14,14 @@
       <p v-for="(item, index) in question.answer" v-bind:key='index'>{{ item }}</p>
       <p v-if='err' style="font-size: 16px; color: red">Вы допустили ошибку</p>
       <p v-else style="font-size: 16px; color: green">Верно</p>
-      <button-next label='Продолжить'/>
+      <button-next v-if='display' label='Продолжить'/>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['question', 'done', 'mark'], // получаем на вход в вашем случае ошибку либо её отсутствие
+  props: ['question', 'done', 'mark', 'display'], // получаем на вход в вашем случае ошибку либо её отсутствие
   data () {
     return {
       validation: false,
@@ -35,13 +35,18 @@ export default {
   methods: {
     check () {
       if (!this.checkValid()) {
+        console.log('!this.checkValid()')
         this.err = false
         this.validation = true
       } else if (!this.arr[this.question.right] || !this.checkArr()) {
+        console.log('!this.arr[this.question.right] || !this.checkArr()')
         this.$emit('error')
+        this.$emit('success')
         this.err = true
         this.done = true
       } else {
+        console.log('ELSE')
+        this.$emit('success')
         this.done = true
         return true
       }
