@@ -14,7 +14,7 @@
       <p v-for="(item, index) in question.answer" v-bind:key='index'>{{ item }}</p>
       <p v-if='err' style="font-size: 16px; color: red">Вы допустили ошибку</p>
       <p v-else style="font-size: 16px; color: green">Верно</p>
-      <button-next v-if='display' label='Продолжить'/>
+      <button-next v-if='!display' label='Продолжить'/>
     </div>
   </div>
 </template>
@@ -35,20 +35,14 @@ export default {
   methods: {
     check () {
       if (!this.checkValid()) {
-        console.log('!this.checkValid()')
         this.err = false
         this.validation = true
       } else if (!this.arr[this.question.right] || !this.checkArr()) {
-        console.log('!this.arr[this.question.right] || !this.checkArr()')
         this.$emit('error')
         this.$emit('success')
         this.err = true
-        this.done = true
       } else {
-        console.log('ELSE')
         this.$emit('success')
-        this.done = true
-        return true
       }
     },
     checkArr () {
