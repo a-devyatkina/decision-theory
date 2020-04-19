@@ -1,5 +1,5 @@
 <template>
-        <q-list class="q-ma-md round-borders shadow-2 bg-grey-2" id="list">
+        <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
             <q-item-main> {{ text }} </q-item-main>
             <div v-if="question.answers.length">
                 <div v-for="answer in question.answers" :key="answer.id">

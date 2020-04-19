@@ -1,5 +1,5 @@
 <template>
-    <q-list class="q-ma-md round-borders shadow-2 bg-grey-2" id="list">
+    <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
         <q-item>
             <q-item-main>Вектор приоритетов</q-item-main>
             <q-item-side>&lt;{{ answer[0].join(', ') }}&gt;</q-item-side>

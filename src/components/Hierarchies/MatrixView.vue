@@ -1,6 +1,7 @@
 <template>
     <div class="matrix" id="matrix_table">
         <q-table
+                class="q-ma-md round-borders shadow-2 bg-white"
                 :title="matrix.name"
                 :data="matrix.value"
                 :columns="columns"

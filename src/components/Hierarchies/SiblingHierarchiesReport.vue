@@ -114,7 +114,7 @@
                 <q-item-side right>Этап {{ session.hierarchical_synthesis.done ? "завершен" : "не завершен" }}</q-item-side>
             </q-item>
             <div v-for="answer in session.hierarchical_synthesis.answers" :key="answer.id">
-                <q-list class="q-ma-md round-borders shadow-2 bg-grey-2" id="list">
+                <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
                     <q-item>
                         <matrix-view :matrix="answer.matrix"/>
                     </q-item>
