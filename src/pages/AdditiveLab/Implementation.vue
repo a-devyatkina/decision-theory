@@ -50,7 +50,7 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <QuestionPref @success='correctChoice' :done='correctStep > 9' :question='question[1]' @error='err' @back='back' />
+        <QuestionPref @success='correctChoice' :done='correctStep > 9' :question='question[1]' :mark='error[10] !== 0' @error='err' @back='back' />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > 9' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
           <q-btn v-if='correctStep > 9' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
@@ -71,7 +71,7 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <QuestionPref @success='correctChoice' :done='correctStep > 11' :question='question[2]' @error='err' @back='back' />
+        <QuestionPref @success='correctChoice' :done='correctStep > 11' :question='question[2]' :mark='error[12] !== 0' @error='err' @back='back' />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > 11' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
           <q-btn v-if='correctStep > 11' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
@@ -93,7 +93,7 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <QuestionPref @success='correctChoice' :done='correctStep > 13' :question='question[3]' @error='err' @back='back' />
+        <QuestionPref @success='correctChoice' :done='correctStep > 13' :question='question[3]' :mark='error[14] !== 0' @error='err' @back='back' />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > 13' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
           <q-btn v-if='correctStep > 13' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
