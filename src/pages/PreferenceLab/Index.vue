@@ -33,6 +33,7 @@
         :done='correctStep > index - 1'
         @success = 'Answer()'
         @error = 'errorMethod'
+        :mark='error[index - 1] !== 0'
       />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > index - 1 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
@@ -154,6 +155,7 @@
         :done='correctStep > 14 + index - 2'
         @success = 'Answer()'
         @error = 'errorMethod'
+        :mark = '13 + index - 1'
       />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > 14 + index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
@@ -237,6 +239,7 @@
           <q-btn v-if='correctStep > 16 || teacherMode' @click='() => { done2 = true; step = 16 }' color='secondary' label='Назад' />
         </q-stepper-navigation>
       </q-step>
+        
     </q-stepper>
      <div class="lab-info">
       <div class="mark">
