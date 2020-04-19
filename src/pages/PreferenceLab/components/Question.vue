@@ -14,7 +14,7 @@
       <p v-for="(item, index) in question.answer" v-bind:key='index'>{{ item }}</p>
       <p v-if='err' style="font-size: 16px; color: red">Вы допустили ошибку</p>
       <p v-else style="font-size: 16px; color: green">Верно</p>
-      <button-next v-if='!display' label='Продолжить'/>
+      <button-next v-if='display' label='Продолжить'/>
     </div>
   </div>
 </template>
