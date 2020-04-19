@@ -25,7 +25,11 @@
         title='Вопрос'
         :done='correctStep > step - 1'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[0]' @error='err' @back='back'></theoretical-choice>
+        <QuestionPref @success='correctChoice' :done='correctStep > 0' :question='question[0]' :mark='error[1] !== 0' @error='err' @back='back' />
+        <q-stepper-navigation>
+          <q-btn v-if='correctStep > 0' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='correctStep > 0' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step v-for="(item, index) in condition.criterion" v-bind:key='index' :name='Number(index + 2)' :title='`Значения С${index + 1}`' icon='assignment' :done='correctStep > 1 + index'>
@@ -46,7 +50,11 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[1]' @back='back' @error="err"></theoretical-choice>
+        <QuestionPref @success='correctChoice' :done='correctStep > 9' :question='question[1]' @error='err' @back='back' />
+        <q-stepper-navigation>
+          <q-btn v-if='correctStep > 9' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='correctStep > 9' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step
@@ -63,7 +71,11 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[2]' @back='back' @error="err"></theoretical-choice>
+        <QuestionPref @success='correctChoice' :done='correctStep > 11' :question='question[2]' @error='err' @back='back' />
+        <q-stepper-navigation>
+          <q-btn v-if='correctStep > 11' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='correctStep > 11' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step
@@ -81,7 +93,11 @@
         :done='correctStep > step - 1'
         icon='assignment'
       >
-        <theoretical-choice @answer='correctChoice' :step='step' :correctStep='correctStep' :question='question[3]' @back='back' @error="err"></theoretical-choice>
+        <QuestionPref @success='correctChoice' :done='correctStep > 13' :question='question[3]' @error='err' @back='back' />
+        <q-stepper-navigation>
+          <q-btn v-if='correctStep > 13' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
+          <q-btn v-if='correctStep > 13' flat @click='step = step - 1' color='secondary' label='Назад' class='q-ml-sm' />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step
@@ -187,7 +203,7 @@ export default {
       if (this.step > this.correctStep) {
         this.correctStep++
       }
-      this.step++
+      // this.step++
     },
     getEvals (evals) {
       if (this.step > this.correctStep) {
