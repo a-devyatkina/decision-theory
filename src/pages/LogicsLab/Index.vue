@@ -28,13 +28,13 @@
         :header-nav='correctStep > index'
         :done='correctStep > index + 1'
       >
-        <question-logics
+        <QuestionPref
           :question='item'
-          :total_step='correctStep'
-          :current_step='current_step'
-          :user_answer='user_answer[index]'
-          @error='question_error($event, index)'
-          @right='question_right($event, index)'
+          :done='correctStep > index + 1'
+          @error='marking(index, 10)'
+          @success='total_step++'
+          :mark='mark[index] === 0'
+          :display='true'
         />
       </q-step>
 
@@ -65,13 +65,13 @@
         :header-nav='correctStep > index + 6'
         :done='correctStep > index + 7'
       >
-        <question-logics
+        <QuestionPref
           :question='item'
-          :total_step='correctStep'
-          :current_step='current_step'
-          :user_answer='user_answer[index + 2]'
-          @error='question_error($event, index + 2)'
-          @right='question_right($event, index + 2)'
+          :done='correctStep > 7 + index'
+          @error='marking(index + 2, 10)'
+          @success='total_step++'
+          :mark='mark[index + 2] === 0'
+          :display='true'
         />
       </q-step>
 
@@ -126,13 +126,14 @@
         Количество баллов: {{ realScore }}. Попытка №{{ work3.work.attempt + 1 }}. Штрафной балл {{ maxScore *10 * work3.work.attempt / 100 }} Прогресс
       </div>
        <div class="step">
-          {{current_step}}/16
+          {{current_step}}/12
       </div>
     </div>
     <q-dialog v-model="alert"  prevent-close @ok='handlerOk'>
       <span slot="title">Неудача</span>
       <span slot="message">К сожалению, вы набрали меньше 60% процентов от максиамльного количества баллов.</span>
     </q-dialog>
+    {{ mark }}
   </div>
 </template>
 
@@ -145,9 +146,9 @@ export default {
   name: 'main_page',
   data () {
     return {
-      correctStep: 0,
+      correctStep: 10,
       current_step: 0,
-      mark: [8, 8, 8, 8, 8, 12, 12, 12, 12, 12],
+      mark: [10, 10, 10, 10, 0, 12, 12, 12, 12, 12],
       user_answer: [0, 0, 0, 0],
       condition: {},
       question: []
@@ -270,7 +271,7 @@ export default {
       return [...Array(n).keys()]
     },
     marking (n, k) {
-      this.mark.splice(n, 1, this.mark[n] ? this.mark[n] - k : 0)
+      this.mark.splice(n, 1, this.mark[n] - k > 0 ? this.mark[n] - k : 0)
       this.work3.work.error = this.mark
       const score = this.mark.reduce((acc, val) => acc + val)
       if (score - this.work3.work.attempt * 10 < 60) {
@@ -284,8 +285,8 @@ export default {
       })
     },
     question_error (array, index) {
-      this.user_answer[index] = array
-      this.marking(index, 8)
+      // this.user_answer[index] = array
+      this.marking(index, 10)
     },
     question_right (array, index) {
       this.user_answer[index] = array
