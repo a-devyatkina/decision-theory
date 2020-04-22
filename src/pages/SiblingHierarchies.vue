@@ -954,28 +954,31 @@ export default {
         dialog = {
           title: 'Вы успешно выполнили задание',
           message: 'Ваша оценка: ' + mark + '. ',
-          ok: 'Продолжить'
+          cancel: 'Отправить на оценкy'
         }
       } else {
         dialog = {
           title: 'Вы допустили слишком много ошибок',
-          message: '',
-          ok: 'Продолжить'
+          message: ''
         }
       }
       if (this.work.work.tries < 3) {
         dialog.message += 'Вы можете попробовать повысить свою оценку, при этом максимальный былл будет снижен на 10%'
-        dialog.cancel = 'Попробовать снова'
+        dialog.ok = 'Попробовать снова'
+      } else {
+        dialog.message += 'У вас законичились попытки. Чтобы переделать работу, попросите преподавателя отправить ее на доработку'
+        dialog.ok = 'Отправить на оценку'
+        delete dialog.cancel
       }
       dialog.preventClose = true
       await this.$q.dialog(
         dialog
       ).then(() => {
-        this.work.work.stage = 'resolve'
-        this.work.work.score = this.mark
-      }).catch(() => {
         this.work.work.stage = 'improve'
         this.work.work.score = 0
+      }).catch(() => {
+        this.work.work.stage = 'resolve'
+        this.work.work.score = this.mark
       })
       this.work.work.tries += 1
       this.$store.dispatch('data/updateHierarchieswork', {
