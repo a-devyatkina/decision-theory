@@ -88,7 +88,7 @@ export default {
     },
     score () {
       let maxscore = this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
-      let score = Math.floor(((this.work.score - this.work.tries * 10) * maxscore) / 100) - this.work.penalty
+      let score = Math.floor(((this.work.score - (this.work.tries - 1) * 10) * maxscore) / 100) - this.work.penalty
       return score > 0 ? score : 0
     }
   },
