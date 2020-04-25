@@ -154,8 +154,8 @@
         :question="question[index + 1]"
         :done='correctStep > 14 + index - 2'
         @success='Answer()'
-        @erro ='errorMethod'
-        :mark='13 + index - 1'
+        @error ='errorMethod'
+        :mark='error[13 + index - 1] !== 0'
       />
         <q-stepper-navigation>
           <q-btn v-if='correctStep > 14 + index - 2 || teacherMode' @click='() => { done2 = true; step = step + 1 }' color='secondary' label='Продолжить' />
