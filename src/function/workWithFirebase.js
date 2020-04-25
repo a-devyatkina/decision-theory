@@ -4,6 +4,7 @@ import variants from './variants'
 
 const usersWithVariants = {
   '-M3laaK6mM7HWas1EMDw': 0,
+  '-M0S_7Mu7gv6HU8r7GZo': 0,
   '-M4Q1b80w6kBbGOWuk1G': 1,
   '-M4Pn67BYX5Daensy7ve': 2,
   '-M4PmenQPUPCZHL5rycY': 3,
@@ -20,6 +21,7 @@ export function checkLab (labName) {
   let cid = this.$router.currentRoute.query.cid
   let work3 = this.$store.getters['data/getStudentWork3'](user.id, labName, cid)
   this.maxScore = this.$store.getters['data/getCourse'](cid).groups[user.group].lab3[work3.work.lab].maxScore
+  console.log(user.id)
 
   if (work3) {
     if (work3.work.stage !== 'improve' && work3.work.condition !== '') {
