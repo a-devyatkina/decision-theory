@@ -32,7 +32,7 @@
           :question='item'
           :done='correctStep > index + 1'
           @error='marking(index, 10)'
-          @success='correctStep++'
+          @success='nextCorrectStepUltraHDStep()'
           :mark='mark[index] === 0'
           :display='true'
         />
@@ -69,7 +69,7 @@
           :question='item'
           :done='correctStep > 7 + index'
           @error='marking(index + 2, 10)'
-          @success='correctStep++'
+          @success='nextCorrectStepUltraHDStep()'
           :mark='mark[index + 2] === 0'
           :display='true'
         />
@@ -133,7 +133,6 @@
       <span slot="title">Неудача</span>
       <span slot="message">К сожалению, вы набрали меньше 60% процентов от максиамльного количества баллов.</span>
     </q-dialog>
-    {{ mark }}
   </div>
 </template>
 
@@ -146,10 +145,9 @@ export default {
   name: 'main_page',
   data () {
     return {
-      correctStep: 10,
+      correctStep: 0,
       current_step: 0,
       mark: [10, 10, 10, 10, 0, 12, 12, 12, 12, 12],
-      user_answer: [0, 0, 0, 0],
       condition: {},
       question: []
     }
@@ -243,15 +241,7 @@ export default {
   },
   async created () {
     bus.$on('next_step', () => {
-      if (this.correctStep === this.current_step) {
-        this.correctStep += 1
-        this.work3.work.step = this.correctStep
-        this.$store.dispatch('data/updateWork3', {
-          wid: this.work3.wid,
-          work: this.work3.work
-        })
-      }
-      this.current_step += 1
+      this.nextCorrectStepUltraHDStep(true)
     })
     await checkLab.call(this, 'logicsLab')
     for (let i = 0; i < this.condition.criterion.length; i++) {
@@ -311,6 +301,19 @@ export default {
         work: this.work3.work
       })
       this.$router.push('/works')
+    },
+    nextCorrectStepUltraHDStep (flag) {
+      if (this.correctStep === this.current_step) {
+        this.correctStep += 1
+        this.work3.work.step = this.correctStep
+        this.$store.dispatch('data/updateWork3', {
+          wid: this.work3.wid,
+          work: this.work3.work
+        })
+      }
+      if (flag) {
+        this.current_step += 1
+      }
     }
   }
 }
