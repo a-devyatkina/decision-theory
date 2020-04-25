@@ -21,21 +21,21 @@
       separator='cell'
       hide-bottom
     >
-      <q-tr slot="body" slot-scope="props" :props="props">
-        <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-        <q-td key="first_value" :props="props">
-          {{ props.row.first_value }}
-          <q-popup-edit v-if='step === 0' v-model="props.row.first_value">
-            <q-input @input='first_building()' placeholder='0.000' v-model="props.row.first_value" dense autofocus />
-          </q-popup-edit>
-        </q-td>
-        <q-td key="second_value" :props="props">
-          {{ props.row.second_value }}
-          <q-popup-edit v-if='step === 0' v-model="props.row.second_value">
-            <q-input @input='first_building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
-          </q-popup-edit>
-        </q-td>
-      </q-tr>
+        <q-tr slot="body" slot-scope="props" :props="props">
+          <q-td key="name" :props="props">{{ props.row.name }}</q-td>
+          <q-td key="first_value" :props="props">
+            {{ props.row.first_value }}
+            <q-popup-edit v-if='step === 0' v-model="props.row.first_value">
+              <q-input @input='first_building()' placeholder='0.000' v-model="props.row.first_value" dense autofocus />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="second_value" :props="props">
+            {{ props.row.second_value }}
+            <q-popup-edit v-if='step === 0' v-model="props.row.second_value">
+              <q-input @input='first_building()' placeholder='0.000' v-model="props.row.second_value" dense autofocus />
+            </q-popup-edit>
+          </q-td>
+        </q-tr>
     </q-table>
     <div class="clr"></div>
     <q-btn v-if='step === 0' @click='first_check()' color='secondary' label='Проверить'/>
@@ -81,10 +81,10 @@
       >
           <q-tr slot="body" slot-scope="props" :props="props">
             <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-            <q-td v-for='index of range(Y.length - 1)' :key='number_value(index)' :props="props">
-              {{ props.row[number_value(index)] }}
-              <q-popup-edit v-if='step === 2' v-model="props.row[key]">
-                <q-input @input='second_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
+            <q-td v-for='index of range(Y.length - 1)' :key='index_column[index]' :props="props">
+              {{ props.row[index_column[index]] }}
+              <q-popup-edit v-if='step === 2' v-model="props.row[index_column[index]]">
+                <q-input @input='second_building()' placeholder='0.000' v-model="props.row[index_column[index]]" dense autofocus />
               </q-popup-edit>
             </q-td>
           </q-tr>
@@ -103,10 +103,10 @@
       >
           <q-tr slot="body" slot-scope="props" :props="props">
             <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-            <q-td v-for='index of range(Y.length - 1)' :key='number_value(index)' :props="props">
-              {{ props.row[number_value(index)] }}
-              <q-popup-edit v-if='step === 3' v-model="props.row[key]">
-                <q-input @input='third_building()' placeholder='0.000' v-model="props.row[key]" dense autofocus />
+            <q-td v-for='index of range(Y.length - 1)' :key='index_column[index]' :props="props">
+              {{ props.row[index_column[index]] }}
+              <q-popup-edit v-if='step === 3' v-model="props.row[index_column[index]]">
+                <q-input @input='third_building()' placeholder='0.000' v-model="props.row[index_column[index]]" dense autofocus />
               </q-popup-edit>
             </q-td>
           </q-tr>
@@ -147,6 +147,15 @@ export default {
     }
   },
   props: ['total_step', 'current_step', 'alternative', 'criterion', 'array1', 'array2', 'array3', 'array4', 'rules'],
+  computed: {
+    index_column () {
+      const array = []
+      for (const i of this.Y.slice(1)) {
+        array.push('value' + i.toString())
+      }
+      return array
+    }
+  },
   created () {
     this.data1 = this.criterion.map((item, index) => { return { name: item.tytle, value: this.array1[index] } })
     this.data2 = this.criterion.map((item, index) => { return { name: item.tytle, first_value: this.total_step === this.current_step ? '' : this.array1[index], second_value: this.total_step === this.current_step ? '' : +(1 - this.array1[index]).toFixed(3) } })
@@ -171,9 +180,6 @@ export default {
     range (n) {
       return [...Array(n).keys()]
     },
-    number_value (index) {
-      return 'value' + (index / 10).toString()
-    },
     compare (a, b) {
       if (Math.abs(a) < 1) {
         if (b < a + 0.1 && b > a - 0.1) { return false } else { return true }
@@ -182,9 +188,9 @@ export default {
       }
     },
     valid (answer) {
-      // console.log(answer)
+      console.log(answer)
       this.error = false
-      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.' && elem[0] !== ' ')) {
+      if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.')) {
         this.validation = false
         return false
       } else {
@@ -281,8 +287,8 @@ export default {
         }
       }
       for (let i = 0; i < this.rules.length; i++) {
-        for (const j of this.range(this.Y.length - 1)) {
-          this.data3[i][this.number_value(j % 11)] = this.array3[j + i * 11]
+        for (const [index, item] of this.Y.slice(1).entries()) {
+          this.data3[i]['value' + item] = this.array3[index + i * 11]
         }
       }
       this.step++
