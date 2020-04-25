@@ -32,6 +32,25 @@ export default {
         { name: 'Балл', label: 'Баллы', field: 'point' },
         { name: 'Штраф', label: 'Штраф', field: 'penalty' },
         { name: 'Максимальный балл', label: 'Максимальный балл', field: 'max_points' }
+      ],
+      title: [
+        'Вопрос 1',
+        'Вопрос 2',
+        'Значения 1',
+        'Значения 2',
+        'Значения 3',
+        'Значения 4',
+        'Отношение 1',
+        'Отношение 2',
+        'Отношение 3',
+        'Отношение 4',
+        'Нечеткое отношение',
+        'Подмножество альтернатив',
+        'Нечеткое отношение',
+        'Вопрос 3',
+        'Вопрос 4',
+        'Подмножество альтернатив',
+        'Лучшая альтернатива'
       ]
     }
   },
@@ -41,8 +60,8 @@ export default {
       for (let i = 0; i < this.max_points.length; i++) {
         arr.push({
           id: i + 1,
-          title: `i + ${i}`,
-          point: this.max_points[i] - this.errors[i] * this.penalty[i],
+          title: this.title[i],
+          point: this.errors[i] * this.penalty[i] > this.max_points[i] ? 0 : this.max_points[i] - this.errors[i] * this.penalty[i],
           penalty: this.penalty[i],
           max_points: this.max_points[i]
         })
