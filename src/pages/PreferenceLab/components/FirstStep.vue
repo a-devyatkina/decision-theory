@@ -127,7 +127,7 @@ export default {
       console.log(this.answers)
       this.error = false
       for (let i = 0; i < answer.length; i++) {
-        if (Number(answer[i]) !== rightAnswer[i]) {
+        if (Math.abs(Number(answer[i]) - rightAnswer[i]) > 0.05) {
           this.error = true
           this.$emit('error')
         }

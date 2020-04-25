@@ -127,7 +127,7 @@ export default {
       this.error = false
       console.log(this.inputMatrix)
       for (let i = 0; i < 3; i++) {
-        if (Number(this.inputMatrix[0][`a${i + 1}`]) !== this.rightMatrix[i]) {
+        if (Math.abs(Number(this.inputMatrix[0][`a${i + 1}`]) - this.rightMatrix[i]) > 0.05) {
           this.error = true
           this.$emit('error')
         }
@@ -135,7 +135,7 @@ export default {
       console.log(Number(this.answer[0]['a1']))
       console.log(this.rightAnswer)
       console.log(Number(this.answer[0]['a1']) === (this.rightAnswer))
-      if (Number(this.answer[0]['a1']) !== this.rightAnswer) {
+      if (Math.abs(Number(this.answer[0]['a1']) - this.rightAnswer) > 0.05) {
         this.error = true
         this.$emit('error')
       }

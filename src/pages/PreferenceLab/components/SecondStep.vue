@@ -90,15 +90,15 @@ export default {
       console.log(this.rightMatrix)
       this.error = false
       for (let i = 0; i < 3; i++) {
-        if (Number(this.inputMatrix[i].a1) !== this.rightMatrix[i * 3 + 0]) {
+        if (Math.abs(Number(this.inputMatrix[i].a1) - this.rightMatrix[i * 3 + 0]) > 0.05) {
           this.error = true
           this.$emit('error')
         }
-        if (Number(this.inputMatrix[i].a2) !== this.rightMatrix[i * 3 + 1]) {
+        if (Math.abs(Number(this.inputMatrix[i].a2) - this.rightMatrix[i * 3 + 1]) > 0.05) {
           this.error = true
           this.$emit('error')
         }
-        if (Number(this.inputMatrix[i].a3) !== this.rightMatrix[i * 3 + 2]) {
+        if (Math.abs(Number(this.inputMatrix[i].a3) - this.rightMatrix[i * 3 + 2]) > 0.05) {
           this.error = true
           this.$emit('error')
         }
