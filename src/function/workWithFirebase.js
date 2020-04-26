@@ -64,7 +64,9 @@ export function checkLab (labName) {
       if (user.role === 'student') {
         work3.work.condition = this.condition
         work3.work.question = this.question
-        work3.work.condition.weight = [0.25, 0.25, 0.25, 0.25]
+        if (!work3.work.condition.weight) {
+          work3.work.condition.weight = [0.25, 0.25, 0.25, 0.25]
+        }
         work3.work.step = 0
         this.correctStep = work3.work.step
         work3.work.stage = 'opened'
