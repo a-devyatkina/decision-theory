@@ -15,7 +15,7 @@
         <q-td key="coord" :props="props">
           {{ props.row.coord }}
           <q-popup-edit :disable="checked" v-model="props.row.coord">
-            <q-input v-model="props.row.coord" dense autofocus counter color="secondary"/>
+            <q-input v-model.number="props.row.coord" type="number" dense autofocus counter color="secondary"/>
           </q-popup-edit>
         </q-td>
       </q-tr>
@@ -191,8 +191,14 @@ export default {
       })
 
       // if (this.altNum !== this.answerAltNum) {
-      if (this.answerCoords[this.altNum - 1].coord !== this.answerCoords[this.answerAltNum - 1].coord) {
+      /*   if (this.answerCoords[this.altNum - 1].coord !== this.answerCoords[this.answerAltNum - 1].coord) {
         this.$emit('error', 3)
+        this.$refs.input.$el.style = 'background-color: #FF0000; max-width: 100px'
+      } */
+
+      if (this.answerRating[Number(this.altNum) - 1].rating !== 1) {
+        this.$emit('error', 3)
+        this.mistake = true
         this.$refs.input.$el.style = 'background-color: #FF0000; max-width: 100px'
       }
 
