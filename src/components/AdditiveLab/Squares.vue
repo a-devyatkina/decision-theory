@@ -39,7 +39,7 @@
         <q-td key="square" :props="props">
           {{ props.row.square }}
           <q-popup-edit :disable="checked" v-model="props.row.square">
-            <q-input v-model="props.row.square" dense autofocus counter color="secondary"/>
+            <q-input v-model.number="props.row.square" type="number" dense autofocus counter color="secondary"/>
           </q-popup-edit>
         </q-td>
       </q-tr>

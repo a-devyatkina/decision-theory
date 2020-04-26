@@ -41,19 +41,19 @@
         <q-td key="begin" :props="props">
           {{ props.row.begin }}
           <q-popup-edit :disable="checked" v-model="props.row.begin">
-            <q-input v-model="props.row.begin" dense autofocus counter color="secondary"/>
+            <q-input v-model.number="props.row.begin" type="number" dense autofocus counter color="secondary"/>
           </q-popup-edit>
         </q-td>
         <q-td key="top" :props="props">
           <div class="text-pre-wrap">{{ props.row.top }}</div>
           <q-popup-edit :disable="checked" v-model="props.row.top">
-            <q-input v-model="props.row.top" dense autofocus counter color="secondary"/>
+            <q-input v-model.number="props.row.top" type="number" dense autofocus counter color="secondary"/>
           </q-popup-edit>
         </q-td>
         <q-td key="end" :props="props">
           {{ props.row.end }}
           <q-popup-edit :disable="checked" v-model="props.row.end">
-            <q-input v-model="props.row.end" dense autofocus counter color="secondary"/>
+            <q-input v-model.number="props.row.end" type="number" dense autofocus counter color="secondary"/>
           </q-popup-edit>
         </q-td>
       </q-tr>

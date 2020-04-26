@@ -24,7 +24,7 @@
     <img v-bind:src="data.function"/>
     <div v-if = 'data.koef && part === 1'>
       <div v-for="(item, index) in koefArr" v-bind:key='index'>
-        {{String.fromCodePoint(65 + index)}} = <input v-model="koefArr[index]" placeholder="0.00"/>
+        {{String.fromCodePoint(65 + index)}} = <input v-model.number="koefArr[index]" type="number" placeholder="0.00"/>
       </div>
       <div v-if="error" style="font-size: 16px; color: red">
         Ошибка
@@ -33,7 +33,7 @@
     </div>
     <div v-else-if = 'part === 2 && !done'>
       <div v-for="(item, index) in alternative" v-bind:key='index'>
-        {{item.description}} <input v-model="funcAnswer[index]" placeholder="0.00"/>
+        {{item.description}} <input v-model.number="funcAnswer[index]" type="number" placeholder="0.00"/>
       </div>
       <div v-if="error" style="font-size: 16px; color: red">
         Ошибка
