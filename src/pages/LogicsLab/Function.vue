@@ -72,12 +72,6 @@
     </div>
     <p v-if='error' style='color: red'>Неверно</p>
     <p v-if='validation' style='color: red'>Проверьте корректность ввода всех полей</p>
-    {{ step }}
-    {{ typeof step }}
-    {{ total_step }}
-    {{ typeof total_step }}
-    {{ current_step }}
-    {{ typeof current_step }}
   </div>
 </template>
 
