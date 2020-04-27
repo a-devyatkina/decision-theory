@@ -118,6 +118,14 @@ const routes = [
     beforeEnter: checkStudentOrTeacher
   },
   {
+    path: '/work3flow',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Lab3FlowPage.vue') }
+    ],
+    beforeEnter: checkStudentOrTeacher
+  },
+  {
     path: '/works',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -130,6 +138,27 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/SteplabPage.vue') }
+    ]
+  },
+  {
+    path: '/additiveLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AdditiveLab/Implementation.vue') }
+    ]
+  },
+  {
+    path: '/logicsLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LogicsLab/Index.vue') }
+    ]
+  },
+  {
+    path: '/preferenceLab',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/PreferenceLab/Index.vue') }
     ]
   }
 ]

@@ -18,6 +18,11 @@
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(lab.state)}}</q-chip>
         </router-link>
       </q-td>
+      <q-td v-for="work in props.row.work3" :key="work.lid" :props="props">
+        <router-link :to="`work3flow?wid=${work.wid}`">
+          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
+        </router-link>
+      </q-td>
       <q-td key="attendance" :props="props">
         <q-chip color="secondary" style="width:50px" class="cursor-pointer">{{props.row.attendance}}
           <q-popover v-if="editable!=undefined">
@@ -88,6 +93,21 @@ export default {
           })
         }
       }
+      for (let lid in this.plan.lab3) {
+        let lab = this.$store.getters['data/getLab3'](lid)
+        if (lab) {
+          cols.push({
+            name: lid,
+            required: true,
+            label: lab.name,
+            align: 'center',
+            field: lid,
+            sortable: true,
+            classes: '',
+            style: ''
+          })
+        }
+      }
       if (this.plan.attendance !== undefined) {
         cols.push({
           name: 'attendance',
@@ -122,7 +142,8 @@ export default {
           name: student.name,
           score: 0,
           works: [],
-          steplabs: []
+          steplabs: [],
+          work3: []
         }
         for (let lid in this.plan.labs) {
           let data = this.$store.getters['data/getStudentWork'](sid, lid)
@@ -140,6 +161,16 @@ export default {
             row.steplabs.push({ lid: lid, state: steplab[sid].state, uid: sid })
           } else {
             row.works.push({ lid: lid, state: '' })
+          }
+        }
+        for (let lid in this.plan.lab3) {
+          let data = this.$store.getters['data/getStudentWork3'](sid, lid, this.cid)
+          console.log(data)
+          if (data) {
+            row.score += data.work.score
+            row.work3.push({ lid: lid, stage: data.work.stage, wid: data.wid })
+          } else {
+            row.work3.push({ lid: lid, stage: '', wid: '' })
           }
         }
         if (this.plan.attendance !== undefined) {
