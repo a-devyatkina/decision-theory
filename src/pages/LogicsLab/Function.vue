@@ -72,6 +72,12 @@
     </div>
     <p v-if='error' style='color: red'>Неверно</p>
     <p v-if='validation' style='color: red'>Проверьте корректность ввода всех полей</p>
+    {{ step }}
+    {{ typeof step }}
+    {{ total_step }}
+    {{ typeof total_step }}
+    {{ current_step }}
+    {{ typeof current_step }}
   </div>
 </template>
 
@@ -80,9 +86,9 @@ export default {
   name: 'function',
   data () {
     return {
-      step: this.total_step > this.current_step ? 2 : this.total_step === 5 || this.total_step === 6 ? 1 : 0,
-      letter: ['a', 'b', 'c'].slice(0, this.criterion.koef.length),
-      user_answer: ['', '', ''].slice(0, this.criterion.koef.length),
+      step: this.getStepper(),
+      letter: ['a', 'b', 'c'].slice(0, this.getLength()),
+      user_answer: ['', '', ''].slice(0, this.getLength()),
       error: false,
       validation: false,
       columns: [
@@ -94,15 +100,29 @@ export default {
     }
   },
   props: ['total_step', 'current_step', 'criterion', 'alternative', 'array'],
-  created () {
-    if (!this.criterion.koef) {
+  mounted () {
+    /*  if (!this.criterion.koef) {
       this.criterion.koef = []
-    }
+    } */
     for (let i = 0; i < this.alternative.length; i++) {
       this.data.push({ name: this.alternative[i].description, first_value: typeof this.alternative[i][this.current_step - 2] === 'number' ? this.alternative[i][this.current_step - 2] : this.alternative[i][this.current_step - 2][0], second_value: this.total_step === this.current_step ? '' : this.array[i] })
     }
   },
   methods: {
+    getStepper () {
+      if (this.total_step > this.current_step) {
+        return 2
+      } else if ('koef' in this.criterion) {
+        return 0
+      }
+      return 1
+    },
+    getLength () {
+      if ('koef' in this.criterion) {
+        return this.criterion.koef.length
+      }
+      return 0
+    },
     compare (a, b) {
       if (Math.abs(a) < 1) {
         if (b < a + 0.1 && b > a - 0.1) { return false } else { return true }
