@@ -158,20 +158,20 @@ export default {
   },
   created () {
     this.data1 = this.criterion.map((item, index) => { return { name: item.tytle, value: this.array1[index] } })
-    this.data2 = this.criterion.map((item, index) => { return { name: item.tytle, first_value: this.total_step === this.current_step ? '' : this.array1[index], second_value: this.total_step === this.current_step ? '' : +(1 - this.array1[index]).toFixed(3) } })
+    this.data2 = this.criterion.map((item, index) => { return { name: item.tytle, first_value: this.step === 0 ? '' : this.array1[index], second_value: this.step === 0 ? '' : +(1 - this.array1[index]).toFixed(3) } })
     this.columns3 = this.Y.map((item, index) => { return index ? { name: 'value' + item.toString(), label: 'x = ' + item.toString(), field: row => row['value' + item.toString()], align: 'right' } : { name: 'name', required: true, label: 'Y', field: row => row.name, align: 'left' } })
     this.data3 = this.array2.map((item, index) => {
       const dict = {}
       dict.name = 'D' + (index + 1).toString()
       for (const i of this.Y.slice(1)) {
-        dict['value' + i.toString()] = this.total_step === this.current_step ? '' : this.array3[i * 10 + index * 11]
+        dict['value' + i.toString()] = this.step <= 2 ? '' : this.array3[i * 10 + index * 11]
       }
       return dict
     })
     const dict = {}
     dict.name = 'D'
     for (const i of this.Y.slice(1)) {
-      dict['value' + i.toString()] = this.total_step === this.current_step ? '' : this.array4[i * 10]
+      dict['value' + i.toString()] = this.step <= 3 ? '' : this.array4[i * 10]
     }
     this.data4.push(dict)
     this.user_answer = this.rules.map(elem => '')
@@ -309,8 +309,8 @@ export default {
           return
         }
       }
-      for (let i = 0; i < this.array4.length; i++) {
-        this.data4[0][this.number_value(i)] = this.array4[i]
+      for (const [index, item] of this.Y.slice(1).entries()) {
+        this.data4[0]['value' + item.toString()] = this.array4[index]
       }
       this.step++
     }
