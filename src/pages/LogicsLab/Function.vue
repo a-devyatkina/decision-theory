@@ -106,10 +106,10 @@ export default {
     getStepper () {
       if (this.total_step > this.current_step) {
         return 2
-      } else if ('koef' in this.criterion) {
-        return 0
+      } else if (this.total_step === 5 || this.total_step === 6) {
+        return 1
       }
-      return 1
+      return 0
     },
     getLength () {
       if ('koef' in this.criterion) {
