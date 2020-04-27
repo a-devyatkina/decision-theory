@@ -10,7 +10,6 @@
       </q-item>
       <steplabs-table/>
     </q-list>
-    <lab3-table/>
   </q-page>
 </template>
 

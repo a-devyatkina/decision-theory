@@ -91,19 +91,6 @@ export default {
           isStepLab: true
         })
       }
-
-      let lab3 = this.$store.getters['data/getLabs3']()
-      for (let lid in lab3) {
-        let selected = this.group.lab3 !== undefined && this.group.lab3[lid] !== undefined
-        let maxScore = selected ? this.group.lab3[lid].maxScore : 0
-        content.push({
-          lid: lid,
-          name: lab3[lid].name,
-          maxScore: maxScore,
-          selected: selected,
-          isLab3: true
-        })
-      }
       let selected = this.group.attendance !== undefined
       let maxScore = selected ? this.group.attendance.maxScore : 0
       content.push({
@@ -118,7 +105,6 @@ export default {
       this.opened = false
       let labs = {}
       let steplabs = {}
-      let lab3 = {}
       let attendance = null
       for (let item of this.content) {
         if (item.selected) {
@@ -126,19 +112,15 @@ export default {
             attendance = item.maxScore
           } else if (item.isStepLab) {
             steplabs[item.lid] = { maxScore: item.maxScore }
-          } else if (item.isLab3) {
-            lab3[item.lid] = { maxScore: item.maxScore }
           } else {
             labs[item.lid] = { maxScore: item.maxScore }
           }
         }
       }
-      console.log('HI!')
       this.$store.dispatch('data/updatePlanLabs', {
         cid: this.cid,
         gid: this.gid,
         labs: labs,
-        lab3: lab3,
         steplabs: steplabs,
         attendance: attendance !== null ? { maxScore: attendance } : undefined
       })

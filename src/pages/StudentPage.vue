@@ -29,12 +29,9 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" v-if="props.row.stage==='assign' || props.row.stage==='improve' || props.row.stage==='opened'" @click.native="view(props.row.id, props.row.isSteplab, props.row.isLab3, cid, props.row.labName)">
-              <q-chip color="secondary" style="width:130px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
+            <router-link to="" @click.native="view(props.row.id, props.row.isSteplab)">
+              <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
-            <span v-else :disabled="true">
-              <q-chip color="secondary" style="width:130px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
-            </span>
           </q-td>
           <q-td key="score" :props="props">
             {{ props.row.score }}
@@ -138,22 +135,6 @@ export default {
               })
             }
           }
-          for (let lid in course.lab3) {
-            let data = this.$store.getters['data/getStudentWork3'](this.user.id, lid, cid)
-            if (data) {
-              sessions[cid].score += data.work.score
-              let lab = this.$store.getters['data/getLab3'](lid)
-              sessions[cid].tasks.push({
-                id: data.wid,
-                name: lab ? lab.name : '',
-                description: lab ? lab.description : '',
-                stage: data.work.stage,
-                score: data.work.score,
-                isLab3: true,
-                labName: data.work.lab
-              })
-            }
-          }
         }
       }
       return sessions
@@ -163,12 +144,9 @@ export default {
     }
   },
   methods: {
-    view (task, isSteplab, isLab3, cid, labName) {
+    view (task, isSteplab) {
       if (isSteplab) {
         this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
-      } else if (isLab3) {
-        // this.$router.push(`/work3flow?wid=${task}&cid=${cid}`)
-        this.$router.push(`/${labName}?cid=${cid}`)
       } else {
         this.$router.push(`/workflow?wid=${task}`)
       }

@@ -171,25 +171,3 @@ export function updateRegistration (state, data) {
 export function removeRegistration (state, rid) {
   Vue.delete(state.registrations, rid)
 }
-
-export function fillLab3 (state, data) {
-  for (let lid in data) {
-    Vue.set(state.lab3, lid, data[lid])
-  }
-}
-
-export function updateLab3 (state, data) {
-  Vue.set(state.lab3, data.lid, data.lab)
-}
-
-export function removeLab3 (state, lid) {
-  Vue.delete(state.lab3, lid)
-}
-
-export function updateWork3 (state, data) {
-  Vue.set(state.work3, data.wid, data.work)
-}
-
-export function removeWork3 (state, data) {
-  Vue.delete(state.work3, data.wid)
-}

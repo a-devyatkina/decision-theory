@@ -37,7 +37,6 @@
         <q-btn @click="$router.back()" :label="$t('Close')" color="secondary"/>
       </q-item>
     </q-list>
-    <h1>THIS PAGE</h1>
   </q-page>
 </template>
 
