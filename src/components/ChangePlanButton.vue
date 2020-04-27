@@ -133,7 +133,6 @@ export default {
           }
         }
       }
-      console.log('HI!')
       this.$store.dispatch('data/updatePlanLabs', {
         cid: this.cid,
         gid: this.gid,

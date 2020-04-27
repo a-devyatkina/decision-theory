@@ -87,7 +87,6 @@ export default {
   },
   methods: {
     onAnswer: function () {
-      console.log(this.rightMatrix)
       this.error = false
       for (let i = 0; i < 3; i++) {
         if (Math.abs(Number(this.inputMatrix[i].a1) - this.rightMatrix[i * 3 + 0]) > 0.05) {
@@ -105,8 +104,6 @@ export default {
       }
       if (!this.error) {
         this.$emit('success')
-      } else {
-        console.log('mistake')
       }
     }
   }

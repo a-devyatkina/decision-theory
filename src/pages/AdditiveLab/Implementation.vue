@@ -180,12 +180,10 @@ export default {
         }
         answerArr.push(arr)
       }
-      console.log('answerArr')
-      console.log(answerArr)
+
       return answerArr
     },
     realScore: function () {
-      console.log(this.maxScore * this.score / 100)
       return this.maxScore * (this.score - 10 * this.work3.work.attempt) / 100
     }
   },
@@ -215,8 +213,6 @@ export default {
       })
       if (!isExists) { this.altsEvals.push(evalsPush) }
       this.step++
-      console.log('getEvals:')
-      console.log(this.altsEvals)
     },
     getFunctions (functions) {
       if (this.step > this.correctStep) {
@@ -273,7 +269,6 @@ export default {
       }
     },
     err (penalty, taskNum) {
-      // console.log('ERR CHANGED')
       this.error.splice(this.step, 1, this.error[this.step] + 1)
 
       /*  this.limits[taskNum] -= penalty
@@ -292,7 +287,6 @@ export default {
     },
     finish () {
       this.work3.work.stage = 'resolve'
-      console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
       this.work3.work.score = this.realScore
       // this.work3.work.attempt += 1
@@ -321,8 +315,6 @@ export default {
     correctStep: {
       handler: function (newStep) {
         this.work3.work.step = newStep
-        console.log(newStep)
-        console.log(this.work3)
         this.$store.dispatch('data/updateWork3', {
           wid: this.work3.wid,
           work: this.work3.work
@@ -331,13 +323,10 @@ export default {
     },
     step: {
       handler: function (newStep, oldStep) {
-        console.log(`step: ${this.step}, correctStep: ${this.correctStep}`)
       }
     },
     error: {
       handler: function (newError, oldError) {
-        console.log('ERROR WATCHER')
-        console.log(newError)
         let limits = [...this.limits]
         for (let i = 1; i < this.error.length; i++) {
           let limitsIndex // index in limits for tasks
@@ -372,8 +361,6 @@ export default {
           for (let j = 0; j < this.error[i]; j++) {
             limits[limitsIndex] -= this.penalties[i]
             if (limits[limitsIndex] < 0) {
-              console.log('меньше нуля')
-              console.log(limits[limitsIndex])
               limits[limitsIndex] = 0
               break
             }
@@ -381,8 +368,6 @@ export default {
         }
         const arrSum = arr => arr.reduce((a, b) => a + b, 0)
         this.score = arrSum(limits)
-        console.log(this.score)
-        console.log(limits)
         // this.work3.work.score = this.score
         this.work3.work.error = this.error
         if (this.score - this.work3.work.attempt * 10 < 60) {

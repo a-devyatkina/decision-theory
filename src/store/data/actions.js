@@ -565,7 +565,6 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
       }
       Vue.set(plan, 'steplabs', steplabs)
 
-      console.log('STEP2')
       for (let lid in lab3) {
         for (let sid in state.students) {
           if (state.students[sid].group === gid) {
@@ -577,8 +576,6 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'lab3', lab3)
-      console.log('STEP3')
-
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
@@ -708,8 +705,6 @@ export async function listenSteplabHandles ({ state, commit }) {
 }
 
 export function listenLab3 ({commit}) {
-  console.log(model)
-  console.log(model.lab3)
   model.lab3.listen(async data => {
     commit('updateLab3', data)
     // if (data.lab.files !== undefined) {

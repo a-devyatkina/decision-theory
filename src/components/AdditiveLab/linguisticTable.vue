@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     linguistic () {
-      console.log(this.table)
       let linguistic = []
       if (this.table.length === 4) {
         linguistic = [

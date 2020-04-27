@@ -83,7 +83,6 @@ export default {
   },
   computed: {
     matrixData: function () {
-      console.log(this.weight)
       const matrixArr = []
       for (let i = 0; i < this.showMatrix.length; i++) {
         const arr = []
@@ -101,7 +100,6 @@ export default {
     },
     weightValue: function () {
       const arr = []
-      console.log(this.weight)
       if (this.weight) {
         for (let i = 0; i < this.weight.length; i++) {
           arr.push({
@@ -116,7 +114,6 @@ export default {
   },
   methods: {
     onAnswer: function () {
-      console.log(this.rightMatrix)
       this.error = false
       for (let i = 0; i < 3; i++) {
         if (Math.abs(Number(this.inputMatrix[i].a1) - this.rightMatrix[i * 3 + 0]) > 0.05) {
@@ -134,8 +131,6 @@ export default {
       }
       if (!this.error) {
         this.$emit('success')
-      } else {
-        console.log('mistake')
       }
     }
   }

@@ -70,9 +70,6 @@ export default {
   },
   computed: {
     part: function () {
-      console.log('hi')
-      console.log(this.done)
-      console.log('hi')
       if ('koef' in this.data && !this.next && !this.done) {
         return 1
       } else {
@@ -124,7 +121,6 @@ export default {
   },
   methods: {
     onAnswer: function (answer, rightAnswer) {
-      console.log(this.answers)
       this.error = false
       for (let i = 0; i < answer.length; i++) {
         if (Math.abs(Number(answer[i]) - rightAnswer[i]) > 0.05) {
@@ -133,7 +129,6 @@ export default {
         }
       }
       if (this.error) {
-        console.log(this.error)
       } else {
         if (this.part === 2) {
           this.$emit('success')

@@ -48,7 +48,6 @@ export default {
       for (let i = 0; i < this.condition.alternative.length; i++) {
         const obj = {}
         const arr = []
-        console.log(this.condition.alternative[i])
         for (let j = 0; j < 4; j++) {
           obj.name = this.condition.criterion[j].title
           if ((this.condition.alternative[i][j + 1].length)) {
@@ -58,15 +57,12 @@ export default {
           }
           arr.push({ ...obj })
         }
-        console.log(arr)
         alternativeArr.push(arr)
       }
-      console.log(alternativeArr)
       return alternativeArr
     },
     weightValue: function () {
       const arr = []
-      console.log(this.condition.weight)
       if (this.condition.weight) {
         for (let i = 0; i < this.condition.weight.length; i++) {
           arr.push({
