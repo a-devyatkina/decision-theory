@@ -142,7 +142,6 @@ export default {
         arr.forEach((item, index) => {
           let sum = 0
           for (let i = 0; i < this.altsEvals.length; i++) {
-            console.log('this.altsEvals = ', this.altsEvals)
             let lingVal = this.tables.linguisticValues.indexOf(this.altsEvals[i]['a' + (alt + 1)])
             let first = parseFloat(linguistic[lingVal + index])
 
@@ -150,7 +149,6 @@ export default {
             let second = parseFloat(importance[impVal + index])
 
             sum += first + second
-            console.log(`A${alt + 1}`, item, `step = ${i + 1}`, first, second, sum)
           }
           correct[alt][item] = sum.toFixed(2)
         })
@@ -190,8 +188,6 @@ export default {
       this.checked = true
       this.r_functions = this.answer
     }
-    console.log('rfunctions:')
-    console.log(this.altsEvals)
   },
   watch: {
     r_functions: {

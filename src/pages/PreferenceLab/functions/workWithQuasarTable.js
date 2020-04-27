@@ -8,6 +8,5 @@ export function rightMatrixFill () {
       a3: this.rightMatrix[j * 3 + 2]
     })
   }
-  console.log(arr)
   return (arr)
 }

@@ -138,9 +138,7 @@ export default {
       let correct = []
 
       let coords = [...this.answerCoords]
-      console.log(JSON.stringify(coords))
       coords.sort((a, b) => (a.coord < b.coord) ? 1 : -1)
-      console.log(JSON.stringify(coords))
       for (let alt = 0; alt < 3; alt++) {
         correct[alt] = {
           name: 'a' + (alt + 1),
@@ -148,8 +146,6 @@ export default {
           __index: alt
         }
       }
-      console.log('correct array')
-      console.log(correct)
       for (let i = 1; i < 3; i++) {
         let alt = parseInt(coords[i].name.substring(coords[i].name.length - 1)) - 1
         let prevAlt = parseInt(coords[i - 1].name.substring(coords[i - 1].name.length - 1)) - 1
@@ -162,8 +158,6 @@ export default {
       return correct
     },
     answerAltNum () {
-      console.log('answerAltNum:')
-      console.log(this.answerRating)
       return (this.answerRating.findIndex(function (e) { return e.rating === 1 }) + 1)
     }
   },

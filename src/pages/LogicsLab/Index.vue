@@ -283,7 +283,6 @@ export default {
     },
     finish () {
       this.work3.work.stage = 'resolve'
-      console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
       this.work3.work.score = this.realScore
       // this.work3.work.attempt += 1

@@ -56,12 +56,9 @@ export default {
     },
     data (n) {
       const array = []
-      console.log('condition')
       for (let i = 0; i < 4; i++) {
         array.push({ name: this.condition.criterion[i].tytle, value: typeof this.condition.alternative[n][i + 1] === 'number' ? this.condition.alternative[n][i + 1] : this.condition.alternative[n][i + 1][0] })
       }
-      console.log('condition')
-      console.log(this.condition)
       return array
     }
   }

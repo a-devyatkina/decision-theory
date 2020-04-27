@@ -188,7 +188,6 @@ export default {
       }
     },
     valid (answer) {
-      console.log(answer)
       this.error = false
       if (answer.every(elem => (+elem || +elem === 0) && elem[elem.length - 1] !== '.' && elem[0] !== '.')) {
         this.validation = false

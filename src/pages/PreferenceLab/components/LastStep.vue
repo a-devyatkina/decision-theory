@@ -96,14 +96,12 @@ export default {
   computed: {
     matrixData1: function () {
       const matrixArr = []
-      console.log(this.showMatrix1)
       matrixArr.push({
         name: ``,
         a1: this.showMatrix1[0],
         a2: this.showMatrix1[1],
         a3: this.showMatrix1[2]
       })
-      console.log(matrixArr)
       return matrixArr
     },
     matrixData2: function () {
@@ -123,26 +121,19 @@ export default {
   },
   methods: {
     onAnswer: function () {
-      console.log(this.rightAnswer)
       this.error = false
-      console.log(this.inputMatrix)
       for (let i = 0; i < 3; i++) {
         if (Math.abs(Number(this.inputMatrix[0][`a${i + 1}`]) - this.rightMatrix[i]) > 0.05) {
           this.error = true
           this.$emit('error')
         }
       }
-      console.log(Number(this.answer[0]['a1']))
-      console.log(this.rightAnswer)
-      console.log(Number(this.answer[0]['a1']) === (this.rightAnswer))
       if (Math.abs(Number(this.answer[0]['a1']) - this.rightAnswer) > 0.05) {
         this.error = true
         this.$emit('error')
       }
       if (!this.error) {
         this.$emit('success')
-      } else {
-        console.log('mistake')
       }
     }
   }

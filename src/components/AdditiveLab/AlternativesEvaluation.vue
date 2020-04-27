@@ -120,11 +120,6 @@ export default {
       let importance = [...this.condition.tables.importance]
       importance.push(1)
       importance.push(1)
-
-      console.log('importance type')
-      console.log(typeof importance[1])
-      console.log(importance[1])
-
       // correct[this.cr] = {
       correct[0] = {
         criterion: 'C' + (this.cr + 1)
@@ -139,7 +134,6 @@ export default {
           // value = Number(this.membership(this.funcAnswers[this.cr][alt], parseFloat(linguistic[i - 1]), parseFloat(linguistic[i]), parseFloat(linguistic[i + 1])).toFixed(2))
           value = this.membership(this.funcAnswers[this.cr][alt], linguistic[i - 1], linguistic[i], linguistic[i + 1]).toFixed(2)
 
-          console.log(`cr = ${this.cr + 1}`, `alt = ${alt + 1}`, `step = ${i}`, value, max, value > max)
           if (value > max) {
             max = value
             // correct[this.cr]['a' + (alt + 1)] = this.tables.linguisticValues[i - 1]
@@ -154,7 +148,6 @@ export default {
       for (let i = 1; i < importance.length - 1; i++) {
         // value = Number(this.membership(parseFloat(this.condition.weight[this.cr]), parseFloat(importance[i - 1]), parseFloat(importance[i]), parseFloat(importance[i + 1])).toFixed(2))
         value = this.membership(this.condition.weight[this.cr], importance[i - 1], importance[i], importance[i + 1]).toFixed(2)
-        console.log(value > max, `value = ${value}`, `max = ${max}`, this.tables.condition[this.cr][this.tables.condition.length - 1], importance[i - 1], importance[i], importance[i + 1])
         if (value > max) {
           max = value
           correct[0]['importance'] = this.tables.importanceValues[i - 1]
@@ -173,7 +166,6 @@ export default {
       this.mistake = false
 
       for (let alt in this.$refs) {
-        console.log(this.evals)
         // console.log(`this.evals[${alt}] = ${this.evals[0][alt].trim().toUpperCase()}`)
         // if (this.evals[0][alt].trim().toUpperCase() !== this.answer[this.cr][alt]) {
         // if (this.evals[this.cr][alt].trim().toUpperCase() !== this.answer[this.cr][alt]) {
@@ -209,13 +201,10 @@ export default {
     // if (localStorage.getItem('evals' + this.cr)) {
     //   this.evals = JSON.parse(localStorage.getItem('evals' + this.cr))
     // }
-    console.log(this.step)
-    console.log(this.correctStep)
     if (this.correctStep >= this.step) {
       this.checked = true
       this.evals = this.answer
     }
-    console.log('mounted')
   },
   watch: {
     evals: {

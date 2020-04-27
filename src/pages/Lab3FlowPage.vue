@@ -183,7 +183,6 @@ export default {
         this.work.question = ''
         this.work.penalty = 0
         this.work.finalquestion = ''
-        console.log(this.work)
       }
       if (stage === 'close') {
         this.work.penalty = penalty
@@ -191,7 +190,6 @@ export default {
       if (stage === 'improve') {
         this.work.attempt += 1
       }
-      console.log(this.work)
       this.$store.dispatch('data/updateWork3', {
         wid: this.wid,
         work: this.work

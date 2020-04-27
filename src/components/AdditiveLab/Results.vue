@@ -78,8 +78,6 @@ export default {
           totalPenalties[limitsIndex] += this.penalties[i]
           totalErrors[limitsIndex]++
           if (limits[limitsIndex] < 0) {
-            console.log('меньше нуля')
-            console.log(limits[limitsIndex])
             limits[limitsIndex] = 0
             // break
           }

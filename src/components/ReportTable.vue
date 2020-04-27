@@ -165,7 +165,6 @@ export default {
         }
         for (let lid in this.plan.lab3) {
           let data = this.$store.getters['data/getStudentWork3'](sid, lid, this.cid)
-          console.log(data)
           if (data) {
             row.score += data.work.score
             row.work3.push({ lid: lid, stage: data.work.stage, wid: data.wid })

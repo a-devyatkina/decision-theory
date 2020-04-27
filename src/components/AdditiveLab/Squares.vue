@@ -108,7 +108,6 @@ export default {
   },
   methods: {
     check () {
-      console.log(this.$refs)
       this.mistake = false
       this.squares.forEach((triangle, row) => {
         if (Math.abs(triangle.square - this.answer[row].square) > 0.05) {

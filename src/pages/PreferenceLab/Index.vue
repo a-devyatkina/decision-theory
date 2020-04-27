@@ -295,7 +295,6 @@ export default {
         }
         answerArr.push(arr)
       }
-      console.log(answerArr)
       return answerArr
     },
     matrixStep2: function () {
@@ -359,7 +358,6 @@ export default {
         }
         arr[i] = Number(arr[i].toFixed(2))
       }
-      console.log(arr)
       return arr
     },
     matrixStep6: function () {
@@ -380,11 +378,9 @@ export default {
       for (let i = 0; i < 3; i++) {
         arr.push(Math.min(this.matrixStep4[2 + i * 3], this.matrixStep6[2 + i * 3]))
       }
-      console.log(arr)
       return arr
     },
     realScore: function () {
-      console.log(this.maxScore * this.score / 100)
       return this.maxScore * (this.score - 10 * this.work3.work.attempt) / 100
     }
   },
@@ -415,7 +411,6 @@ export default {
     },
     finish () {
       this.work3.work.stage = 'resolve'
-      console.log(this.question[4])
       this.work3.work.finalquestion = {...this.question[4]}
       this.work3.work.score = this.realScore
       // this.work3.work.attempt += 1
@@ -439,8 +434,6 @@ export default {
     correctStep: {
       handler: function (newStep) {
         this.work3.work.step = newStep
-        console.log(newStep)
-        console.log(this.work3)
         this.$store.dispatch('data/updateWork3', {
           wid: this.work3.wid,
           work: this.work3.work
