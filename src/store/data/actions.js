@@ -230,6 +230,9 @@ export async function createStudent ({ state }, { name, group, email, phone, add
         for (let lid in state.courses[cid].groups[group].lab3) {
           await model.work3.create(sid, cid, state.courses[cid].teacher, lid, 0, 'unassign', '', 0, 0, '', '', 0, '')
         }
+        for (let lid in state.courses[cid].groups[group].hierarchieslab) {
+          await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, '')
+        }
       }
     }
   }
@@ -402,6 +405,8 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
     dispatch('listenCourses')
     dispatch('listenLab3')
     dispatch('listenWorks3')
+    dispatch('listenHierarchieslab')
+    dispatch('listenHierarchiesworks')
   } else if (state.user.role === 'student') {
     dispatch('listenTeachers')
     dispatch('listenLabs')
@@ -411,6 +416,8 @@ export async function subscribeDatabase ({ state, commit, dispatch }) {
     dispatch('listenCourses')
     dispatch('listenLab3')
     dispatch('listenWorks3')
+    dispatch('listenHierarchieslab')
+    dispatch('listenHierarchiesworks')
     commit('updateGroup', await model.groups.get(state.user.group))
   } else if (state.user.role === 'root') {
     dispatch('listenGroups')
@@ -429,6 +436,8 @@ export async function unsubscribeDatabase ({ dispatch }) {
   dispatch('unlistenAttendance')
   dispatch('unlistenCourses')
   dispatch('unlistenLab3')
+  dispatch('unlistenHierarchieslab')
+  dispatch('unlistenHierarchiesworks')
 }
 
 export async function loginUser ({ dispatch, commit }, { email, password }) {
@@ -539,7 +548,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs, lab3 }) {
+export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs, lab3, hierarchieslab }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -576,6 +585,21 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
         }
       }
       Vue.set(plan, 'lab3', lab3)
+
+      for (let lid in hierarchieslab) {
+        for (let sid in state.students) {
+          if (state.students[sid].group === gid) {
+            let work = getters['getStudentHierarchieswork'](sid, lid)
+            if (!work) {
+              await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
+            } else if (plan.hierarchieslab === undefined || plan.hierarchieslab[lid] === undefined) {
+              await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
+            }
+          }
+        }
+      }
+      Vue.set(plan, 'hierarchieslab', hierarchieslab)
+
       if (attendance !== undefined) {
         Vue.set(plan, 'attendance', attendance)
       } else {
@@ -763,6 +787,49 @@ export async function removeLab3 ({ state, commit }, { lid }) {
   await model.lab3.remove(lid)
   commit('removeLab3', lid)
 }
+export function listenHierarchieslab ({commit}) {
+  model.hierarchieslab.listen(async data => {
+    commit('updateHierarchieslab', data)
+  }, async data => {
+    commit('updateHierarchieslab', data)
+  }, lid => {
+    commit('removeHierarchieslab', lid)
+  })
+}
+
+export function unlistenHierarchieslab ({ commit }) {
+  model.hierarchieslab.unlisten()
+}
+
+export async function createHierarchieslab ({ commit }, { name, description, maxscore, teacher }) {
+  let lid = await model.hierarchieslab.create(name, description, maxscore, teacher)
+  commit('updateHierarchieslab', { lid: lid, lab: { name, description, maxscore, teacher } })
+}
+
+export async function updateHierarchieslab ({ commit }, { lid, name, description, maxscore, teacher }) {
+  await model.hierarchieslab.update(lid, name, description, maxscore, teacher)
+  commit('updateHierarchieslab', { lid: lid, lab: { name, description, maxscore, teacher } })
+}
+
+export async function removeHierarchieslab ({ state, commit }, { lid }) {
+  let archive = false
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].lab === lid) {
+      archive = true
+      break
+    }
+  }
+  if (archive) {
+    let lab = state.hierarchieslab[lid]
+    if (lab) {
+      await model.hierarchieslab.update(lid, lab.name, lab.description, lab.maxscore, lab.teacher)
+      commit('updateHierarchieslab', { lid: lid, lab: { name: lab.name, description: lab.description, maxscore: lab.maxscore, teacher: lab.teacher } })
+    }
+    return
+  }
+  await model.hierarchieslab.remove(lid)
+  commit('removeHierarchieslab', lid)
+}
 
 export async function listenWorks3 ({ state, commit, dispatch }) {
   model.work3.listen(state.user, async data => {
@@ -788,4 +855,22 @@ export async function unlistenWorks3 ({ commit }) {
 
 export async function updateWork3 ({ commit }, { wid, work }) {
   await model.work3.update(wid, work.student, work.course, work.teacher, work.lab, work.step, work.stage, work.condition, work.score, work.attempt, work.error, work.question, work.penalty, work.finalquestion)
+}
+
+export async function listenHierarchiesworks ({ state, commit, dispatch }) {
+  model.hierarchieswork.listen(state.user, async data => {
+    commit('updateHierarchieswork', data)
+  }, async data => {
+    commit('updateHierarchieswork', data)
+  }, wid => {
+    commit('removeHierarchieswork', wid)
+  })
+}
+
+export async function unlistenHierarchiesworks ({ commit }) {
+  model.hierarchieswork.unlisten()
+}
+
+export async function updateHierarchieswork ({ commit }, { wid, work }) {
+  await model.hierarchieswork.update(wid, work.student, work.course, work.teacher, work.lab, work.stage, work.score, work.tries, work.penalty)
 }

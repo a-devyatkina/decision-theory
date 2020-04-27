@@ -23,6 +23,11 @@
           <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
         </router-link>
       </q-td>
+      <q-td v-for="work in props.row.hierarchieswork" :key="work.lid" :props="props">
+        <router-link :to="`hierarchiesworkflow?wid=${work.wid}`">
+          <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{$t(work.stage)}}</q-chip>
+        </router-link>
+      </q-td>
       <q-td key="attendance" :props="props">
         <q-chip color="secondary" style="width:50px" class="cursor-pointer">{{props.row.attendance}}
           <q-popover v-if="editable!=undefined">
@@ -42,7 +47,6 @@
 </template>
 
 <script>
-
 export default {
   props: [ 'cid', 'gid', 'plan', 'editable' ],
   data () {
@@ -108,6 +112,21 @@ export default {
           })
         }
       }
+      for (let lid in this.plan.hierarchieslab) {
+        let lab = this.$store.getters['data/getHierarchieslab'](lid)
+        if (lab) {
+          cols.push({
+            name: lid,
+            required: true,
+            label: lab.name,
+            align: 'center',
+            field: lid,
+            sortable: true,
+            classes: '',
+            style: ''
+          })
+        }
+      }
       if (this.plan.attendance !== undefined) {
         cols.push({
           name: 'attendance',
@@ -143,7 +162,8 @@ export default {
           score: 0,
           works: [],
           steplabs: [],
-          work3: []
+          work3: [],
+          hierarchieswork: []
         }
         for (let lid in this.plan.labs) {
           let data = this.$store.getters['data/getStudentWork'](sid, lid)
@@ -170,6 +190,18 @@ export default {
             row.work3.push({ lid: lid, stage: data.work.stage, wid: data.wid })
           } else {
             row.work3.push({ lid: lid, stage: '', wid: '' })
+          }
+        }
+        for (let lid in this.plan.hierarchieslab) {
+          let data = this.$store.getters['data/getStudentHierarchieswork'](sid, lid)
+          if (data) {
+            let maxscore = this.$store.getters['data/getCourse'](this.cid).groups[this.gid].hierarchieslab[lid].maxScore
+            let score = Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty
+            if (score < 0) score = 0
+            row.score += score
+            row.hierarchieswork.push({ lid: lid, stage: data.work.stage, wid: data.wid })
+          } else {
+            row.hierarchieswork.push({ lid: lid, stage: '', wid: '' })
           }
         }
         if (this.plan.attendance !== undefined) {

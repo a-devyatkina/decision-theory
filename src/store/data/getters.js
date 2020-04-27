@@ -209,11 +209,40 @@ export const getStudentWorks3 = (state) => (sid) => {
   }
   return works
 }
+export const getHierarchieslab = (state) => (lid) => {
+  return state.hierarchieslab[lid]
+}
+
+export const getHierarchieslabs = (state) => () => {
+  return state.hierarchieslab
+}
+
+export const getHierarchieswork = (state) => (wid) => {
+  return state.hierarchieswork[wid]
+}
+
+export const getStudentHierarchiesworks = (state) => (sid) => {
+  let works = {}
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].student === sid) {
+      works[wid] = state.hierarchieswork[wid]
+    }
+  }
+  return works
+}
 
 export const getStudentWork3 = (state) => (sid, lid, cid) => {
   for (let wid in state.work3) {
     if (state.work3[wid].student === sid && state.work3[wid].lab === lid && state.work3[wid].course === cid) {
       return { wid: wid, work: state.work3[wid] }
+    }
+  }
+  return null
+}
+export const getStudentHierarchieswork = (state) => (sid, lid) => {
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].student === sid && state.hierarchieswork[wid].lab === lid) {
+      return { wid: wid, work: state.hierarchieswork[wid] }
     }
   }
   return null
@@ -224,6 +253,15 @@ export const getCourseStudentWorks3 = (state) => (sid, cid) => {
   for (let wid in state.work3) {
     if (state.work3[wid].student === sid && state.work3[wid].course === cid) {
       works[wid] = state.work3[wid]
+    }
+  }
+  return works
+}
+export const getCourseStudentHierarchiesworks = (state) => (sid, cid) => {
+  let works = {}
+  for (let wid in state.hierarchieswork) {
+    if (state.hierarchieswork[wid].student === sid && state.hierarchieswork[wid].course === cid) {
+      works[wid] = state.hierarchieswork[wid]
     }
   }
   return works

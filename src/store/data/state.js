@@ -14,5 +14,7 @@ export default {
   steplabs: {},
   lab3: {},
   work3: {},
+  hierarchieslab: {},
+  hierarchieswork: {},
   registrations: {}
 }

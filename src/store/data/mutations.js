@@ -193,3 +193,24 @@ export function updateWork3 (state, data) {
 export function removeWork3 (state, data) {
   Vue.delete(state.work3, data.wid)
 }
+export function fillHierarchieslab (state, data) {
+  for (let lid in data) {
+    Vue.set(state.hierarchieslab, lid, data[lid])
+  }
+}
+
+export function updateHierarchieslab (state, data) {
+  Vue.set(state.hierarchieslab, data.lid, data.lab)
+}
+
+export function removeHierarchieslab (state, lid) {
+  Vue.delete(state.hierarchieslab, lid)
+}
+
+export function updateHierarchieswork (state, data) {
+  Vue.set(state.hierarchieswork, data.wid, data.work)
+}
+
+export function removeHierarchieswork (state, data) {
+  Vue.delete(state.hierarchieswork, data.wid)
+}

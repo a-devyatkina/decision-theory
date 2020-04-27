@@ -29,8 +29,8 @@
             <div style="white-space:pre-wrap">{{ props.row.description }}</div>
           </q-td>
           <q-td key="stage" :props="props">
-            <router-link to="" v-if="props.row.stage==='assign' || props.row.stage==='improve' || props.row.stage==='opened'" @click.native="view(props.row.id, props.row.isSteplab, props.row.isLab3, cid, props.row.labName)">
-              <q-chip color="secondary" style="width:130px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
+            <router-link to="" v-if="props.row.stage==='assign' || props.row.stage==='improve' || props.row.stage==='opened' || props.row.stage==='assigned'" @click.native="view(props.row, cid)">
+              <q-chip color="secondary" style="width:110px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
             </router-link>
             <span v-else :disabled="true">
               <q-chip color="secondary" style="width:130px" class="cursor-pointer">{{ $t(props.row.stage) }}</q-chip>
@@ -154,6 +154,25 @@ export default {
               })
             }
           }
+          for (let lid in course.hierarchieslab) {
+            let data = this.$store.getters['data/getStudentHierarchieswork'](this.user.id, lid)
+            let maxscore = course.hierarchieslab[lid].maxScore
+            if (data) {
+              let lab = this.$store.getters['data/getHierarchieslab'](lid)
+              let score = Math.floor(((data.work.score - data.work.tries * 10) * maxscore) / 100) - data.work.penalty
+              if (score < 0) score = 0
+              sessions[cid].score += score
+              sessions[cid].tasks.push({
+                id: data.wid,
+                lid: lid,
+                name: lab ? lab.name : '',
+                description: lab ? lab.description : '',
+                stage: data.work.stage,
+                score: score,
+                isHierarchieslab: true
+              })
+            }
+          }
         }
       }
       return sessions
@@ -163,14 +182,28 @@ export default {
     }
   },
   methods: {
-    view (task, isSteplab, isLab3, cid, labName) {
-      if (isSteplab) {
-        this.$router.push(`/steplab?lab=${task}&user=${this.user.id}`)
-      } else if (isLab3) {
+    view (lab, cid) {
+      if (lab.isSteplab) {
+        this.$router.push(`/steplab?lab=${lab.task}&user=${this.user.id}`)
+      } else if (lab.isLab3) {
         // this.$router.push(`/work3flow?wid=${task}&cid=${cid}`)
-        this.$router.push(`/${labName}?cid=${cid}`)
+        this.$router.push(`/${lab.labName}?cid=${cid}`)
+      } else if (lab.isHierarchieslab) {
+        if ((lab.lid === 'siblinghierarchies' ||
+             lab.lid === 'layeredhierarchies') &&
+             lab.stage !== 'assigned' &&
+             lab.stage !== 'improve' &&
+             lab.stage !== 'opened') {
+          this.$q.dialog({
+            title: 'Лабораторная работа недоступна',
+            message: 'Обратитесь к переподавателю',
+            ok: 'Продолжить'
+          })
+        } else {
+          this.$router.push(`/${lab.lid}`)
+        }
       } else {
-        this.$router.push(`/workflow?wid=${task}`)
+        this.$router.push(`/workflow?wid=${lab.task}`)
       }
     }
   }

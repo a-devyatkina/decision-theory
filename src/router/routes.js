@@ -126,6 +126,14 @@ const routes = [
     beforeEnter: checkStudentOrTeacher
   },
   {
+    path: '/hierarchiesworkflow',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/HierarchieslabFlowPage.vue') }
+    ],
+    beforeEnter: checkStudentOrTeacher
+  },
+  {
     path: '/works',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -160,10 +168,37 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/PreferenceLab/Index.vue') }
     ]
+  },
+  {
+    path: '/siblinghierarchies_preview',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/SiblingHierarchiesPreview.vue') }
+    ]
+  },
+  {
+    path: '/siblinghierarchies',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/SiblingHierarchies.vue') }
+    ]
+  },
+  {
+    path: '/layeredhierarchies_preview',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LayeredHierarchiesPreview.vue') }
+    ]
+  },
+  {
+    path: '/layeredhierarchies',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LayeredHierarchies.vue') }
+    ]
   }
 ]
 
-// Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
