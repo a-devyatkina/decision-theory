@@ -95,6 +95,9 @@ export default {
   },
   props: ['total_step', 'current_step', 'criterion', 'alternative', 'array'],
   created () {
+    if (!this.criterion.koef) {
+      this.criterion.koef = []
+    }
     for (let i = 0; i < this.alternative.length; i++) {
       this.data.push({ name: this.alternative[i].description, first_value: typeof this.alternative[i][this.current_step - 2] === 'number' ? this.alternative[i][this.current_step - 2] : this.alternative[i][this.current_step - 2][0], second_value: this.total_step === this.current_step ? '' : this.array[i] })
     }
