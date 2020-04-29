@@ -539,7 +539,7 @@ export async function unarchiveCourse ({ state }, { cid }) {
   }
 }
 
-export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs, hierarchieslab }) {
+export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, labs, attendance, steplabs, hierarchieslab, update }) {
   let course = state.courses[cid]
   if (course) {
     let plan = course.groups[gid]
@@ -571,7 +571,7 @@ export async function updatePlanLabs ({ state, getters, dispatch }, { cid, gid, 
             let work = getters['getStudentHierarchieswork'](sid, lid)
             if (!work) {
               await model.hierarchieswork.create(sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
-            } else if (plan.hierarchieslab === undefined || plan.hierarchieslab[lid] === undefined) {
+            } else if (update && (plan.hierarchieslab === undefined || plan.hierarchieslab[lid] === undefined)) {
               await model.hierarchieswork.update(work.wid, sid, cid, state.courses[cid].teacher, lid, 'assigned', 0, 0, 0)
             }
           }

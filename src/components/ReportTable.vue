@@ -1,7 +1,7 @@
 <template>
   <q-table separator="cell" :data="content" :columns="columns" row-key="sid" rows-per-page-options="0" :pagination.sync="pagination" hide-bottom class="bg-grey-2">
     <template slot="top-right" slot-scope="props">
-      <change-plan-button v-if="editable!=undefined" icon="edit" :title="$t('Edit plan')" :cid="cid" :gid="gid" />
+      <change-plan-button v-if="editable!=undefined" icon="edit" :title="$t('Edit plan')" :cid="cid" :gid="gid"/>
       <q-btn v-if="editable!=undefined" icon="delete" color="secondary" round @click="delGroupFromCourse(gid)" class="q-ml-sm" />
     </template>
     <q-tr slot="body" slot-scope="props" :props="props">
@@ -170,9 +170,9 @@ export default {
             let score = Math.floor(((data.work.score - penalty) * maxscore) / 100) - data.work.penalty
             if (score < 0) score = 0
             row.score += score
-            row.hierarchieswork.push({ lid: lid, stage: data.work.stage, wid: data.wid })
+            row.hierarchieswork.push({lid: lid, stage: data.work.stage, wid: data.wid})
           } else {
-            row.hierarchieswork.push({ lid: lid, stage: '', wid: '' })
+            row.hierarchieswork.push({lid: lid, stage: '', wid: ''})
           }
         }
         if (this.plan.attendance !== undefined) {

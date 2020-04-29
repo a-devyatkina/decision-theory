@@ -16,7 +16,8 @@
           </q-tr>
         </q-table>
         <div class="row q-mt-lg">
-          <q-btn slot="footer" color="secondary" @click="apply()" :label="title" class="col q-ma-sm"/>
+          <q-btn slot="footer" color="secondary" @click="apply(false)" :label="'Изменить план'" class="col q-ma-sm"/>
+          <q-btn slot="footer" color="secondary" @click="apply(true)" :label="'Удалить старые работы'" class="col q-ma-sm"/>
           <q-btn slot="footer" color="secondary" @click="cancel()" :label="$t('Cancel')" class="col q-ma-sm"/>
         </div>
       </div>
@@ -91,7 +92,6 @@ export default {
           isStepLab: true
         })
       }
-
       let hierarchieslab = this.$store.getters['data/getHierarchieslabs']()
       for (let lid in hierarchieslab) {
         let selected = this.group.hierarchieslab !== undefined && this.group.hierarchieslab[lid] !== undefined
@@ -114,7 +114,7 @@ export default {
       })
       this.content = content
     },
-    apply () {
+    apply (update) {
       this.opened = false
       let labs = {}
       let steplabs = {}
@@ -139,7 +139,8 @@ export default {
         labs: labs,
         steplabs: steplabs,
         hierarchieslab: hierarchieslab,
-        attendance: attendance !== null ? { maxScore: attendance } : undefined
+        attendance: attendance !== null ? { maxScore: attendance } : undefined,
+        update: update
       })
     },
     cancel () {

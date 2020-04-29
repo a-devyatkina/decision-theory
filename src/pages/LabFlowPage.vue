@@ -1,4 +1,4 @@
-<template>
+ <template>
   <q-page>
     <q-list no-border>
       <q-item>
