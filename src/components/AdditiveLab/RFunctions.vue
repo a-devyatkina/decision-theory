@@ -148,7 +148,7 @@ export default {
             let impVal = this.tables.importanceValues.indexOf(this.altsEvals[i]['importance'])
             let second = parseFloat(importance[impVal + index])
 
-            sum += first + second
+            sum += first * second
           }
           correct[alt][item] = sum.toFixed(2)
         })
