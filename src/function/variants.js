@@ -41,14 +41,14 @@ export default [
         1: 12,
         2: ['высокое', 3],
         3: ['высокое', 3],
-        4: 81,
+        4: 81
       },
       {
         description: 'A2 Питер',
         1: 5,
         2: ['низкое', 1],
         3: ['среднее', 2],
-        4: 57,
+        4: 57
       },
       {
         description: 'A3 Краснодар',
@@ -171,7 +171,7 @@ export default [
         count: 3,
         koef: [0.125, 2, 1],
         functioncompute: 'Math.log(x+1)/(8*Math.log(2))'
-      },
+      }
     ],
     alternative: [
       {
@@ -516,7 +516,7 @@ export default [
         count: 2,
         koef: [0.25, 0.5],
         functioncompute: '0.25*(x**0.5)'
-      },
+      }
     ],
     alternative: [
       {
@@ -585,7 +585,7 @@ export default [
         count: 2,
         koef: [0.25, 0.5],
         functioncompute: '0.25*(x**0.5)'
-      },
+      }
     ],
     alternative: [
       {
