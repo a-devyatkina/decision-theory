@@ -160,7 +160,8 @@ export default {
             if (data) {
               let lab = this.$store.getters['data/getHierarchieslab'](lid)
               let penalty = data.work.tries > 0 ? (data.work.tries - 1) * 10 : 0
-              let score = Math.floor(((data.work.score - penalty) * maxscore) / 100) - data.work.penalty
+              let score = ((data.work.score - penalty) * maxscore) / 100 - data.work.penalty
+              score = Math.round(score * 10) / 10
               if (score < 0) score = 0
               sessions[cid].score += score
               sessions[cid].tasks.push({
