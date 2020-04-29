@@ -167,7 +167,8 @@ export default {
           if (data) {
             let maxscore = this.$store.getters['data/getCourse'](this.cid).groups[this.gid].hierarchieslab[lid].maxScore
             let penalty = data.work.tries > 1 ? (data.work.tries - 1) * 10 : 0
-            let score = Math.floor(((data.work.score - penalty) * maxscore) / 100) - data.work.penalty
+            let score = ((data.work.score - penalty) * maxscore) / 100 - data.work.penalty
+            score = Math.round(score * 10) / 10
             if (score < 0) score = 0
             row.score += score
             row.hierarchieswork.push({lid: lid, stage: data.work.stage, wid: data.wid})
