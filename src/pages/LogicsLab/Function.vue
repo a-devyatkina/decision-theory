@@ -80,9 +80,12 @@ export default {
   name: 'function',
   data () {
     return {
-      step: this.getStepper(),
-      letter: ['a', 'b', 'c'].slice(0, this.getLength()),
-      user_answer: ['', '', ''].slice(0, this.getLength()),
+      // step: this.getStepper(),
+      // letter: ['a', 'b', 'c'].slice(0, this.getLength()),
+      // user_answer: ['', '', ''].slice(0, this.getLength()),
+      step: this.total_step > this.current_step ? 2 : ('koef' in this.criterion) ? 0 : 1,
+      letter: ['a', 'b', 'c'].slice(0, 'koef' in this.criterion ? this.criterion.koef.length : 0),
+      user_answer: ['', '', ''].slice(0, 'koef' in this.criterion ? this.criterion.koef.length : 0),
       error: false,
       validation: false,
       columns: [
@@ -103,7 +106,7 @@ export default {
     }
   },
   methods: {
-    getStepper () {
+    /* getStepper () {
       if (this.total_step > this.current_step) {
         return 2
       } else if (this.total_step === 5 || this.total_step === 6) {
@@ -116,7 +119,7 @@ export default {
         return this.criterion.koef.length
       }
       return 0
-    },
+    }, */
     compare (a, b) {
       if (Math.abs(a) < 1) {
         if (b < a + 0.1 && b > a - 0.1) { return false } else { return true }

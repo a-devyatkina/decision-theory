@@ -452,22 +452,22 @@ export default [
     alternative: [
       {
         description: 'A1 IOS',
-        1: 60,
-        2: 10,
+        1: 6,
+        2: 2,
         3: ['высокая', 3],
         4: ['низкая', 1]
       },
       {
         description: 'A2 Android',
-        1: 20,
-        2: 15,
+        1: 2,
+        2: 10,
         3: ['средняя', 2],
         4: ['средняя', 2]
       },
       {
         description: 'A3 Windows Phone',
-        1: 40,
-        2: 8,
+        1: 4,
+        2: 1,
         3: ['высокая', 3],
         4: ['высокая', 3]
       }
@@ -521,21 +521,21 @@ export default [
     alternative: [
       {
         description: 'A1 IOS',
-        1: 70,
+        1: 7,
         2: 12,
         3: ['высокая', 3],
         4: ['средняя', 2]
       },
       {
         description: 'A2 Android',
-        1: 25,
+        1: 2.5,
         2: 13,
         3: ['низкая', 1],
         4: ['высокая', 3]
       },
       {
         description: 'A3 Windows Phone',
-        1: 30,
+        1: 3,
         2: 11,
         3: ['средняя', 2],
         4: ['средняя', 2]
@@ -590,22 +590,22 @@ export default [
     alternative: [
       {
         description: 'A1 IOS',
-        1: 50,
-        2: 15,
+        1: 5,
+        2: 6,
         3: ['средняя', 2],
         4: ['низкая', 1]
       },
       {
         description: 'A2 Android',
-        1: 15,
-        2: 15,
+        1: 1.5,
+        2: 6,
         3: ['низкая', 1],
         4: ['средняя', 2]
       },
       {
         description: 'A3 Windows Phone',
-        1: 20,
-        2: 7,
+        1: 2,
+        2: 3,
         3: ['низкая', 1],
         4: ['средняя', 2]
       }
@@ -832,12 +832,12 @@ export default [
     criterion: [
       {
         tytle: 'С1 Производительность',
-        description: 'С1 Производительность - объём товаров и услуг (в сотнях в час), создаваемых в единицу времени',
+        description: 'С1 Производительность - объём товаров и услуг (в тысячах в час), создаваемых в единицу времени',
         function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2F1.11.png?alt=media&token=1d31f7da-762d-4c22-adb3-0e36e079df52',
         path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffuncfor13graph.png?alt=media&token=de97c7c6-28d2-4040-a2bc-614e835352d4',
         count: 3,
-        koef: [100, 20, 0.05],
-        functioncompute: '100*x**2+20*x+0.05'
+        koef: [1, 2, 0.05],
+        functioncompute: 'x**2+2*x+0.05'
       },
       {
         tytle: 'С2 Финансовая осуществимость стратегии',
@@ -866,21 +866,21 @@ export default [
     alternative: [
       {
         description: 'A1 Концентрированный рост',
-        1: 0.01,
+        1: 0.1,
         2: 0.4,
         3: ['высокая', 0.75],
         4: ['низкий', 1]
       },
       {
         description: 'A2 Интеграция',
-        1: 0.009,
+        1: 0.09,
         2: 0.1,
         3: ['низкая', 0.25],
         4: ['высокий', 3]
       },
       {
         description: 'A3 Диверсификация',
-        1: 0.014,
+        1: 0.14,
         2: 0.28,
         3: ['высокая', 0.75],
         4: ['средний', 2]
@@ -901,12 +901,12 @@ export default [
     criterion: [
       {
         tytle: 'С1 Производительность',
-        description: 'С1 Производительность - объём товаров и услуг (в сотнях в час), создаваемых в единицу времени',
+        description: 'С1 Производительность - объём товаров и услуг (в тысячах в час), создаваемых в единицу времени',
         function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2F1.11.png?alt=media&token=1d31f7da-762d-4c22-adb3-0e36e079df52',
         path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffuncfor13graph.png?alt=media&token=de97c7c6-28d2-4040-a2bc-614e835352d4',
         count: 3,
-        koef: [100, 20, 0.05],
-        functioncompute: '100*x**2+20*x+0.05'
+        koef: [1, 2, 0.05],
+        functioncompute: 'x**2+2*x+0.05'
       },
       {
         tytle: 'С2 Финансовая осуществимость стратегии',
@@ -935,21 +935,21 @@ export default [
     alternative: [
       {
         description: 'A1 Концентрированный рост',
-        1: 0.008,
+        1: 0.08,
         2: 0.35,
         3: ['высокая', 0.75],
         4: ['средний', 2]
       },
       {
         description: 'A2 Интеграция',
-        1: 0.012,
+        1: 0.12,
         2: 0.15,
         3: ['средняя', 0.5],
         4: ['высокий', 3]
       },
       {
         description: 'A3 Диверсификация',
-        1: 0.013,
+        1: 0.13,
         2: 0.38,
         3: ['низкая', 0.25],
         4: ['средний', 2]
@@ -970,12 +970,12 @@ export default [
     criterion: [
       {
         tytle: 'С1 Производительность',
-        description: 'С1 Производительность - объём товаров и услуг (в сотнях в час), создаваемых в единицу времени',
+        description: 'С1 Производительность - объём товаров и услуг (в тысячах в час), создаваемых в единицу времени',
         function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2F1.11.png?alt=media&token=1d31f7da-762d-4c22-adb3-0e36e079df52',
         path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffuncfor13graph.png?alt=media&token=de97c7c6-28d2-4040-a2bc-614e835352d4',
         count: 3,
-        koef: [100, 20, 0.05],
-        functioncompute: '100*x**2+20*x+0.05'
+        koef: [1, 2, 0.05],
+        functioncompute: 'x**2+2*x+0.05'
       },
       {
         tytle: 'С2 Финансовая осуществимость стратегии',
@@ -1004,21 +1004,21 @@ export default [
     alternative: [
       {
         description: 'A1 Концентрированный рост',
-        1: 0.007,
+        1: 0.07,
         2: 0.2,
         3: ['высокая', 0.75],
         4: ['средний', 2]
       },
       {
         description: 'A2 Интеграция',
-        1: 0.005,
+        1: 0.05,
         2: 0.26,
         3: ['средняя', 0.5],
         4: ['средний', 2]
       },
       {
         description: 'A3 Диверсификация',
-        1: 0.006,
+        1: 0.06,
         2: 0.17,
         3: ['высокая', 0.75],
         4: ['низкий', 1]

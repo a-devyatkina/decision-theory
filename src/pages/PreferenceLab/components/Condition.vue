@@ -49,7 +49,7 @@ export default {
         const obj = {}
         const arr = []
         for (let j = 0; j < 4; j++) {
-          obj.name = this.condition.criterion[j].title
+          obj.name = this.condition.criterion[j].tytle
           if ((this.condition.alternative[i][j + 1].length)) {
             obj.value = this.condition.alternative[i][j + 1][0]
           } else {
@@ -66,7 +66,7 @@ export default {
       if (this.condition.weight) {
         for (let i = 0; i < this.condition.weight.length; i++) {
           arr.push({
-            name: this.condition.criterion[i].title,
+            name: this.condition.criterion[i].tytle,
             value: this.condition.weight[i]
           })
         }

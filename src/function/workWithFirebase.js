@@ -5,6 +5,7 @@ import variants from './variants'
 const usersWithVariants = {
   '-M3laaK6mM7HWas1EMDw': 0,
   '-M0S_7Mu7gv6HU8r7GZo': 0,
+  '-M63orwMramoZQpgjjCk': 0,
   '-M4Q1b80w6kBbGOWuk1G': 1,
   '-M4Pn67BYX5Daensy7ve': 2,
   '-M4PmenQPUPCZHL5rycY': 3,
