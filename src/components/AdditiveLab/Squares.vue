@@ -25,7 +25,7 @@
     </q-table>
     <br>
     <q-table
-      title="Площади соответсвующих треугольников:"
+      title="Площади соответствующих треугольников:"
       :data="squares"
       :columns="columns"
       ref='table'
