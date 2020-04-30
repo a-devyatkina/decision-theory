@@ -25,7 +25,7 @@
     </q-table>
     <br>
     <q-table
-      title="Площади соответсвующих треугольников:"
+      title="Площади соответствующих треугольников:"
       :data="squares"
       :columns="columns"
       ref='table'
@@ -98,7 +98,8 @@ export default {
       for (let alt = 0; alt < 3; alt++) {
         correct[alt] = {
           name: 'S' + (alt + 1),
-          square: ((this.r_functions[alt]['end'] - this.r_functions[alt]['begin']) / 2).toFixed(2),
+          // square: ((this.r_functions[alt]['end'] - this.r_functions[alt]['begin']) / 2).toFixed(2),
+          square: Math.round(((this.r_functions[alt]['end'] - this.r_functions[alt]['begin']) / 2) * 100) / 100,
           __index: alt
         }
       }
