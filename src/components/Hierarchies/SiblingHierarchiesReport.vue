@@ -22,7 +22,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Вводный тест - Этап {{ session.intro.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Вводный тест - Этап {{ intro }}</h6>
                 </q-item-main>
             </q-item>
             <div class="questions" v-for="question in session.intro.questions" :key="question.id">
@@ -32,7 +32,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Практический тест - Этап {{ session.practice.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Практический тест - Этап {{ practice }}</h6>
                 </q-item-main>
             </q-item>
             <div class="questions" v-for="question in session.practice.questions" :key="question.id">
@@ -42,7 +42,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Целевая матрица - Этап {{ session.target_matrix.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Целевая матрица - Этап {{ target_matrix }}</h6>
                 </q-item-main>
             </q-item>
             <div class="matrix_step" v-for="answer in session.target_matrix.answers" :key="answer.id">
@@ -54,7 +54,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Матрица по первому критерию - Этап {{ session.criterion_matrix1.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Матрица по первому критерию - Этап {{ criterion_matrix1 }}</h6>
                 </q-item-main>
             </q-item>
             <div class="matrix_step" v-for="answer in session.criterion_matrix1.answers" :key="answer.id">
@@ -66,7 +66,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Матрица по второму критерию - Этап {{ session.criterion_matrix2.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Матрица по второму критерию - Этап {{ criterion_matrix2 }}</h6>
                 </q-item-main>
             </q-item>
             <div class="matrix_step" v-for="answer in session.criterion_matrix2.answers" :key="answer.id">
@@ -78,7 +78,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Матрица по третьему критерию - Этап {{ session.criterion_matrix3.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Матрица по третьему критерию - Этап {{ criterion_matrix3 }}</h6>
                 </q-item-main>
             </q-item>
             <div class="matrix_step" v-for="answer in session.criterion_matrix3.answers" :key="answer.id">
@@ -90,7 +90,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Матрица по четвертому критерию - Этап {{ session.criterion_matrix4.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Матрица по четвертому критерию - Этап {{ criterion_matrix4 }}</h6>
                 </q-item-main>
             </q-item>
             <div class="matrix_step" v-for="answer in session.criterion_matrix4.answers" :key="answer.id">
@@ -102,7 +102,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Иерархический синтез - Этап {{ session.hierarchical_synthesis.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Иерархический синтез - Этап {{ hierarchical_synthesis }}</h6>
                 </q-item-main>
             </q-item>
             <div v-for="answer in session.hierarchical_synthesis.answers" :key="answer.id">
@@ -126,7 +126,7 @@
             </div>
             <q-item>
                 <q-item-main>
-                    <h6>Дополнительный вопрос - Этап {{ session.add_test.done ? "завершен" : "не завершен" }}</h6>
+                    <h6>Дополнительный вопрос - Этап {{ add_test }}</h6>
                 </q-item-main>
             </q-item>
             <q-item>
@@ -147,6 +147,53 @@ export default {
     return {
       sessions: [],
       session: null
+    }
+  },
+  computed: {
+    intro () {
+      let intro = this.session.intro
+      let message = intro.done ? 'завершен (' + intro.points + '/5)' : 'не завершен'
+      return message
+    },
+    practice () {
+      let practice = this.session.practice
+      let message = practice.done ? 'завершен (' + practice.points + '/15)' : 'не завершен'
+      return message
+    },
+    target_matrix () {
+      let targetMatrix = this.session.target_matrix
+      let message = targetMatrix.done ? 'завершен (' + targetMatrix.points + '/10)' : 'не завершен'
+      return message
+    },
+    criterion_matrix1 () {
+      let criterionMatrix1 = this.session.criterion_matrix1
+      let message = criterionMatrix1.done ? 'завершен (' + criterionMatrix1.points + '/10)' : 'не завершен'
+      return message
+    },
+    criterion_matrix2 () {
+      let criterionMatrix2 = this.session.criterion_matrix2
+      let message = criterionMatrix2.done ? 'завершен (' + criterionMatrix2.points + '/10)' : 'не завершен'
+      return message
+    },
+    criterion_matrix3 () {
+      let criterionMatrix3 = this.session.criterion_matrix3
+      let message = criterionMatrix3.done ? 'завершен (' + criterionMatrix3.points + '/10)' : 'не завершен'
+      return message
+    },
+    criterion_matrix4 () {
+      let criterionMatrix4 = this.session.criterion_matrix4
+      let message = criterionMatrix4.done ? 'завершен (' + criterionMatrix4.points + '/10)' : 'не завершен'
+      return message
+    },
+    hierarchical_synthesis () {
+      let hierarchicalSynthesis = this.session.hierarchical_synthesis
+      let message = hierarchicalSynthesis.done ? 'завершен (' + hierarchicalSynthesis.points + '/20)' : 'не завершен'
+      return message
+    },
+    add_test () {
+      let addTest = this.session.add_test
+      let message = addTest.done ? 'завершен (' + addTest.points + '/10)' : 'не завершен'
+      return message
     }
   },
   mounted () {

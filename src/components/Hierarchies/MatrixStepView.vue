@@ -33,10 +33,7 @@
 
 <script>
 export default {
-  props: [ 'answer' ],
-  mounted () {
-    console.log(this.answer)
-  }
+  props: [ 'answer' ]
 }
 </script>
 
