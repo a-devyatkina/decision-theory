@@ -1,5 +1,8 @@
 const math = require('mathjs')
 
+const error = 3
+const consistency_error = 1
+
 module.exports = function(app, db, ObjectID) {
     app.post('/restapi/hierarchies/siblinghierarchies', async (req, res) => {
         let fixed_variant = await db.collection('fixed_variants').findOne({user:req.body.user_id})
@@ -189,8 +192,8 @@ module.exports = function(app, db, ObjectID) {
             }
             for (i = 0; i < 4; i++) {
                 for (j = 0; j < calculations[i].length; j++) {
-                    let upper = Math.round(calculations[i][j]*100+1)/100
-                    let lower = Math.round(calculations[i][j]*100-1)/100
+                    let upper = Math.round(calculations[i][j]*100+error)/100
+                    let lower = Math.round(calculations[i][j]*100-error)/100
                     let tmp = req.body.value[i][j]
                     //console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
@@ -201,8 +204,8 @@ module.exports = function(app, db, ObjectID) {
                 }
             }
             for (i = 4; i < 7; i++) {
-                let upper = Math.round(calculations[i]*100+1)/100
-                let lower = Math.round(calculations[i]*100-1)/100
+                let upper = Math.round(calculations[i]*100+consistency_error)/100
+                let lower = Math.round(calculations[i]*100-consistency_error)/100
                 let tmp = req.body.value[i][0]
                 //console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
@@ -301,8 +304,8 @@ module.exports = function(app, db, ObjectID) {
             for (i = 0; i < 3; i++) {
                 let row = matrix[i]
                 for (j = 0; j < 4; j++) {
-                    let upper = Math.round(row[j]*100+1)/100
-                    let lower = Math.round(row[j]*100-1)/100
+                    let upper = Math.round(row[j]*100+error)/100
+                    let lower = Math.round(row[j]*100-error)/100
                     let tmp = request[i][j]
                     //console.log(lower, tmp, upper)
                     if (lower > tmp || tmp > upper || !tmp) {
@@ -314,8 +317,8 @@ module.exports = function(app, db, ObjectID) {
 
             request = req.body.value.criterion_priority
             for (i = 0; i < criterion_priority.length; i++) {
-                let upper = Math.round(criterion_priority[i]*100+1)/100
-                let lower = Math.round(criterion_priority[i]*100-1)/100
+                let upper = Math.round(criterion_priority[i]*100+error)/100
+                let lower = Math.round(criterion_priority[i]*100-error)/100
                 let tmp = request[i]
                 //console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
@@ -326,8 +329,8 @@ module.exports = function(app, db, ObjectID) {
 
             request = req.body.value.global_priority
             for (i = 0; i < global_priority.length; i++) {
-                let upper = Math.round(global_priority[i]*100+1)/100
-                let lower = Math.round(global_priority[i]*100-1)/100
+                let upper = Math.round(global_priority[i]*100+consistency_error)/100
+                let lower = Math.round(global_priority[i]*100-consistency_error)/100
                 let tmp = request[i]
                 //console.log(lower, tmp, upper)
                 if (lower > tmp || tmp > upper || !tmp) {
@@ -352,7 +355,6 @@ module.exports = function(app, db, ObjectID) {
             }
 
             response.body = Array.from(response.body).join(', ')
-            //console.log(response)
 
             if (response.status === 'wrong') {
                 if (session.hierarchical_synthesis.points-4 === 0) {
