@@ -125,14 +125,30 @@ export default {
           name: 'x' + (alt + 1)
         }
 
-        let a = 0
-        if ((this.r_functions[alt]['end'] - this.r_functions[alt]['top']) > (this.r_functions[alt]['top'] - this.r_functions[alt]['begin'])) {
-          a = this.r_functions[alt]['end']
-          correct[alt]['coord'] = (Math.abs(Math.sqrt(this.squares[alt]['square'] * (a - this.r_functions[alt]['top'])) - a)).toFixed(2)
+        let a = parseFloat(this.r_functions[alt]['begin'])
+        let b = parseFloat(this.r_functions[alt]['top'])
+        let c = parseFloat(this.r_functions[alt]['end'])
+        let S = parseFloat(this.squares[alt]['square'])
+        let x1, x2
+
+        if ((c - b) > (b - a)) {
+          // For right half
+          let koren = Math.sqrt(S * (c - b))
+          x1 = c - koren
+          x2 = c + koren
         } else {
-          a = this.r_functions[alt]['begin']
-          correct[alt]['coord'] = (Math.sqrt(this.squares[alt]['square'] * this.r_functions[alt]['top'] - a * (this.squares[alt]['square'] - a))).toFixed(2)
+          // For left half
+          let koren = Math.sqrt(this.squares[alt]['square'] * (this.r_functions[alt]['top'] - this.r_functions[alt]['begin']))
+          x1 = a - koren
+          x2 = a + koren
         }
+
+        if (x1 < a || x1 > c) {
+          correct[alt]['coord'] = Math.round(x2 * 100) / 100
+        } else {
+          correct[alt]['coord'] = Math.round(x1 * 100) / 100
+        }
+
         correct[alt]['__index'] = alt
       }
       return correct
