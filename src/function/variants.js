@@ -442,8 +442,8 @@ export default [
       {
         tytle: 'С4 Среднее количество приложений',
         description: 'С4 Среднее количество приложений – количество предложений (в десятках тысяч) от поставщика для данной операционной системы в среднем. ',
-        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=cb46b5aa-d566-411e-8ff7-c65728e3a569',
-        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=77bdc2c9-1675-483d-ac75-ec52af5f7a27',
+        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=e9d7a2c4-4db2-43fc-95b1-e9864f1a442d',
+        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=22e52243-6dc6-471d-92b5-8f407f8cb8ba',
         count: 2,
         koef: [0.25, 0.5],
         functioncompute: '0.25*(x**0.5)'
@@ -511,8 +511,8 @@ export default [
       {
         tytle: 'C4 Среднее количество приложений',
         description: 'С4 Среднее количество приложений – количество предложений (в десятках тысяч) от поставщика для данной операционной системы в среднем. ',
-        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=cb46b5aa-d566-411e-8ff7-c65728e3a569',
-        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=77bdc2c9-1675-483d-ac75-ec52af5f7a27',
+        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=e9d7a2c4-4db2-43fc-95b1-e9864f1a442d',
+        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=22e52243-6dc6-471d-92b5-8f407f8cb8ba',
         count: 2,
         koef: [0.25, 0.5],
         functioncompute: '0.25*(x**0.5)'
@@ -580,8 +580,8 @@ export default [
       {
         tytle: 'С4 Среднее количество приложений',
         description: 'С4 Среднее количество приложений – количество предложений (в десятках тысяч) от поставщика для данной операционной системы в среднем. ',
-        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=cb46b5aa-d566-411e-8ff7-c65728e3a569',
-        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=77bdc2c9-1675-483d-ac75-ec52af5f7a27',
+        function: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxa.png?alt=media&token=e9d7a2c4-4db2-43fc-95b1-e9864f1a442d',
+        path: 'https://firebasestorage.googleapis.com/v0/b/decision-theory-simulator.appspot.com/o/statics%2Ffunckxagraph.png?alt=media&token=22e52243-6dc6-471d-92b5-8f407f8cb8ba',
         count: 2,
         koef: [0.25, 0.5],
         functioncompute: '0.25*(x**0.5)'
