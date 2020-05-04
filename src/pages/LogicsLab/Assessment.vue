@@ -15,7 +15,7 @@
           <q-input v-for='index of range(user_answer.length)'
             :key='index'
             outlined
-            :label='`A${index}`'
+            :stack-label='`A${index}`'
             v-model="user_answer[index]"
             placeholder='0.000'
             class='input'
@@ -23,7 +23,7 @@
           />
           <div class="clr"></div>
           <q-input
-            label='Лучшая альтернатива'
+            stack-label='Лучшая альтернатива'
             outlined
             v-model="final_answer"
             placeholder='0'

@@ -51,7 +51,7 @@
         :key='index'
         outlined
         v-model="user_answer[index]"
-        :label='`d${index + 1}`'
+        :stack-label='`d${index + 1}`'
         placeholder='0.000'
         class='input'
         @input='valid(user_answer)'
