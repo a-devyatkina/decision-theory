@@ -12,9 +12,7 @@
                     color="secondary"/>
         </q-item>
         <div v-if="session">
-            <q-item>
-                <h6>Начальный балл - {{ session.base_score }}</h6>
-            </q-item>
+            <q-item>Начальный балл - {{ session.base_score }}</q-item>
             <q-item>
                 <h5>Задание</h5>
             </q-item>
@@ -133,7 +131,9 @@
                 </q-item-main>
             </q-item>
             <q-item>
-                <question-report :question="session.add_test" :type="'add'"/>
+                <div v-if="session.add_test.question">
+                    <question-report :question="session.add_test" :type="'add'"/>
+                </div>
             </q-item>
             <!--<q-item>-->
                 <!--<q-item-main v-if="this.session.mark">Оценка: {{ score }}</q-item-main>-->
@@ -258,7 +258,7 @@ export default {
         baseScore = Math.round(baseScore * 10) / 10
         response.data[i].base_score = baseScore
         let mark
-        if (response.data[i].mark) {
+        if (response.data[i].mark === undefined) {
           mark = baseScore * response.data[i].mark / 100
           mark = Math.round(mark * 10) / 10
         } else {
