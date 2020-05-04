@@ -1,24 +1,30 @@
 <template>
-        <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
-            <q-item-main> {{ text }} </q-item-main>
-            <div v-if="question.answers.length">
-                <div v-for="answer in question.answers" :key="answer.id">
-                    <q-item> {{ answer }} </q-item>
-                </div>
+    <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
+        <q-item-main> {{ question.question }} </q-item-main>
+        <div v-for="answer in question.answers" :key="answer.id">
+            <div v-if="question.user_answers.includes(answer)">
+                <q-item> {{ answer }} &#10004; </q-item>
             </div>
             <div v-else>
-                <q-item>(На этот вопрос студент не отвечал)</q-item>
+                <q-item> {{ answer }}</q-item>
             </div>
-        </q-list>
+        </div>
+        <q-item-side>{{ result }}</q-item-side>
+    </q-list>
 </template>
 
 <script>
 const axios = require('axios')
 export default {
-  props: [ 'question', 'type' ],
-  data: () => {
-    return {
-      text: null
+  props: ['question', 'type'],
+  // data: () => {
+  //   return {
+  //     question: null
+  //   }
+  // },
+  computed: {
+    result () {
+      return 'Правильный ответ - ' + this.question.correct
     }
   },
   mounted () {
@@ -40,7 +46,9 @@ export default {
       url,
       body
     ).then(response => {
-      this.text = response.data.question
+      let userAnswers = this.question.answers
+      this.question = response.data
+      this.question.user_answers = userAnswers
     })
   }
 }

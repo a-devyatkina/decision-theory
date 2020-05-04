@@ -17,6 +17,7 @@ module.exports = function(app, db, ObjectID) {
         let session = {
             user_id: req.body.user_id,
             timestamp: Date.now(),
+            try: req.body.try,
             variant: variant,
             intro: {
                 questions: [],

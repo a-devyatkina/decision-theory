@@ -42,15 +42,16 @@
                 <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{value}}</q-chip></q-item-side>
               </q-item>
               <q-item>
-                <q-item-main :sublabel="$t('Score')" />
-                <q-item-side right><q-chip round class="q-subheading" color="grey-3" text-color="grey-9">{{score}}</q-chip></q-item-side>
+                <q-item-main :sublabel="$t('Score')" >
+                  <q-chip round class="q-subheading" color="grey-3" text-color="grey-9"> {{score}} </q-chip>
+                </q-item-main>
               </q-item>
             </q-list>
           </q-item-main>
         </q-item>
       </q-list>
       <div v-if="work.lab === 'siblinghierarchies'">
-        <siblinghierarchies-report :sid="work.student"/>
+        <siblinghierarchies-report :sid="work.student" :max_score="this.max_score"/>
       </div>
     </q-list>
   </q-page>
@@ -86,10 +87,12 @@ export default {
     user () {
       return this.$store.getters['data/getUser']()
     },
+    max_score () {
+      return this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
+    },
     score () {
-      let maxscore = this.course.groups[this.student.group].hierarchieslab[this.work.lab].maxScore
       let penalty = this.work.tries > 1 ? (this.work.tries - 1) * 10 : 0
-      let score = ((this.work.score - penalty) * maxscore) / 100 - this.work.penalty
+      let score = ((this.work.score - penalty) * this.max_score) / 100 - this.work.penalty
       score = Math.round(score * 10) / 10
       return score > 0 ? score : 0
     }

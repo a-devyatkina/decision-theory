@@ -13,6 +13,9 @@
         </q-item>
         <div v-if="session">
             <q-item>
+                <h6>Начальный балл - {{ session.base_score }}</h6>
+            </q-item>
+            <q-item>
                 <h5>Задание</h5>
             </q-item>
             <div class=matrix v-for="matrix in session.variant.data" :key="matrix.id">
@@ -132,9 +135,9 @@
             <q-item>
                 <question-report :question="session.add_test" :type="'add'"/>
             </q-item>
-            <q-item>
-                <q-item-main v-if="this.session.mark">Оценка: {{ this.session.mark }}</q-item-main>
-            </q-item>
+            <!--<q-item>-->
+                <!--<q-item-main v-if="this.session.mark">Оценка: {{ score }}</q-item-main>-->
+            <!--</q-item>-->
         </div>
     </q-list>
 </template>
@@ -142,7 +145,7 @@
 <script>
 const axios = require('axios')
 export default {
-  props: [ 'sid' ],
+  props: [ 'sid', 'max_score' ],
   data () {
     return {
       sessions: [],
@@ -152,48 +155,89 @@ export default {
   computed: {
     intro () {
       let intro = this.session.intro
-      let message = intro.done ? 'завершен (' + intro.points + '/5)' : 'не завершен'
+      let points = this.session.base_score * (intro.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.05
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = intro.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     practice () {
       let practice = this.session.practice
-      let message = practice.done ? 'завершен (' + practice.points + '/15)' : 'не завершен'
+      let points = this.session.base_score * (practice.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.15
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = practice.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     target_matrix () {
       let targetMatrix = this.session.target_matrix
-      let message = targetMatrix.done ? 'завершен (' + targetMatrix.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (targetMatrix.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = targetMatrix.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix1 () {
       let criterionMatrix1 = this.session.criterion_matrix1
-      let message = criterionMatrix1.done ? 'завершен (' + criterionMatrix1.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (criterionMatrix1.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = criterionMatrix1.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix2 () {
       let criterionMatrix2 = this.session.criterion_matrix2
-      let message = criterionMatrix2.done ? 'завершен (' + criterionMatrix2.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (criterionMatrix2.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = criterionMatrix2.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix3 () {
       let criterionMatrix3 = this.session.criterion_matrix3
-      let message = criterionMatrix3.done ? 'завершен (' + criterionMatrix3.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (criterionMatrix3.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = criterionMatrix3.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix4 () {
       let criterionMatrix4 = this.session.criterion_matrix4
-      let message = criterionMatrix4.done ? 'завершен (' + criterionMatrix4.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (criterionMatrix4.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = criterionMatrix4.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     hierarchical_synthesis () {
       let hierarchicalSynthesis = this.session.hierarchical_synthesis
-      let message = hierarchicalSynthesis.done ? 'завершен (' + hierarchicalSynthesis.points + '/20)' : 'не завершен'
+      let points = this.session.base_score * (hierarchicalSynthesis.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.2
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = hierarchicalSynthesis.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     add_test () {
       let addTest = this.session.add_test
-      let message = addTest.done ? 'завершен (' + addTest.points + '/10)' : 'не завершен'
+      let points = this.session.base_score * (addTest.points / 100)
+      points = Math.round(points * 10) / 10
+      let maxPoints = this.session.base_score * 0.1
+      maxPoints = Math.round(maxPoints * 10) / 10
+      let message = addTest.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
+    },
+    score () {
+      let score = this.session.mark / 100 * this.session.base_score
+      score = Math.round(score * 10) / 10
+      return score
     }
   },
   mounted () {
@@ -208,8 +252,21 @@ export default {
         let date = new Date(response.data[i].timestamp)
         date = date.toLocaleString()
         delete response.data[i].timestamp
+        response.data[i].date = date
+        let label = 'Попытка ' + (response.data[i].try + 1)
+        let baseScore = (this.max_score * (100 - response.data[i].try * 10) / 100)
+        baseScore = Math.round(baseScore * 10) / 10
+        response.data[i].base_score = baseScore
+        let mark
+        if (response.data[i].mark) {
+          mark = baseScore * response.data[i].mark / 100
+          mark = Math.round(mark * 10) / 10
+        } else {
+          mark = '?'
+        }
+        label += ' (' + mark + ' /' + this.max_score + ')'
         let session = {
-          label: date,
+          label: label,
           value: response.data[i]
         }
         for (let i in session.value.hierarchical_synthesis.answers) {
