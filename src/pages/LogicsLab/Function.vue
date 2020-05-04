@@ -13,7 +13,7 @@
         outlined
         v-model="user_answer[index]"
         placeholder='0.000'
-        :label='item'
+        :stack-label='item'
         @input='valid(user_answer)'
       />
       <div class="clr"></div>

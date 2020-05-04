@@ -21,7 +21,7 @@
       </q-tr>
     </q-table>
     <br>
-    <h7>Примечание: альтернативам с равными координатами присваиваются равные оценки</h7>
+   <!--  <h7>Примечание: альтернативам с равными координатами присваиваются равные оценки</h7>
     <br>
     <br>
     <q-table
@@ -43,7 +43,7 @@
           </q-popup-edit>
         </q-td>
       </q-tr>
-    </q-table>
+    </q-table> -->
     <h5>Оптимальной является альтернатива под номером:</h5>
     <q-input
       v-model.number="altNum"
@@ -193,7 +193,7 @@ export default {
         }
       })
 
-      this.rating.forEach((alt, row) => {
+      /* this.rating.forEach((alt, row) => {
         if (Math.abs(alt.rating - this.answerRating[row].rating) > 0.05) {
           this.$refs.rating.$children[2 + row].$children[1].$el.style = 'background-color: #FF0000'
           this.mistake = true
@@ -201,7 +201,7 @@ export default {
         } else {
           this.$refs.rating.$children[2 + row].$children[1].$el.style = 'background-color: #FFFFFF'
         }
-      })
+      }) */
 
       // if (this.altNum !== this.answerAltNum) {
       /*   if (this.answerCoords[this.altNum - 1].coord !== this.answerCoords[this.answerAltNum - 1].coord) {
