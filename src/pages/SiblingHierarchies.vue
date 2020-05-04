@@ -689,9 +689,13 @@ export default {
           this.step++
         })
       } else {
+        let body = {
+          user_id: this.user.id,
+          try: this.work.work.tries
+        }
         axios.post(
           'restapi/hierarchies/siblinghierarchies',
-          {user_id: this.user.id}
+          body
         ).then(response => {
           this.info = response.data.data
           this.work.work.stage = 'opened'
