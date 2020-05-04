@@ -10,7 +10,7 @@
             </div>
         </div>
         <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @click="$emit('answer')" label="Ответить"/>
-        <q-btn class='q-px-lg' color="secondary" style='margin: 15px 17px' @back="$emit('back')" label="Назад"/>
+        <q-btn flat class='q-px-lg' color="secondary" style='margin: 15px 17px' @click="$emit('back')" label="Назад"/>
     </div>
 </template>
 
