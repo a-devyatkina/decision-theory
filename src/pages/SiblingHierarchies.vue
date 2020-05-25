@@ -661,7 +661,6 @@ export default {
     stepper (step) {
       this.step = step
       if (step > this.maxstep) this.maxstep = step
-      console.log(this.step, this.maxstep)
     },
     getVar () {
       if (this.work.work.stage === 'opened') {
@@ -853,7 +852,6 @@ export default {
       })
     },
     labIntermediate (value, step) {
-      console.log(value)
       let data = {
         session_id: this.session_id,
         id: this.info._id,
