@@ -11,7 +11,7 @@
                     :options="sessions"
                     color="secondary"/>
         </q-item>
-        <div v-if="session">
+        <div v-if="session" id="report">
             <q-item>Начальный балл - {{ session.base_score }}</q-item>
             <q-item>
                 <h5>Задание</h5>
@@ -135,6 +135,9 @@
                     <question-report :question="session.add_test" :type="'add'"/>
                 </div>
             </q-item>
+            <q-item>
+                <q-btn @click="generatePDF()">Скачать отчет в PDF</q-btn>
+            </q-item>
             <!--<q-item>-->
                 <!--<q-item-main v-if="this.session.mark">Оценка: {{ score }}</q-item-main>-->
             <!--</q-item>-->
@@ -144,12 +147,348 @@
 
 <script>
 const axios = require('axios')
+const pdfMake = require('pdfmake/build/pdfmake.js')
+const pdfFonts = require('pdfmake/build/vfs_fonts.js')
+pdfMake.vfs = pdfFonts.pdfMake.vfs
+
 export default {
   props: [ 'sid', 'max_score' ],
   data () {
     return {
       sessions: [],
       session: null
+    }
+  },
+  methods: {
+    async generatePDF () {
+      let dd = {
+        content: [
+          {
+            text: 'Отчет о выполнении лабораторной работы',
+            style: 'title'
+          }
+        ],
+        styles: {
+          title: {
+            fontSize: 24,
+            bold: true,
+            alignment: 'center',
+            margin: [0, 0, 0, 20]
+          },
+          subtitle: {
+            fontSize: 16,
+            alignment: 'right'
+          },
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 0]
+          },
+          subheader: {
+            fontSize: 16,
+            margin: [0, 20, 0, 10]
+          },
+          question: {
+            fontSize: 14,
+            margin: [0, 10, 0, 10]
+          },
+          correct: {
+            italics: true,
+            color: 'grey',
+            margin: [0, 0, 0, 10]
+          },
+          answers: {
+            fontSize: 14,
+            margin: [0, 20, 0, 20]
+          },
+          body: {
+            fontSize: 14
+          }
+        }
+      }
+      let student = this.$store.getters['data/getStudent'](this.sid)
+      let group = this.$store.getters['data/getGroup'](student.group)
+      let mark
+      if (this.session.mark !== undefined) {
+        mark = this.max_score * (this.session.mark - this.session.try * 10) / 100
+        mark = Math.round(mark * 10) / 10
+      } else {
+        mark = '?'
+      }
+      mark = ' (' + mark + ' /' + this.max_score + ')'
+      let penalty = this.session.try ? 'Балл снижен на ' + this.session.try * 10 + '%\n' : '\n'
+      let subtitle = 'Студент - ' + student.name + '\n' +
+          'Группа - ' + group.name + '\n' +
+          'Попытка - ' + (this.session.try + 1) + '\n' +
+          'Балл - ' + mark + '\n' +
+          penalty
+      dd.content.push({
+        text: subtitle,
+        style: 'subtitle'
+      })
+      dd.content.push({
+        text: 'Задание',
+        style: 'header'
+      })
+      let task = this.session.variant.data
+      dd.content.push({
+        text: 'Целевая матрица',
+        style: 'subheader'
+      })
+      dd.content.push({
+        table: {
+          widths: [30, 30, 30, 30],
+          body: task[0].value
+        }
+      })
+      dd.content.push({
+        text: 'Матрица по первому критерию',
+        style: 'subheader'
+      })
+      dd.content.push({
+        table: {
+          widths: [30, 30, 30, 30],
+          body: task[1].value
+        }
+      })
+      dd.content.push({
+        text: 'Матрица по второму критерию',
+        style: 'subheader'
+      })
+      dd.content.push({
+        table: {
+          widths: [30, 30, 30, 30],
+          body: task[2].value
+        }
+      })
+      dd.content.push({
+        text: 'Матрица по третьему критерию',
+        style: 'subheader'
+      })
+      dd.content.push({
+        table: {
+          widths: [30, 30, 30, 30],
+          body: task[3].value
+        }
+      })
+      dd.content.push({
+        text: 'Матрица по четвертому критерию',
+        style: 'subheader'
+      })
+      dd.content.push({
+        table: {
+          widths: [30, 30, 30, 30],
+          body: task[4].value
+        }
+      })
+      dd.content.push({
+        text: 'Вводный тест - Этап ' + this.intro,
+        style: 'header'
+      })
+      let intro = this.session.intro.questions
+      for (let i in intro) {
+        let question = await axios.post(
+          'restapi/hierarchies/get_intro_question',
+          {id: intro[i]._id}
+        )
+        let status = 0
+        question = question.data
+        for (let j in intro[i].answers) {
+          if (intro[i].answers[j] === question.correct) {
+            status += 2
+          } else {
+            status -= 1
+          }
+          for (let k in question.answers) {
+            if (intro[i].answers[j] === question.answers[k]) {
+              question.answers[k] += ' [Х]'
+              // if (question.answers[k] !== question.correct) {
+              //   question.answers[k] += ' (-' +  + ')'
+              //   console.log(this.session)
+              // }
+            }
+          }
+        }
+        switch (status) {
+          case 2:
+            status = ' (Верно)'
+            break
+          case -2:
+            status = ' (Неверно)'
+            break
+          case 1:
+            status = ' (Частично верно)'
+            break
+          default:
+            status = ' (Не закончен)'
+            break
+        }
+        dd.content.push({
+          text: question.question + status,
+          style: 'question'
+        })
+        dd.content.push({ul: question.answers})
+        dd.content.push({
+          text: 'Правильный ответ - ' + question.correct,
+          style: 'correct'
+        })
+      }
+      dd.content.push({
+        text: 'Практический тест - Этап ' + this.practice,
+        style: 'header'
+      })
+      let practice = this.session.practice.questions
+      for (let i in practice) {
+        let question = await axios.post(
+          'restapi/hierarchies/get_practice_question',
+          {
+            id: practice[i]._id,
+            type: practice[i].type
+          }
+        )
+        question = question.data
+        let status
+        for (let j in practice[i].answers) {
+          if (practice[i].answers[j] === question.correct) {
+            status += 2
+          } else {
+            status -= 1
+          }
+          for (let k in question.answers) {
+            if (practice[i].answers[j] === question.answers[k]) {
+              question.answers[k] += ' [Х]'
+            }
+          }
+        }
+        switch (status) {
+          case 2:
+            status = ' (Верно)'
+            break
+          case -2:
+            status = ' (Неверно)'
+            break
+          case 1:
+            status = ' (Частично верно)'
+            break
+          default:
+            status = ' (Не закончен)'
+            break
+        }
+        dd.content.push({
+          text: question.question + status,
+          style: 'question'
+        })
+        dd.content.push({ul: question.answers})
+        dd.content.push({
+          text: 'Правильный ответ - ' + question.correct,
+          style: 'correct'
+        })
+      }
+      let processor = (array) => {
+        array[0] = 'Вектор приоритетов <' + array[0].join(', ') + '>'
+        array[1] = 'Веса критериев <' + array[1].join(', ') + '>'
+        array[2] = '(M*w) <' + array[2].join(', ') + '>'
+        array[3] = 'Лямбда <' + array[3].join(', ') + '>'
+        array[4] = 'Собственное значение лямбда <' + array[4].join(', ') + '>'
+        array[5] = 'Индекс согласованности <' + array[5].join(', ') + '>'
+        array[6] = 'Отношение согласованности <' + array[6].join(', ') + '>'
+        return array.join('\n')
+      }
+      dd.content.push({
+        text: 'Целевая матрица - Этап ' + this.target_matrix,
+        style: 'header'
+      })
+      let answers = this.session.target_matrix.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: processor(answers[i]),
+          style: 'answers'
+        })
+      }
+      dd.content.push({
+        text: 'Матрица по первому критерию - Этап ' + this.criterion_matrix1,
+        style: 'header'
+      })
+      answers = this.session.criterion_matrix1.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: processor(answers[i]),
+          style: 'answers'
+        })
+      }
+      dd.content.push({
+        text: 'Матрица по второму критерию - Этап ' + this.criterion_matrix2,
+        style: 'header'
+      })
+      answers = this.session.criterion_matrix2.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: processor(answers[i]),
+          style: 'answers'
+        })
+      }
+      dd.content.push({
+        text: 'Матрица по третьему критерию - Этап ' + this.criterion_matrix3,
+        style: 'header'
+      })
+      answers = this.session.criterion_matrix3.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: processor(answers[i]),
+          style: 'answers'
+        })
+      }
+      dd.content.push({
+        text: 'Матрица по четвертому критерию - Этап ' + this.criterion_matrix4,
+        style: 'header'
+      })
+      answers = this.session.criterion_matrix4.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: processor(answers[i]),
+          style: 'answers'
+        })
+      }
+      dd.content.push({
+        text: 'Иерархический синтез - Этап ' + this.hierarchical_synthesis,
+        style: 'header'
+      })
+      answers = this.session.hierarchical_synthesis.answers
+      for (let i in answers) {
+        dd.content.push({
+          text: 'Итоговая матрица',
+          style: 'subheader'
+        })
+        dd.content.push({
+          table: {
+            body: answers[i].matrix.value,
+            widths: [30, 30, 30, 30]
+          }
+        })
+        dd.content.push({
+          text: 'Вектор приоритетов критериев <' + answers[i].criterion_priority.join(', ') + '>',
+          style: 'subheader'
+        })
+        dd.content.push({
+          text: 'Вектор глобальных приоритетов <' + answers[i].global_priority.join(', ') + '>',
+          style: 'subheader'
+        })
+        dd.content.push({
+          text: 'Выбранная альтернатива <' + answers[i].alternative + '>',
+          style: 'subheader'
+        })
+      }
+      // let add
+      //   {
+      //     text: 'Дополнительный вопрос - Этап ' + this.add_test,
+      //     style: 'header'
+      //   },
+      //   {
+      //     text: add,
+      //     style: 'body'
+      //   }
+      // ]
+      pdfMake.createPdf(dd).open()
     }
   },
   computed: {
@@ -258,7 +597,7 @@ export default {
         baseScore = Math.round(baseScore * 10) / 10
         response.data[i].base_score = baseScore
         let mark
-        if (response.data[i].mark === undefined) {
+        if (response.data[i].mark !== undefined) {
           mark = baseScore * response.data[i].mark / 100
           mark = Math.round(mark * 10) / 10
         } else {

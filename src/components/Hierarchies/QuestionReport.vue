@@ -2,7 +2,7 @@
     <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
         <q-item-main> {{ question.question }} </q-item-main>
         <div v-for="answer in question.answers" :key="answer.id">
-            <div v-if="question.user_answers.includes(answer)">
+            <div v-if="question.user_answers && question.user_answers.includes(answer)">
                 <q-item> {{ answer }} &#10004; </q-item>
             </div>
             <div v-else>
@@ -28,6 +28,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.question)
     let url, body
     if (this.type === 'intro') {
       url = 'restapi/hierarchies/get_intro_question'
