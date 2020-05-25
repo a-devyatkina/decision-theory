@@ -11,6 +11,8 @@ const usersWithVariants = {
   '-M4PmenQPUPCZHL5rycY': 3,
   '-M4PmZCB_KCPLK53e1ml': 6,
   '-M3Ad--2oHBITF0JqmKA': 7,
+  '-M84Am4m_4pJJMXTfprr': 8,
+  '-M84B2vcSEjcYkbvnbkc': 9,
   '-M4Pnb2MQr6eNKSs4T7O': 10,
   '-M4PmnGjorSfmhM1Yr3z': 11,
   '-M4PmxFijtvj0uC70zFQ': 12,
