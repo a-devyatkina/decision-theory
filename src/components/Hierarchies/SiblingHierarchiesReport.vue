@@ -12,129 +12,129 @@
                     color="secondary"/>
         </q-item>
         <div v-if="session" id="report">
-            <q-item>Начальный балл - {{ session.base_score }}</q-item>
-            <q-item>
-                <h5>Задание</h5>
-            </q-item>
-            <div class=matrix v-for="matrix in session.variant.data" :key="matrix.id">
-                <q-item>
-                    <matrix-view :matrix="matrix"/>
-                </q-item>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Вводный тест - Этап {{ intro }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="questions" v-for="question in session.intro.questions" :key="question.id">
-                <q-item>
-                    <question-report :question="question" :type="'intro'"/>
-                </q-item>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Практический тест - Этап {{ practice }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="questions" v-for="question in session.practice.questions" :key="question.id">
-                <q-item>
-                    <question-report :question="question" :type="'practice'"/>
-                </q-item>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Целевая матрица - Этап {{ target_matrix }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="matrix_step" v-for="answer in session.target_matrix.answers" :key="answer.id">
-                <div v-if="session.target_matrix.answers.length">
-                    <q-item>
-                        <matrixstep-view :answer="answer"/>
-                    </q-item>
-                </div>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Матрица по первому критерию - Этап {{ criterion_matrix1 }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="matrix_step" v-for="answer in session.criterion_matrix1.answers" :key="answer.id">
-                <div v-if="session.criterion_matrix1.answers.length">
-                    <q-item>
-                        <matrixstep-view :answer="answer"/>
-                    </q-item>
-                </div>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Матрица по второму критерию - Этап {{ criterion_matrix2 }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="matrix_step" v-for="answer in session.criterion_matrix2.answers" :key="answer.id">
-                <div v-if="session.criterion_matrix2.answers.length">
-                    <q-item>
-                        <matrixstep-view :answer="answer"/>
-                    </q-item>
-                </div>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Матрица по третьему критерию - Этап {{ criterion_matrix3 }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="matrix_step" v-for="answer in session.criterion_matrix3.answers" :key="answer.id">
-                <div v-if="session.criterion_matrix3.answers.length">
-                    <q-item>
-                        <matrixstep-view :answer="answer"/>
-                    </q-item>
-                </div>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Матрица по четвертому критерию - Этап {{ criterion_matrix4 }}</h6>
-                </q-item-main>
-            </q-item>
-            <div class="matrix_step" v-for="answer in session.criterion_matrix4.answers" :key="answer.id">
-                <div v-if="session.criterion_matrix4.answers.length">
-                    <q-item>
-                        <matrixstep-view :answer="answer"/>
-                    </q-item>
-                </div>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Иерархический синтез - Этап {{ hierarchical_synthesis }}</h6>
-                </q-item-main>
-            </q-item>
-            <div v-for="answer in session.hierarchical_synthesis.answers" :key="answer.id">
-                <q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">
-                    <q-item>
-                        <matrix-view :matrix="answer.matrix"/>
-                    </q-item>
-                    <q-item>
-                        <q-item-main>Вектор приоритетов критериев</q-item-main>
-                        <q-item-side>&lt;{{ answer.criterion_priority.join(', ') }}&gt;</q-item-side>
-                    </q-item>
-                    <q-item>
-                        <q-item-main>Вектор глобальных приоритетов</q-item-main>
-                        <q-item-side>&lt;{{ answer.global_priority.join(', ') }}&gt;</q-item-side>
-                    </q-item>
-                    <q-item>
-                        <q-item-main>Альтернатива</q-item-main>
-                        <q-item-side>&lt;{{ answer.alternative }}&gt;</q-item-side>
-                    </q-item>
-                </q-list>
-            </div>
-            <q-item>
-                <q-item-main>
-                    <h6>Дополнительный вопрос - Этап {{ add_test }}</h6>
-                </q-item-main>
-            </q-item>
-            <q-item>
-                <div v-if="session.add_test.question">
-                    <question-report :question="session.add_test" :type="'add'"/>
-                </div>
-            </q-item>
+            <!--<q-item>Начальный балл - {{ session.base_score }}</q-item>-->
+            <!--<q-item>-->
+                <!--<h5>Задание</h5>-->
+            <!--</q-item>-->
+            <!--<div class=matrix v-for="matrix in session.variant.data" :key="matrix.id">-->
+                <!--<q-item>-->
+                    <!--<matrix-view :matrix="matrix"/>-->
+                <!--</q-item>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Вводный тест - Этап {{ intro }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="questions" v-for="question in session.intro.questions" :key="question.id">-->
+                <!--<q-item>-->
+                    <!--<question-report :question="question" :type="'intro'"/>-->
+                <!--</q-item>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Практический тест - Этап {{ practice }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="questions" v-for="question in session.practice.questions" :key="question.id">-->
+                <!--<q-item>-->
+                    <!--<question-report :question="question" :type="'practice'"/>-->
+                <!--</q-item>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Целевая матрица - Этап {{ target_matrix }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="matrix_step" v-for="answer in session.target_matrix.answers" :key="answer.id">-->
+                <!--<div v-if="session.target_matrix.answers.length">-->
+                    <!--<q-item>-->
+                        <!--<matrixstep-view :answer="answer"/>-->
+                    <!--</q-item>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Матрица по первому критерию - Этап {{ criterion_matrix1 }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="matrix_step" v-for="answer in session.criterion_matrix1.answers" :key="answer.id">-->
+                <!--<div v-if="session.criterion_matrix1.answers.length">-->
+                    <!--<q-item>-->
+                        <!--<matrixstep-view :answer="answer"/>-->
+                    <!--</q-item>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Матрица по второму критерию - Этап {{ criterion_matrix2 }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="matrix_step" v-for="answer in session.criterion_matrix2.answers" :key="answer.id">-->
+                <!--<div v-if="session.criterion_matrix2.answers.length">-->
+                    <!--<q-item>-->
+                        <!--<matrixstep-view :answer="answer"/>-->
+                    <!--</q-item>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Матрица по третьему критерию - Этап {{ criterion_matrix3 }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="matrix_step" v-for="answer in session.criterion_matrix3.answers" :key="answer.id">-->
+                <!--<div v-if="session.criterion_matrix3.answers.length">-->
+                    <!--<q-item>-->
+                        <!--<matrixstep-view :answer="answer"/>-->
+                    <!--</q-item>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Матрица по четвертому критерию - Этап {{ criterion_matrix4 }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div class="matrix_step" v-for="answer in session.criterion_matrix4.answers" :key="answer.id">-->
+                <!--<div v-if="session.criterion_matrix4.answers.length">-->
+                    <!--<q-item>-->
+                        <!--<matrixstep-view :answer="answer"/>-->
+                    <!--</q-item>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Иерархический синтез - Этап {{ hierarchical_synthesis }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<div v-for="answer in session.hierarchical_synthesis.answers" :key="answer.id">-->
+                <!--<q-list class="q-ma-md round-borders shadow-2 bg-white" id="list">-->
+                    <!--<q-item>-->
+                        <!--<matrix-view :matrix="answer.matrix"/>-->
+                    <!--</q-item>-->
+                    <!--<q-item>-->
+                        <!--<q-item-main>Вектор приоритетов критериев</q-item-main>-->
+                        <!--<q-item-side>&lt;{{ answer.criterion_priority.join(', ') }}&gt;</q-item-side>-->
+                    <!--</q-item>-->
+                    <!--<q-item>-->
+                        <!--<q-item-main>Вектор глобальных приоритетов</q-item-main>-->
+                        <!--<q-item-side>&lt;{{ answer.global_priority.join(', ') }}&gt;</q-item-side>-->
+                    <!--</q-item>-->
+                    <!--<q-item>-->
+                        <!--<q-item-main>Альтернатива</q-item-main>-->
+                        <!--<q-item-side>&lt;{{ answer.alternative }}&gt;</q-item-side>-->
+                    <!--</q-item>-->
+                <!--</q-list>-->
+            <!--</div>-->
+            <!--<q-item>-->
+                <!--<q-item-main>-->
+                    <!--<h6>Дополнительный вопрос - Этап {{ add_test }}</h6>-->
+                <!--</q-item-main>-->
+            <!--</q-item>-->
+            <!--<q-item>-->
+                <!--<div v-if="session.add_test.question">-->
+                    <!--<question-report :question="session.add_test" :type="'add'"/>-->
+                <!--</div>-->
+            <!--</q-item>-->
             <q-item>
                 <q-btn @click="generatePDF()">Скачать отчет в PDF</q-btn>
             </q-item>
@@ -302,22 +302,22 @@ export default {
           for (let k in question.answers) {
             if (intro[i].answers[j] === question.answers[k]) {
               question.answers[k] += ' [Х]'
-              // if (question.answers[k] !== question.correct) {
-              //   question.answers[k] += ' (-' +  + ')'
-              //   console.log(this.session)
-              // }
             }
           }
         }
+        let penalty = Math.round(this.max_score * 0.5) / 100
         switch (status) {
           case 2:
             status = ' (Верно)'
             break
           case -2:
-            status = ' (Неверно)'
+            status = ' (Неверно'
+            penalty *= 2
+            status += ' - Штраф ' + penalty + ' баллов)'
             break
           case 1:
-            status = ' (Частично верно)'
+            status = ' (Частично верно'
+            status += ' - Штраф ' + penalty + ' баллов)'
             break
           default:
             status = ' (Не закончен)'
@@ -347,7 +347,7 @@ export default {
           }
         )
         question = question.data
-        let status
+        let status = 0
         for (let j in practice[i].answers) {
           if (practice[i].answers[j] === question.correct) {
             status += 2
@@ -360,18 +360,22 @@ export default {
             }
           }
         }
+        let penalty = Math.round(this.max_score) / 100
         switch (status) {
           case 2:
             status = ' (Верно)'
             break
           case -2:
-            status = ' (Неверно)'
+            status = ' (Неверно'
+            penalty *= 2
+            status += ' - Штраф ' + penalty + ' баллов)'
             break
           case 1:
-            status = ' (Частично верно)'
+            status = ' (Частично верно'
+            status += ' - Штраф ' + penalty + ' баллов)'
             break
           default:
-            status = ' (Не закончен)'
+            status = ' (Не закончен)' + status
             break
         }
         dd.content.push({
@@ -405,6 +409,30 @@ export default {
           style: 'answers'
         })
       }
+      let basePenalty = Math.round(this.max_score * 2) / 100
+      penalty = 0
+      console.log(penalty)
+      if (this.session.target_matrix.done) {
+        penalty = (this.session.target_matrix.answers.length - 1) * basePenalty
+        console.log(penalty)
+      } else {
+        console.log(penalty)
+        penalty = this.session.target_matrix.answers.length * basePenalty
+        console.log(penalty)
+      }
+      console.log(basePenalty)
+      console.log(penalty)
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
+        })
+      }
       dd.content.push({
         text: 'Матрица по первому критерию - Этап ' + this.criterion_matrix1,
         style: 'header'
@@ -414,6 +442,23 @@ export default {
         dd.content.push({
           text: processor(answers[i]),
           style: 'answers'
+        })
+      }
+      penalty = 0
+      if (this.session.criterion_matrix1.done) {
+        penalty = (this.session.criterion_matrix1.answers.length - 1) * basePenalty
+      } else {
+        penalty = this.session.criterion_matrix1.answers.length * basePenalty
+      }
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
         })
       }
       dd.content.push({
@@ -427,6 +472,23 @@ export default {
           style: 'answers'
         })
       }
+      penalty = 0
+      if (this.session.criterion_matrix2.done) {
+        penalty = (this.session.criterion_matrix2.answers.length - 1) * basePenalty
+      } else {
+        penalty = this.session.criterion_matrix2.answers.length * basePenalty
+      }
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
+        })
+      }
       dd.content.push({
         text: 'Матрица по третьему критерию - Этап ' + this.criterion_matrix3,
         style: 'header'
@@ -438,6 +500,23 @@ export default {
           style: 'answers'
         })
       }
+      penalty = 0
+      if (this.session.criterion_matrix3.done) {
+        penalty = (this.session.criterion_matrix3.answers.length - 1) * basePenalty
+      } else {
+        penalty = this.session.criterion_matrix3.answers.length * basePenalty
+      }
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
+        })
+      }
       dd.content.push({
         text: 'Матрица по четвертому критерию - Этап ' + this.criterion_matrix4,
         style: 'header'
@@ -447,6 +526,23 @@ export default {
         dd.content.push({
           text: processor(answers[i]),
           style: 'answers'
+        })
+      }
+      penalty = 0
+      if (this.session.criterion_matrix4.done) {
+        penalty = (this.session.criterion_matrix4.answers.length - 1) * basePenalty
+      } else {
+        penalty = this.session.criterion_matrix4.answers.length * basePenalty
+      }
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
         })
       }
       dd.content.push({
@@ -466,16 +562,33 @@ export default {
           }
         })
         dd.content.push({
-          text: 'Вектор приоритетов критериев <' + answers[i].criterion_priority.join(', ') + '>',
+          text: 'Веса критериев <' + answers[i].criterion_priority.join(', ') + '>',
           style: 'subheader'
         })
         dd.content.push({
-          text: 'Вектор глобальных приоритетов <' + answers[i].global_priority.join(', ') + '>',
+          text: 'Вектор глобальных альтернатив <' + answers[i].global_priority.join(', ') + '>',
           style: 'subheader'
         })
         dd.content.push({
-          text: 'Выбранная альтернатива <' + answers[i].alternative + '>',
+          text: 'Рекомендуемая альтернатива <' + answers[i].alternative + '>',
           style: 'subheader'
+        })
+      }
+      penalty = 0
+      if (this.session.hierarchical_synthesis.done) {
+        penalty = (this.session.hierarchical_synthesis.answers.length - 1) * basePenalty
+      } else {
+        penalty = this.session.hierarchical_synthesis.answers.length * basePenalty
+      }
+      if (penalty) {
+        dd.content.push({
+          text: 'Штраф - ' + penalty + ' баллов',
+          style: 'correct'
+        })
+      } else {
+        dd.content.push({
+          text: 'Верный ответ',
+          style: 'correct'
         })
       }
       // let add
@@ -494,81 +607,81 @@ export default {
   computed: {
     intro () {
       let intro = this.session.intro
-      let points = this.session.base_score * (intro.points / 100)
+      let points = this.max_score * (intro.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.05
+      let maxPoints = this.max_score * 0.05
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = intro.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     practice () {
       let practice = this.session.practice
-      let points = this.session.base_score * (practice.points / 100)
+      let points = this.max_score * (practice.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.15
+      let maxPoints = this.max_score * 0.15
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = practice.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     target_matrix () {
       let targetMatrix = this.session.target_matrix
-      let points = this.session.base_score * (targetMatrix.points / 100)
+      let points = this.max_score * (targetMatrix.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = targetMatrix.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix1 () {
       let criterionMatrix1 = this.session.criterion_matrix1
-      let points = this.session.base_score * (criterionMatrix1.points / 100)
+      let points = this.max_score * (criterionMatrix1.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = criterionMatrix1.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix2 () {
       let criterionMatrix2 = this.session.criterion_matrix2
-      let points = this.session.base_score * (criterionMatrix2.points / 100)
+      let points = this.max_score * (criterionMatrix2.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = criterionMatrix2.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix3 () {
       let criterionMatrix3 = this.session.criterion_matrix3
-      let points = this.session.base_score * (criterionMatrix3.points / 100)
+      let points = this.max_score * (criterionMatrix3.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = criterionMatrix3.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     criterion_matrix4 () {
       let criterionMatrix4 = this.session.criterion_matrix4
-      let points = this.session.base_score * (criterionMatrix4.points / 100)
+      let points = this.max_score * (criterionMatrix4.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = criterionMatrix4.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     hierarchical_synthesis () {
       let hierarchicalSynthesis = this.session.hierarchical_synthesis
-      let points = this.session.base_score * (hierarchicalSynthesis.points / 100)
+      let points = this.max_score * (hierarchicalSynthesis.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.2
+      let maxPoints = this.max_score * 0.2
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = hierarchicalSynthesis.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
     },
     add_test () {
       let addTest = this.session.add_test
-      let points = this.session.base_score * (addTest.points / 100)
+      let points = this.max_score * (addTest.points / 100)
       points = Math.round(points * 10) / 10
-      let maxPoints = this.session.base_score * 0.1
+      let maxPoints = this.max_score * 0.1
       maxPoints = Math.round(maxPoints * 10) / 10
       let message = addTest.done ? 'завершен (' + points + '/' + maxPoints + ')' : 'не завершен'
       return message
@@ -593,17 +706,17 @@ export default {
         delete response.data[i].timestamp
         response.data[i].date = date
         let label = 'Попытка ' + (response.data[i].try + 1)
-        let baseScore = (this.max_score * (100 - response.data[i].try * 10) / 100)
-        baseScore = Math.round(baseScore * 10) / 10
-        response.data[i].base_score = baseScore
-        let mark
-        if (response.data[i].mark !== undefined) {
-          mark = baseScore * response.data[i].mark / 100
-          mark = Math.round(mark * 10) / 10
-        } else {
-          mark = '?'
-        }
-        label += ' (' + mark + ' /' + this.max_score + ')'
+        // let baseScore = (this.max_score * (100 - response.data[i].try * 10) / 100)
+        // baseScore = Math.round(baseScore * 10) / 10
+        // response.data[i].base_score = baseScore
+        // let mark
+        // if (response.data[i].mark !== undefined) {
+        //   mark = baseScore * response.data[i].mark / 100
+        //   mark = Math.round(mark * 10) / 10
+        // } else {
+        //   mark = '?'
+        // }
+        // label += ' (' + mark + ' /' + this.max_score + ')'
         let session = {
           label: label,
           value: response.data[i]

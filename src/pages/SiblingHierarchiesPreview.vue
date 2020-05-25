@@ -280,7 +280,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][0]"
+                    v-model="hierarchical_synthesis.matrix[0][0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -288,7 +288,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][1]"
+                    v-model="hierarchical_synthesis.matrix[0][1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -296,7 +296,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][2]"
+                    v-model="hierarchical_synthesis.matrix[0][2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -304,40 +304,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[0][3]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <br>
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][0]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][1]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][2]"
-                    v-validate.continues="{ required: true, max: 10 }"
-                    data-vv-as="вектор приоритетов"
-                    name="matrix"
-            >
-            <input
-                    id="matrix"
-                    type="text"
-                    v-model="hierarchical_syntech.matrix[1][3]"
+                    v-model="hierarchical_synthesis.matrix[0][3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -346,7 +313,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][0]"
+                    v-model="hierarchical_synthesis.matrix[1][0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -354,7 +321,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][1]"
+                    v-model="hierarchical_synthesis.matrix[1][1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -362,7 +329,7 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][2]"
+                    v-model="hierarchical_synthesis.matrix[1][2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -370,7 +337,40 @@
             <input
                     id="matrix"
                     type="text"
-                    v-model="hierarchical_syntech.matrix[2][3]"
+                    v-model="hierarchical_synthesis.matrix[1][3]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+            >
+            <br>
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][0]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][1]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][2]"
+                    v-validate.continues="{ required: true, max: 10 }"
+                    data-vv-as="вектор приоритетов"
+                    name="matrix"
+            >
+            <input
+                    id="matrix"
+                    type="text"
+                    v-model="hierarchical_synthesis.matrix[2][3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="matrix"
@@ -384,7 +384,7 @@
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[0]"
+                    v-model="hierarchical_synthesis.vector[0]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
@@ -392,7 +392,7 @@
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[1]"
+                    v-model="hierarchical_synthesis.vector[1]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
@@ -400,7 +400,7 @@
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[2]"
+                    v-model="hierarchical_synthesis.vector[2]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
@@ -408,7 +408,7 @@
             <input
                     id="vector"
                     type="text"
-                    v-model="hierarchical_syntech.vector[3]"
+                    v-model="hierarchical_synthesis.vector[3]"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="vector"
@@ -421,7 +421,7 @@
             <input
                     id="5"
                     type="alternative"
-                    v-model="hierarchical_syntech.alternative"
+                    v-model="hierarchical_synthesis.alternative"
                     v-validate.continues="{ required: true, max: 10 }"
                     data-vv-as="вектор приоритетов"
                     name="alternative"
@@ -509,7 +509,7 @@ export default {
         [{}, {}, {}, {}, {}, {}, {}],
         [{}, {}, {}, {}, {}, {}, {}]
       ],
-      hierarchical_syntech: {
+      hierarchical_synthesis: {
         matrix: [[], [], []],
         vector: [],
         alternative: null
