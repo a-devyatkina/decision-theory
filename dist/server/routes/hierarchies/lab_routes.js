@@ -1,7 +1,7 @@
 const math = require('mathjs')
 
 const error = 3
-const consistency_error = 1
+const consistency_error = 3
 
 module.exports = function(app, db, ObjectID) {
     app.post('/restapi/hierarchies/siblinghierarchies', async (req, res) => {

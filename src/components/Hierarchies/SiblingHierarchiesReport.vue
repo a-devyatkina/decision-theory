@@ -285,51 +285,49 @@ export default {
         text: 'Вводный тест - Этап ' + this.intro,
         style: 'header'
       })
+
       let intro = this.session.intro.questions
+      let introPenalty = Math.round(this.max_score * 0.5) / 100
       for (let i in intro) {
         let question = await axios.post(
           'restapi/hierarchies/get_intro_question',
           {id: intro[i]._id}
         )
-        let status = 0
+        let answerStatus = ''
+        let questionStatus = 0
         question = question.data
         for (let j in intro[i].answers) {
           if (intro[i].answers[j] === question.correct) {
-            status += 2
+            answerStatus = 'Верный ответ'
+            questionStatus += 2
           } else {
-            status -= 1
+            answerStatus = 'Неверный ответ, штраф - ' + introPenalty + ' баллов'
+            questionStatus -= 1
           }
           for (let k in question.answers) {
             if (intro[i].answers[j] === question.answers[k]) {
-              question.answers[k] += ' [Х]'
+              question.answers[k] += ' [Х] '
+              let answer = [
+                question.answers[k],
+                {
+                  text: answerStatus,
+                  style: 'correct'
+                }
+              ]
+              question.answers[k] = answer
             }
           }
         }
-        let penalty = Math.round(this.max_score * 0.5) / 100
-        switch (status) {
-          case 2:
-            status = ' (Верно)'
-            break
-          case -2:
-            status = ' (Неверно'
-            penalty *= 2
-            status += ' - Штраф ' + penalty + ' баллов)'
-            break
-          case 1:
-            status = ' (Частично верно'
-            status += ' - Штраф ' + penalty + ' баллов)'
-            break
-          default:
-            status = ' (Не закончен)'
-            break
-        }
+        if (questionStatus > 0) questionStatus = ' (Верно)'
+        else if (questionStatus === -1) questionStatus = ' (Не завершен)'
+        else if (questionStatus === -2) questionStatus = ' (Неверно)'
         dd.content.push({
-          text: question.question + status,
+          text: question.question + questionStatus,
           style: 'question'
         })
         dd.content.push({ul: question.answers})
         dd.content.push({
-          text: 'Правильный ответ - ' + question.correct,
+          text: 'Верный ответ - ' + question.correct,
           style: 'correct'
         })
       }
@@ -338,6 +336,7 @@ export default {
         style: 'header'
       })
       let practice = this.session.practice.questions
+      let practicePenalty = Math.round(this.max_score) / 100
       for (let i in practice) {
         let question = await axios.post(
           'restapi/hierarchies/get_practice_question',
@@ -346,40 +345,35 @@ export default {
             type: practice[i].type
           }
         )
+        let questionStatus = 0
+        let answerStatus = ''
         question = question.data
-        let status = 0
         for (let j in practice[i].answers) {
           if (practice[i].answers[j] === question.correct) {
-            status += 2
+            answerStatus = 'Верный ответ'
+            questionStatus += 2
           } else {
-            status -= 1
+            answerStatus = 'Неверный ответ, штраф - ' + practicePenalty + ' баллов'
+            questionStatus -= 1
           }
           for (let k in question.answers) {
             if (practice[i].answers[j] === question.answers[k]) {
               question.answers[k] += ' [Х]'
+              question.answers[k] = [
+                question.answers[k],
+                {
+                  text: answerStatus,
+                  style: 'correct'
+                }
+              ]
             }
           }
         }
-        let penalty = Math.round(this.max_score) / 100
-        switch (status) {
-          case 2:
-            status = ' (Верно)'
-            break
-          case -2:
-            status = ' (Неверно'
-            penalty *= 2
-            status += ' - Штраф ' + penalty + ' баллов)'
-            break
-          case 1:
-            status = ' (Частично верно'
-            status += ' - Штраф ' + penalty + ' баллов)'
-            break
-          default:
-            status = ' (Не закончен)' + status
-            break
-        }
+        if (questionStatus > 0) questionStatus = ' (Верно)'
+        else if (questionStatus === -1) questionStatus = ' (Не завершен)'
+        else if (questionStatus === -2) questionStatus = ' (Неверно)'
         dd.content.push({
-          text: question.question + status,
+          text: question.question + questionStatus,
           style: 'question'
         })
         dd.content.push({ul: question.answers})
@@ -398,6 +392,7 @@ export default {
         array[6] = 'Отношение согласованности <' + array[6].join(', ') + '>'
         return array.join('\n')
       }
+      let matrixPenalty = Math.round(this.max_score * 2) / 100
       dd.content.push({
         text: 'Целевая матрица - Этап ' + this.target_matrix,
         style: 'header'
@@ -408,30 +403,17 @@ export default {
           text: processor(answers[i]),
           style: 'answers'
         })
-      }
-      let basePenalty = Math.round(this.max_score * 2) / 100
-      penalty = 0
-      console.log(penalty)
-      if (this.session.target_matrix.done) {
-        penalty = (this.session.target_matrix.answers.length - 1) * basePenalty
-        console.log(penalty)
-      } else {
-        console.log(penalty)
-        penalty = this.session.target_matrix.answers.length * basePenalty
-        console.log(penalty)
-      }
-      console.log(basePenalty)
-      console.log(penalty)
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.target_matrix.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       dd.content.push({
         text: 'Матрица по первому критерию - Этап ' + this.criterion_matrix1,
@@ -443,23 +425,17 @@ export default {
           text: processor(answers[i]),
           style: 'answers'
         })
-      }
-      penalty = 0
-      if (this.session.criterion_matrix1.done) {
-        penalty = (this.session.criterion_matrix1.answers.length - 1) * basePenalty
-      } else {
-        penalty = this.session.criterion_matrix1.answers.length * basePenalty
-      }
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.criterion_matrix1.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       dd.content.push({
         text: 'Матрица по второму критерию - Этап ' + this.criterion_matrix2,
@@ -471,23 +447,17 @@ export default {
           text: processor(answers[i]),
           style: 'answers'
         })
-      }
-      penalty = 0
-      if (this.session.criterion_matrix2.done) {
-        penalty = (this.session.criterion_matrix2.answers.length - 1) * basePenalty
-      } else {
-        penalty = this.session.criterion_matrix2.answers.length * basePenalty
-      }
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.criterion_matrix2.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       dd.content.push({
         text: 'Матрица по третьему критерию - Этап ' + this.criterion_matrix3,
@@ -499,23 +469,17 @@ export default {
           text: processor(answers[i]),
           style: 'answers'
         })
-      }
-      penalty = 0
-      if (this.session.criterion_matrix3.done) {
-        penalty = (this.session.criterion_matrix3.answers.length - 1) * basePenalty
-      } else {
-        penalty = this.session.criterion_matrix3.answers.length * basePenalty
-      }
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.criterion_matrix3.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       dd.content.push({
         text: 'Матрица по четвертому критерию - Этап ' + this.criterion_matrix4,
@@ -527,23 +491,17 @@ export default {
           text: processor(answers[i]),
           style: 'answers'
         })
-      }
-      penalty = 0
-      if (this.session.criterion_matrix4.done) {
-        penalty = (this.session.criterion_matrix4.answers.length - 1) * basePenalty
-      } else {
-        penalty = this.session.criterion_matrix4.answers.length * basePenalty
-      }
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.criterion_matrix1.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       dd.content.push({
         text: 'Иерархический синтез - Этап ' + this.hierarchical_synthesis,
@@ -573,23 +531,17 @@ export default {
           text: 'Рекомендуемая альтернатива <' + answers[i].alternative + '>',
           style: 'subheader'
         })
-      }
-      penalty = 0
-      if (this.session.hierarchical_synthesis.done) {
-        penalty = (this.session.hierarchical_synthesis.answers.length - 1) * basePenalty
-      } else {
-        penalty = this.session.hierarchical_synthesis.answers.length * basePenalty
-      }
-      if (penalty) {
-        dd.content.push({
-          text: 'Штраф - ' + penalty + ' баллов',
-          style: 'correct'
-        })
-      } else {
-        dd.content.push({
-          text: 'Верный ответ',
-          style: 'correct'
-        })
+        if (answers.length - 1 !== parseInt(i) || !this.session.hierarchical_synthesis.done) {
+          dd.content.push({
+            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            style: 'correct'
+          })
+        } else {
+          dd.content.push({
+            text: 'Верно',
+            style: 'correct'
+          })
+        }
       }
       // let add
       //   {
