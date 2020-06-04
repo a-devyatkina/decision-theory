@@ -216,7 +216,7 @@ export default {
         mark = '?'
       }
       mark = ' (' + mark + ' /' + this.max_score + ')'
-      let penalty = this.session.try ? 'Балл снижен на ' + this.session.try * 10 + '%\n' : '\n'
+      let penalty = this.session.try ? 'Начальный балл снижен на ' + this.session.try * 10 + '%\n' : '\n'
       let subtitle = 'Студент - ' + student.name + '\n' +
           'Группа - ' + group.name + '\n' +
           'Попытка - ' + (this.session.try + 1) + '\n' +
@@ -318,7 +318,8 @@ export default {
             }
           }
         }
-        if (questionStatus > 0) questionStatus = ' (Верно)'
+        if (questionStatus === 2) questionStatus = ' (Верно)'
+        else if (questionStatus === 1) questionStatus = ' (Верно со второй попытки)'
         else if (questionStatus === -1) questionStatus = ' (Не завершен)'
         else if (questionStatus === -2) questionStatus = ' (Неверно)'
         dd.content.push({
@@ -369,7 +370,8 @@ export default {
             }
           }
         }
-        if (questionStatus > 0) questionStatus = ' (Верно)'
+        if (questionStatus === 2) questionStatus = ' (Верно)'
+        else if (questionStatus === 1) questionStatus = ' (Верно со второй попытки)'
         else if (questionStatus === -1) questionStatus = ' (Не завершен)'
         else if (questionStatus === -2) questionStatus = ' (Неверно)'
         dd.content.push({
@@ -507,6 +509,7 @@ export default {
         text: 'Иерархический синтез - Этап ' + this.hierarchical_synthesis,
         style: 'header'
       })
+      let hierarchyPenalty = Math.round(this.max_score * 4) / 100
       answers = this.session.hierarchical_synthesis.answers
       for (let i in answers) {
         dd.content.push({
@@ -516,7 +519,7 @@ export default {
         dd.content.push({
           table: {
             body: answers[i].matrix.value,
-            widths: [30, 30, 30, 30]
+            widths: [50, 50, 50, 50]
           }
         })
         dd.content.push({
@@ -533,7 +536,7 @@ export default {
         })
         if (answers.length - 1 !== parseInt(i) || !this.session.hierarchical_synthesis.done) {
           dd.content.push({
-            text: 'Неверно, штраф - ' + matrixPenalty + ' баллов',
+            text: 'Неверно, штраф - ' + hierarchyPenalty + ' баллов',
             style: 'correct'
           })
         } else {
@@ -543,16 +546,55 @@ export default {
           })
         }
       }
-      // let add
-      //   {
-      //     text: 'Дополнительный вопрос - Этап ' + this.add_test,
-      //     style: 'header'
-      //   },
-      //   {
-      //     text: add,
-      //     style: 'body'
-      //   }
-      // ]
+      dd.content.push({
+        text: 'Дополнительный вопрос - Этап ' + this.add_test,
+        style: 'header'
+      })
+      let add = this.session.add_test
+      let addPenalty = Math.round(this.max_score * 5) / 100
+      let question = await axios.post(
+        'restapi/hierarchies/get_add_question',
+        {
+          id: add.question
+        }
+      )
+      let questionStatus = 0
+      let answerStatus = ''
+      question = question.data
+      for (let i in add.answers) {
+        if (add.answers[i] === question.correct) {
+          answerStatus = 'Верный ответ'
+          questionStatus += 2
+        } else {
+          answerStatus = 'Неверный ответ, штраф - ' + addPenalty + ' баллов'
+          questionStatus -= 1
+        }
+        for (let k in question.answers) {
+          if (add.answers[i] === question.answers[k]) {
+            question.answers[k] += ' [Х]'
+            question.answers[k] = [
+              question.answers[k],
+              {
+                text: answerStatus,
+                style: 'correct'
+              }
+            ]
+          }
+        }
+      }
+      if (questionStatus === 2) questionStatus = ' (Верно)'
+      else if (questionStatus === 1) questionStatus = ' (Верно со второй попытки)'
+      else if (questionStatus === -1) questionStatus = ' (Не завершен)'
+      else if (questionStatus === -2) questionStatus = ' (Неверно)'
+      dd.content.push({
+        text: question.question + questionStatus,
+        style: 'question'
+      })
+      dd.content.push({ul: question.answers})
+      dd.content.push({
+        text: 'Правильный ответ - ' + question.correct,
+        style: 'correct'
+      })
       pdfMake.createPdf(dd).open()
     }
   },
